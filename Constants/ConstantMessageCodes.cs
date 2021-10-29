@@ -10,5 +10,6 @@ namespace OnlineLearning.Constants
         public const string OPERATION_SUCCESS = "OPERATION_SUCCESS";
         public const string OPERATION_FAILED = "OPERATION_FAILED";
         public const string VALIDATION_ERROR = "VALIDATION_ERROR";
+        public const string USER_NOT_FOUND = "USER_NOT_FOUND";
     }
 }

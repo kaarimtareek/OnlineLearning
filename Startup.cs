@@ -1,21 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 using FluentValidation;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 using OnlineLearning.Common;
@@ -23,6 +27,10 @@ using OnlineLearning.EntitiesValidators;
 using OnlineLearning.Models;
 using OnlineLearning.PipelineBehaviors;
 using OnlineLearning.Services;
+using OnlineLearning.Settings;
+using OnlineLearning.Utilities;
+
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace OnlineLearning
 {
@@ -40,16 +48,78 @@ namespace OnlineLearning
         {
 
             services.AddDbContext<AppDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("OnlineLearningDb")));
+            services.AddIdentity<ApplicationUser, IdentityRole>(policy => {
+                policy.Password.RequireUppercase = false;
+                policy.Password.RequireNonAlphanumeric = false;
+                policy.Password.RequireLowercase = false;
+                policy.Password.RequiredLength =8;
+            
+            })
+                .AddRoles<IdentityRole>()
+                .AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<AppDbContext>();
+            services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped(typeof( ILoggerService<>), typeof( LoggerService<>));
             services.AddScoped<IUserValidator, UserValidator>();
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
             services.AddMediatR(typeof(Startup));
             services.AddControllers();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LogBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            var jwtSettings = new JwtSettings();
+            Configuration.Bind(nameof(jwtSettings), jwtSettings);
+            services.AddSingleton(jwtSettings);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
+
+            }).AddJwtBearer(x =>
+                {
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        RequireExpirationTime = true,
+                        ClockSkew = TimeSpan.FromMilliseconds(jwtSettings.ExpirationInDays),
+                    };
+                });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OnlineLearning", Version = "v1" });
+              
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Insert the token here",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                    {
+                            Reference = new OpenApiReference
+                            {
+                               Type = ReferenceType.SecurityScheme,
+                               Id = "Bearer"
+                            }
+                    },
+                        new string[]{}
+                    },
+                    
+                });
+               
             });
         }
 
@@ -60,13 +130,16 @@ namespace OnlineLearning
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OnlineLearning v1"));
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "OnlineLearning v1");
+                    c.OAuthAppName("Test Auth JWT with swagger");
+                });
             }
-
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

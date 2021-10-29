@@ -1,25 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 namespace OnlineLearning.Models
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
-        public DbSet<Answer> Answers{ get; set; }
-        public DbSet<Interest> Interests{ get; set; }
-        public DbSet<Question> Questions{ get; set; }
-        public DbSet<Room> Rooms{ get; set; }
-        public DbSet<RoomInterest> RoomInterests{ get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserInterest>  UserInterests{ get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Interest> Interests { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<RoomInterest> RoomInterests { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<UserInterest> UserInterests { get; set; }
+
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
+
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             OnBeforeSaving();
@@ -45,12 +46,12 @@ namespace OnlineLearning.Models
             });
         }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken=default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             OnBeforeSaving();
             return await base.SaveChangesAsync(cancellationToken);
         }
-      
+
         private void OnBeforeSaving()
         {
             var entries = ChangeTracker.Entries();
@@ -78,6 +79,26 @@ namespace OnlineLearning.Models
                             trackable.CreatedAt = utcNow;
                             trackable.UpdatedAt = utcNow;
                             break;
+                    }
+                    if (entry.Entity is ApplicationUser anothertrackable)
+                    {
+                        switch (entry.State)
+                        {
+                            case EntityState.Modified:
+                                // set the updated date to "now"
+                                anothertrackable.UpdatedAt = utcNow;
+
+                                // mark property as "don't touch"
+                                // we don't want to update on a Modify operation
+                                entry.Property("CreatedAt").IsModified = false;
+                                break;
+
+                            case EntityState.Added:
+                                // set both updated and created date to "now"
+                                anothertrackable.CreatedAt = utcNow;
+                                anothertrackable.UpdatedAt = utcNow;
+                                break;
+                        }
                     }
                 }
             }

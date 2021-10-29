@@ -25,21 +25,6 @@ namespace OnlineLearning.PipelineBehaviors
             this.validators = validators;
         }
 
-
-        public async Task<OperationResult<TResponse>> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<OperationResult<TResponse>> next)
-        {
-            var validationContext = new ValidationContext<TRequest>(request);
-            var failures = validators.Select(x => x.Validate(validationContext))
-                .SelectMany(x => x.Errors)
-                .Where(x => x != null)
-                .ToList();
-            if (failures.Count > 0)
-            {
-                return OperationResult.Fail<TResponse>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
-            }
-            return await next();
-        }
-
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
             var validationContext = new ValidationContext<TRequest>(request);
@@ -49,13 +34,13 @@ namespace OnlineLearning.PipelineBehaviors
                 .ToList();
             if (failures.Count > 0)
             {
-                var errors = failures.Select(x => new ErrorModel
+                var errors = failures.ConvertAll(x => new ErrorModel
                 {
                     Code = x.ErrorCode,
                     FieldName = x.PropertyName,
                     Message = x.ErrorMessage,
                     
-                }).ToList();
+                });
                 return new TResponse { IsSuccess = false,HttpStatusCode= HttpStatusCode.BadRequest  ,Errors = errors, MessageCode = ConstantMessageCodes.VALIDATION_ERROR };
             }
             return await next();

@@ -11,7 +11,7 @@ namespace OnlineLearning.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public int OwnerId { get; set; }
+        public string OwnerId { get; set; }
         [MaxLength(200)]
         public string Name { get; set; }
         [MaxLength(1500)]
@@ -22,5 +22,6 @@ namespace OnlineLearning.Models
         public DateTime StartDate { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<RoomInterest> RoomInterests{ get; set; }
+        public virtual ApplicationUser Owner { get; set; }
     }
 }

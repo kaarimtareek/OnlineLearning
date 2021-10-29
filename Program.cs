@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using NLog.Web;
+
 namespace OnlineLearning
 {
     public class Program
@@ -19,6 +21,12 @@ namespace OnlineLearning
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(LogLevel.Information);
+            })
+            .UseNLog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

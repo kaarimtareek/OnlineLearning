@@ -1,5 +1,6 @@
 ﻿using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ using OnlineLearning.Commands;
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.InputModels;
+using OnlineLearning.Queries;
 
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,9 @@ namespace OnlineLearning.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    [Authorize]
+    
+    public class UsersController : SystemBaseController
     {
         private readonly IMediator mediator;
 
@@ -25,19 +29,17 @@ namespace OnlineLearning.Controllers
         {
             this.mediator = mediator;
         }
-        [HttpPost("")]
-        public async Task<IActionResult>Add(AddUserInputModel inputModel)
+       
+        [HttpGet("")]
+        public async Task<IActionResult>Get()
         {
-            var command = new AddUserCommand
+            var query = new GetUserByIdQuery
             {
-                Name = inputModel.Name,
-                BrithDate = inputModel.BrithDate,
-                Email = inputModel.Email,
-                Password = inputModel.Password,
-                Phonenumber = inputModel.Phonenumber
+                Id = UserId
             };
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(query);
             return StatusCode((int)result.HttpStatusCode, result);
         }
+
     }
 }

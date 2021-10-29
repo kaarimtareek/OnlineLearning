@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,22 +9,19 @@ using System.Threading.Tasks;
 
 namespace OnlineLearning.Models
 {
-    public class User : BaseEntity
+    public class ApplicationUser : IdentityUser
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         [MaxLength(200)]
         public string Name { get; set; }
-        [MaxLength(200)]
-        public string Email { get; set; }
-        [MaxLength(200)]
-        public string Password { get; set; }
-        [MaxLength(200)]
-        public string Salt { get; set; }
-        [MaxLength(15)]
-        public string Phonenumber { get; set; }
         public DateTime? Birthdate { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<Answer> Answers{ get; set; }
+        public virtual ICollection<Room> Rooms{ get; set; }
+        public virtual ICollection<UserInterest> UserInterests{ get; set; }
     }
 }

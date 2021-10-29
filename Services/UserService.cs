@@ -1,11 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.Models;
+using OnlineLearning.Settings;
 using OnlineLearning.Utilities;
 
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlineLearning.Services
@@ -13,60 +19,36 @@ namespace OnlineLearning.Services
     public class UserService : IUserService
     {
         private readonly DbContextOptions<AppDbContext> contextOptions;
+        private readonly ILoggerService<UserService> logger;
 
-        public UserService(DbContextOptions<AppDbContext> contextOptions)
+        public UserService(DbContextOptions<AppDbContext> contextOptions, ILoggerService<UserService> logger)
         {
             this.contextOptions = contextOptions;
+            this.logger = logger;
         }
 
-        public async Task<OperationResult<int>> Add(string name, string email, string phonenumber, string passwrod, DateTime? birthdate)
+       
+        public async Task<OperationResult<ApplicationUser>> Get(string id)
         {
             try
             {
                 using (var context = new AppDbContext(contextOptions))
                 {
-                    string salt = PasswordHasher.CreateRandomSalt();
-                    string passwordHashed = PasswordHasher.Create(passwrod, salt);
-                    var user = new User
-                    {
-                        Email = email,
-                        Phonenumber = phonenumber,
-                        Name = name,
-                        Birthdate = birthdate,
-                        Salt = salt,
-                        Password = passwordHashed,
-                    };
-                    await context.Users.AddAsync(user);
-                    await context.SaveChangesAsync();
-                    return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS, user.Id, ResponseCodeEnum.SUCCESS);
-                }
-            }
-            catch (Exception e)
-            {
-
-                return OperationResult.Fail<int>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
-            }
-        }
-        public async Task<OperationResult<User>> Get(int id)
-        {
-            try
-            {
-                using (var context = new AppDbContext(contextOptions))
-                {
-                    var user = await context.Users.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+                    logger.LogInfo($"trying to get user with id {id}");
+                    var user = await context.ApplicationUsers.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
                     if (user == null)
                     {
-                        return OperationResult.Fail<User>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
+                        return OperationResult.Fail<ApplicationUser>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
                     }
                     return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS, user, ResponseCodeEnum.SUCCESS);
                 }
             }
             catch (Exception e)
             {
-                return OperationResult.Fail<User>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
+                return OperationResult.Fail<ApplicationUser>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
             }
         }
+
+       
     }
-
-
 }

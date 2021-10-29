@@ -22,7 +22,7 @@ namespace OnlineLearning.EntitiesValidators
         {
             using (var context = new AppDbContext(contextOptions))
             {
-                return !await context.Users.AnyAsync(x => x.Email == email);
+                return !await context.ApplicationUsers.AnyAsync(x => x.Email == email);
 
             }
         }
@@ -30,7 +30,7 @@ namespace OnlineLearning.EntitiesValidators
         {
             using (var context = new AppDbContext(contextOptions))
             {
-                return !await context.Users.AnyAsync(x => x.Email == email, cancellationToken);
+                return !await context.ApplicationUsers.AnyAsync(x => x.Email == email, cancellationToken);
 
             }
         }
@@ -38,7 +38,7 @@ namespace OnlineLearning.EntitiesValidators
         {
             using (var context = new AppDbContext(contextOptions))
             {
-                return !await context.Users.AnyAsync(x => x.Phonenumber == phonenumber);
+                return !await context.ApplicationUsers.AnyAsync(x => x.PhoneNumber == phonenumber);
 
             }
         }
@@ -46,7 +46,7 @@ namespace OnlineLearning.EntitiesValidators
         {
             using (var context = new AppDbContext(contextOptions))
             {
-                return !await context.Users.AnyAsync(x => x.Phonenumber == phonenumber, cancellationToken);
+                return !await context.ApplicationUsers.AnyAsync(x => x.PhoneNumber == phonenumber, cancellationToken);
 
             }
         }

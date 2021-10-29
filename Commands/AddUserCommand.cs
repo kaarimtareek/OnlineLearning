@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnlineLearning.Commands
 {
-    public class AddUserCommand : IRequest<ResponseModel<int>>
+    public class AddUserCommand : IRequest<ResponseModel<string>>
     {
         public string Email { get; set; }
         public string Phonenumber { get; set; }

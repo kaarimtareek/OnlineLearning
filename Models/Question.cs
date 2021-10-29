@@ -12,7 +12,7 @@ namespace OnlineLearning.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int RoomId { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         [MaxLength(50)]
         public string StatusId { get; set; }
         [MaxLength(200)]
@@ -20,7 +20,7 @@ namespace OnlineLearning.Models
         [MaxLength(1500)]
         public string Body { get; set; }
         public virtual Room Room { get; set; }
-        public virtual User User { get; set; }
+        public virtual ApplicationUser User { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace OnlineLearning.PipelineBehaviors
                 .ToList();
             if (failures.Count > 0)
             {
-                var errors = failures.ConvertAll(x => new ErrorModel
+                var errors = failures.ConvertAll(x => new ValidationErrorModel
                 {
                     Code = x.ErrorCode,
                     FieldName = x.PropertyName,

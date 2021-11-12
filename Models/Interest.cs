@@ -12,9 +12,7 @@ namespace OnlineLearning.Models
         [MaxLength(200)]
         public string Id { get; set; }
         [MaxLength(200)]
-        public string NameArabic { get; set; }
-        [MaxLength(200)]
-        public string NameEnglish { get; set; }
+        public string StemmedName { get; set; }
         public virtual ICollection<RoomInterest> RoomInterests { get; set; }
         public virtual ICollection<UserInterest> UserInterests { get; set; }
     }

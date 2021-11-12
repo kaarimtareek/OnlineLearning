@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OnlineLearning.Common
 {
-    public class ErrorModel
+    public class ValidationErrorModel
     {
         public string FieldName { get; set; }
         public string Message { get; set; }

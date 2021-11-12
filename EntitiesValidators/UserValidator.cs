@@ -50,5 +50,21 @@ namespace OnlineLearning.EntitiesValidators
 
             }
         }
+        public async Task<bool> IsExistingUserId(string id)
+        {
+            using (var context = new AppDbContext(contextOptions))
+            {
+                return !await context.ApplicationUsers.AnyAsync(x => x.Id == id && !x.IsDeleted);
+
+            }
+        }
+        public async Task<bool> IsExistingUserId(string id,CancellationToken cancellationToken)
+        {
+            using (var context = new AppDbContext(contextOptions))
+            {
+                return await context.ApplicationUsers.AnyAsync(x => x.Id == id && !x.IsDeleted,cancellationToken);
+
+            }
+        }
     }
 }

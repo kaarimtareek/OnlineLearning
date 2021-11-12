@@ -1,14 +1,10 @@
 ﻿using MediatR;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 using OnlineLearning.Commands;
+using OnlineLearning.Models.InputModels;
 
-using OnlineLearning.InputModels;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineLearning.Controllers
@@ -23,6 +19,7 @@ namespace OnlineLearning.Controllers
         {
             this.mediator = mediator;
         }
+
         [HttpPost("Register")]
         public async Task<IActionResult> Add(AddUserInputModel inputModel)
         {
@@ -37,6 +34,7 @@ namespace OnlineLearning.Controllers
             var result = await mediator.Send(command);
             return StatusCode((int)result.HttpStatusCode, result);
         }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginUserInputModel inputModel)
         {

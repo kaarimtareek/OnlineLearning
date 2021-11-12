@@ -29,6 +29,7 @@ using OnlineLearning.PipelineBehaviors;
 using OnlineLearning.Services;
 using OnlineLearning.Settings;
 using OnlineLearning.Utilities;
+using OnlineLearning.Utilities.Stemmer;
 
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -60,6 +61,8 @@ namespace OnlineLearning
                 .AddEntityFrameworkStores<AppDbContext>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IInterestService, InterestService>();
+            services.AddScoped<IStemmer, EnglishPorter2Stemmer>();
             services.AddScoped(typeof( ILoggerService<>), typeof( LoggerService<>));
             services.AddScoped<IUserValidator, UserValidator>();
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);

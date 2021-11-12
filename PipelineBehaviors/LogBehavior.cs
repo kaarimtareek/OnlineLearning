@@ -25,7 +25,9 @@ namespace OnlineLearning.PipelineBehaviors
 
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
         {
-            logger.LogInfo($"loggin request of {request} ");
+
+            logger.LogInfo($"logging request of {request} ");
+
             var result =  await next();
             logger.LogInfo($"logging reponse of {result}");
             return result;

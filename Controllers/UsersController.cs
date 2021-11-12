@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineLearning.Commands;
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
-using OnlineLearning.InputModels;
+using OnlineLearning.Models.InputModels;
 using OnlineLearning.Queries;
 
 using System;
@@ -36,6 +36,20 @@ namespace OnlineLearning.Controllers
             var query = new GetUserByIdQuery
             {
                 Id = UserId
+            };
+            var result = await mediator.Send(query);
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        
+        [HttpPost("/Interests")]
+        public async Task<IActionResult>AddInterest(AddUserInterestInputModel inputModel)
+        {
+            var query = new AddUserInterestCommand
+            {
+                UserId= UserId,
+                Interest = inputModel.Interest,
+                InterestId = inputModel.InterestId,
+                IgnoreSimilarity = inputModel.IgnoreSimilarity,
             };
             var result = await mediator.Send(query);
             return StatusCode((int)result.HttpStatusCode, result);

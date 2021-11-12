@@ -11,6 +11,7 @@ namespace OnlineLearning.Constants
         SUCCESS = 1,
         FAILED = -1,
         DUPLICATE_DATA = 2,
+        NOT_FOUND = 3,
 
     }
     public static class ResponseCodeEnumExtension
@@ -23,7 +24,9 @@ namespace OnlineLearning.Constants
                 case ResponseCodeEnum.SUCCESS:
                     return HttpStatusCode.OK;
                 case ResponseCodeEnum.DUPLICATE_DATA:
-                    return HttpStatusCode.BadRequest;
+                    return HttpStatusCode.Conflict;
+                case ResponseCodeEnum.NOT_FOUND:
+                    return HttpStatusCode.NotFound;
                 default:
                     return HttpStatusCode.InternalServerError;
 

@@ -12,15 +12,15 @@ namespace OnlineLearning.Common
 
     public class ResponseModel : IResponseModel
     {
-        public static ResponseModel<T> Fail<T>(string message,T data = default, List<ErrorModel> errors = default, HttpStatusCode code = default)
+        public static ResponseModel<T> Fail<T>(string message,T data = default, List<ValidationErrorModel> errors = default, HttpStatusCode code = default)
         {
             return new ResponseModel<T>(false, data, errors, message,code);
         }
-        public static ResponseModel<T> Success<T>(string message,T data = default,List<ErrorModel> errors=default,HttpStatusCode code = default)
+        public static ResponseModel<T> Success<T>(string message,T data = default,List<ValidationErrorModel> errors=default,HttpStatusCode code = default)
         {
             return new ResponseModel<T>( true,data, errors, message,code);
         }
-        public List<ErrorModel> Errors { get; set; }
+        public List<ValidationErrorModel> Errors { get; set; }
         public bool IsSuccess { get; set; }
         public string MessageCode { get; set; }
         [JsonIgnore]
@@ -33,7 +33,7 @@ namespace OnlineLearning.Common
         {
 
         }
-        public ResponseModel(bool isSuccess, T result = default, List<ErrorModel> errors = default,string messageCode = "",HttpStatusCode code = default)
+        public ResponseModel(bool isSuccess, T result = default, List<ValidationErrorModel> errors = default,string messageCode = "",HttpStatusCode code = default)
         {
             IsSuccess = isSuccess;
             Errors = errors;
@@ -42,7 +42,7 @@ namespace OnlineLearning.Common
             HttpStatusCode = code;
         }
         public T Result { get; set; }
-        public List<ErrorModel> Errors { get; set; }
+        public List<ValidationErrorModel> Errors { get; set; }
 
         public bool IsSuccess { get; set; }
         public string MessageCode { get; set; }
@@ -52,7 +52,7 @@ namespace OnlineLearning.Common
     }
     public interface IResponseModel
     {
-        public List<ErrorModel> Errors { get; set; }
+        public List<ValidationErrorModel> Errors { get; set; }
         public bool IsSuccess { get; set; }
         public string MessageCode { get; set; }
         [JsonIgnore]

@@ -10,6 +10,8 @@ namespace OnlineLearning.Models
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<LookupUserStatus> LookupUserStatuses{ get; set; }
+        public DbSet<LookupRoomStatus> LookupRoomStatuses{ get; set; }
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Room> Rooms { get; set; }

@@ -54,6 +54,16 @@ namespace OnlineLearning.Controllers
             var result = await mediator.Send(query);
             return StatusCode((int)result.HttpStatusCode, result);
         }
+        [HttpGet("/Interests")]
+        public async Task<IActionResult>GetInterests()
+        {
+            var query = new GetUserInterestsQuery
+            {
+                UserId= UserId,
+            };
+            var result = await mediator.Send(query);
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
 
     }
 }

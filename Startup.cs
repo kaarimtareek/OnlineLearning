@@ -59,12 +59,16 @@ namespace OnlineLearning
                 .AddRoles<IdentityRole>()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<AppDbContext>();
+            #region Services
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IInterestService, InterestService>();
             services.AddScoped<IStemmer, EnglishPorter2Stemmer>();
+            #endregion
             services.AddScoped(typeof( ILoggerService<>), typeof( LoggerService<>));
             services.AddScoped<IUserValidator, UserValidator>();
+            services.AddScoped<IInterestValidator, InterestValidator>();
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
             services.AddMediatR(typeof(Startup));
             services.AddControllers();

@@ -43,7 +43,7 @@ namespace OnlineLearning.Services
             }
         }
 
-        public async Task<OperationResult<string>> AddInterest(AppDbContext context, string newInterest,bool ignoreSimilarity =false)
+        public async Task<OperationResult<string>> AddInterest(AppDbContext context, string newInterest, bool ignoreSimilarity = false)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace OnlineLearning.Services
                         var similarInterestsResult = await GetSimilarInterests(stemmedInterest);
                         if (similarInterestsResult.Data?.Count > 0)
                         {
-                            var similarInterets = string.Join(",", similarInterestsResult.Data.Select(x=>x.Id));
+                            var similarInterets = string.Join(",", similarInterestsResult.Data.Select(x => x.Id));
                             return new OperationResult<string>
                             {
                                 IsSuccess = false,
@@ -80,7 +80,7 @@ namespace OnlineLearning.Services
                             };
                         }
                     }
-                  
+
                     interest = new Interest
                     {
                         Id = normalizedInterest,

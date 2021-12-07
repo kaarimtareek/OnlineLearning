@@ -13,6 +13,8 @@ namespace OnlineLearning.Models
     {
         [MaxLength(200)]
         public string Name { get; set; }
+        [MaxLength(50)]
+        public string StatusId { get; set; }
         public DateTime? Birthdate { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -23,5 +25,6 @@ namespace OnlineLearning.Models
         public virtual ICollection<Answer> Answers{ get; set; }
         public virtual ICollection<Room> Rooms{ get; set; }
         public virtual ICollection<UserInterest> UserInterests{ get; set; }
+        public virtual LookupUserStatus Status { get; set; }
     }
 }

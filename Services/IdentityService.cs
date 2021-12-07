@@ -49,6 +49,7 @@ namespace OnlineLearning.Services
                     Name = name,
                     Birthdate = birthdate,
                     UserName = email,
+                    StatusId =  ConstantUserStatus.ACTIVE
                 };
                 //create the user
                var createUserResult = await userManager.CreateAsync(user, passwrod);

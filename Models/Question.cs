@@ -5,8 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace OnlineLearning.Models
 {
+    [Index(nameof(UserId))]
+    [Index(nameof(RoomId))]
     public class Question : BaseEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

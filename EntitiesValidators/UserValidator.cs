@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+using OnlineLearning.Constants;
 using OnlineLearning.Models;
 
 using System;
@@ -63,6 +64,22 @@ namespace OnlineLearning.EntitiesValidators
             using (var context = new AppDbContext(contextOptions))
             {
                 return await context.ApplicationUsers.AnyAsync(x => x.Id == id && !x.IsDeleted,cancellationToken);
+
+            }
+        }
+        public async Task<bool> IsActiveUserId(string id)
+        {
+            using (var context = new AppDbContext(contextOptions))
+            {
+                return !await context.ApplicationUsers.AnyAsync(x => x.Id == id && !x.IsDeleted && x.StatusId == ConstantUserStatus.ACTIVE);
+
+            }
+        }
+        public async Task<bool> IsActiveUserId(string id,CancellationToken cancellationToken)
+        {
+            using (var context = new AppDbContext(contextOptions))
+            {
+                return await context.ApplicationUsers.AnyAsync(x => x.Id == id && !x.IsDeleted && x.StatusId == ConstantUserStatus.ACTIVE, cancellationToken);
 
             }
         }

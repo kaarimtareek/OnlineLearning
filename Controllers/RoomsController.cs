@@ -43,6 +43,22 @@ namespace OnlineLearning.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
+        [HttpGet("")]
+        public async Task<IActionResult> GetRooms()
+        {
+            try
+            {
+                var result =await mediator.Send(new GetAvailableRoomsQuery
+                {
+                    UserId = UserId
+                });
+                return StatusCode((int)result.HttpStatusCode,result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
         [HttpPost("")]
         public async Task<IActionResult> CreateRoom(AddRoomInputModel inputModel)
         {
@@ -57,6 +73,40 @@ namespace OnlineLearning.Controllers
                     RoomName = inputModel.RoomName,
                     StartDate = inputModel.StartDate,
                     UserId  = UserId
+                });
+                return StatusCode((int)result.HttpStatusCode,result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpPost("{roomId}/Join")]
+        public async Task<IActionResult> RequestToJoinRoom(int roomId)
+        {
+            try
+            {
+                var result =await mediator.Send(new JoinRoomCommand
+                {
+                    RoomId = roomId,
+                    UserId  = UserId
+                });
+                return StatusCode((int)result.HttpStatusCode,result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpGet("{roomId}/RequestedUsers")]
+        public async Task<IActionResult> RequestedUsers(int roomId)
+        {
+            try
+            {
+                var result =await mediator.Send(new GetRequestedUsersToRoomQuery
+                {
+                    RoomId = roomId,
+                    RoomOwnerId  = UserId
                 });
                 return StatusCode((int)result.HttpStatusCode,result);
             }

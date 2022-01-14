@@ -23,7 +23,8 @@ namespace OnlineLearning.Models
         public byte[] RowVersion { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<Answer> Answers{ get; set; }
-        public virtual ICollection<Room> Rooms{ get; set; }
+        public virtual ICollection<Room> CreatedRooms{ get; set; }
+        public virtual ICollection<UsersRooms> RequestedRooms{ get; set; }
         public virtual ICollection<UserInterest> UserInterests{ get; set; }
         public virtual LookupUserStatus Status { get; set; }
     }

@@ -11,10 +11,12 @@ namespace OnlineLearning.Models
     {
         public DbSet<Answer> Answers { get; set; }
         public DbSet<LookupUserStatus> LookupUserStatuses{ get; set; }
+        public DbSet<LookupUserRoomStatus> LookupUserRoomStatuses{ get; set; }
         public DbSet<LookupRoomStatus> LookupRoomStatuses{ get; set; }
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<UsersRooms> UsersRooms { get; set; }
         public DbSet<RoomInterest> RoomInterests { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserInterest> UserInterests { get; set; }

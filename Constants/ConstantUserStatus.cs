@@ -12,5 +12,8 @@ namespace OnlineLearning.Constants
         public const string BLOCKED= "BLOCKED";
         public static List<string> ALL = new List<string> { ACTIVE, IN_ACTIVE, BLOCKED };
         public static bool IsStatusExist(string status) => ALL.Contains(status);
+        public static bool IsActive(string status) => status == ACTIVE;
+        public static bool IsInActive(string status) => status == IN_ACTIVE;
+        public static bool IsBlocked(string status) => status == BLOCKED;
     }
 }

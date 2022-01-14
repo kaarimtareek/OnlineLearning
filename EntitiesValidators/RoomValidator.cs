@@ -30,5 +30,34 @@ namespace OnlineLearning.EntitiesValidators
                 return await context.LookupRoomStatuses.AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, cancellationToken);
             }
         }
+        public async Task<bool> IsRoomExist(int id)
+        {
+            using (var context = new AppDbContext(contextOptions))
+            {
+                return await context.Rooms.AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted);
+            }
+        }
+        public async Task<bool> IsRoomExist(int id, CancellationToken cancellationToken)
+        {
+            using (var context = new AppDbContext(contextOptions))
+            {
+                return await context.Rooms.AsNoTracking().AnyAsync(x => x.Id == id && !x.IsDeleted, cancellationToken);
+            }
+        }
+        public async Task<bool> IsUserRoomOwner(int roomId,string userId)
+        {
+            using (var context = new AppDbContext(contextOptions))
+            {
+                return await context.Rooms.AsNoTracking().AnyAsync(x => x.Id == roomId && x.OwnerId == userId && !x.IsDeleted);
+            }
+        }
+        public async Task<bool> IsUserRoomOwner(int roomId, string userId, CancellationToken cancellationToken)
+        {
+            using (var context = new AppDbContext(contextOptions))
+            {
+                return await context.Rooms.AsNoTracking().AnyAsync(x => x.Id == roomId && x.OwnerId == userId && !x.IsDeleted, cancellationToken);
+            }
+        }
+
     }
 }

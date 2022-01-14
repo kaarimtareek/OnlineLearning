@@ -5,8 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace OnlineLearning.Models
 {
+    [Index(nameof(UserId), nameof(InterestId),IsUnique = true)]
     public class UserInterest : BaseEntity
     {
         [Key]

@@ -11,5 +11,7 @@ namespace OnlineLearning.EntitiesValidators
         Task<bool> IsAvailablePhoneNumber(string phonenumber, CancellationToken cancellationToken);
         Task<bool> IsExistingUserId(string id);
         Task<bool> IsExistingUserId(string id, CancellationToken cancellationToken);
+        Task<bool> IsActiveUserId(string id);
+        Task<bool> IsActiveUserId(string id, CancellationToken cancellationToken);
     }
 }

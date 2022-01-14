@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineLearning.Models;
 
 namespace OnlineLearning.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211218180646_add_user_rooms")]
+    partial class add_user_rooms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -480,9 +482,6 @@ namespace OnlineLearning.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -549,9 +548,7 @@ namespace OnlineLearning.Migrations
 
                     b.HasIndex("InterestId");
 
-                    b.HasIndex("RoomId", "InterestId")
-                        .IsUnique()
-                        .HasFilter("[InterestId] IS NOT NULL");
+                    b.HasIndex("RoomId");
 
                     b.ToTable("RoomInterests");
                 });
@@ -588,9 +585,7 @@ namespace OnlineLearning.Migrations
 
                     b.HasIndex("InterestId");
 
-                    b.HasIndex("UserId", "InterestId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL AND [InterestId] IS NOT NULL");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserInterests");
                 });
@@ -641,9 +636,7 @@ namespace OnlineLearning.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.HasIndex("UserId", "RoomId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UsersRooms");
                 });
@@ -803,7 +796,7 @@ namespace OnlineLearning.Migrations
                         .HasForeignKey("StatusId");
 
                     b.HasOne("OnlineLearning.Models.ApplicationUser", "User")
-                        .WithMany("RequestedRooms")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("Room");
@@ -820,8 +813,6 @@ namespace OnlineLearning.Migrations
                     b.Navigation("CreatedRooms");
 
                     b.Navigation("Questions");
-
-                    b.Navigation("RequestedRooms");
 
                     b.Navigation("UserInterests");
                 });

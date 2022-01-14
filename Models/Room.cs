@@ -19,6 +19,8 @@ namespace OnlineLearning.Models
         [MaxLength(50)]
         public string StatusId { get; set; }
         public decimal Price { get; set; }
+        //indication if the room doesn't need approval or not
+        public bool IsPublic { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? ExpectedEndDate{ get; set; }
         public DateTime? FinishDate{ get; set; }
@@ -26,5 +28,6 @@ namespace OnlineLearning.Models
         public virtual ICollection<RoomInterest> RoomInterests{ get; set; }
         public virtual ApplicationUser Owner { get; set; }
         public virtual LookupRoomStatus Status { get; set; }
+        public virtual ICollection<UsersRooms> RequestedUsers { get; set; }
     }
 }

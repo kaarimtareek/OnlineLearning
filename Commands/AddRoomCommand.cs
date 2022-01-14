@@ -16,6 +16,7 @@ namespace OnlineLearning.Commands
         public decimal Price { get; set; }
         public DateTime? ExpectedEndDate{ get; set; }
         public DateTime StartDate{ get; set; }
+        public bool IsPublic { get; set; }
         public List<string> Interests { get; set; }
     }
 }

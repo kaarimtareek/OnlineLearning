@@ -64,11 +64,16 @@ namespace OnlineLearning
             services.AddScoped<IRoomService, RoomService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IInterestService, InterestService>();
+            services.AddScoped<IInterestService, InterestService>();
+            //services.AddScoped<IConstatQueries, ConstatQueries>();
             services.AddScoped<IStemmer, EnglishPorter2Stemmer>();
             #endregion
             services.AddScoped(typeof( ILoggerService<>), typeof( LoggerService<>));
+            #region Validators
             services.AddScoped<IUserValidator, UserValidator>();
+            services.AddScoped<IRoomValidator, RoomValidator>();
             services.AddScoped<IInterestValidator, InterestValidator>();
+            #endregion
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
             services.AddMediatR(typeof(Startup));
             services.AddControllers();

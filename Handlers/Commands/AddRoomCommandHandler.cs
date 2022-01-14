@@ -35,7 +35,8 @@ namespace OnlineLearning.Handlers.Commands
                 {
                     try
                     {
-                      var result = await roomService.CreateRoom(context, request.UserId, request.RoomName, request.RoomDescription, request.Price, request.StartDate, request.ExpectedEndDate, request.Interests);
+                        //validate the interests before creating the room
+                      var result = await roomService.CreateRoom(context, request.UserId, request.RoomName, request.RoomDescription, request.Price, request.StartDate, request.ExpectedEndDate,request.IsPublic, request.Interests);
                         if (!result.IsSuccess)
                         {
                             await transactionScope.RollbackAsync();
@@ -54,6 +55,7 @@ namespace OnlineLearning.Handlers.Commands
                     }
                     catch (Exception e)
                     {
+                        //TODO: log the error
                         await transactionScope.RollbackAsync();
                         return new ResponseModel<int>
                         {

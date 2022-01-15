@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using OnlineLearning.Commands;
+using OnlineLearning.Constants;
 using OnlineLearning.Models.InputModels;
 using OnlineLearning.Queries;
 
@@ -86,10 +87,11 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                var result =await mediator.Send(new JoinRoomCommand
+                var result =await mediator.Send(new UserChangeUserRoomStatusCommand
                 {
                     RoomId = roomId,
-                    UserId  = UserId
+                    UserId  = UserId,
+                    StatusId = ConstantRoomStatus.PENDING
                 });
                 return StatusCode((int)result.HttpStatusCode,result);
             }
@@ -107,6 +109,46 @@ namespace OnlineLearning.Controllers
                 {
                     RoomId = roomId,
                     RoomOwnerId  = UserId
+                });
+                return StatusCode((int)result.HttpStatusCode,result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpPut("{roomId}/AcceptUser/{userId}")]
+        public async Task<IActionResult> AcceptUserToRoom(int roomId,string userId)
+        {
+            try
+            {
+                var result =await mediator.Send(new OwnerChangeUserRoomStatusCommand
+                {
+                    RoomId = roomId,
+                    OwnerId  = UserId,
+                    UserId = userId,
+                    Reason ="",
+                    StatusId = ConstantUserRoomStatus.ACCEPTED ,
+                });
+                return StatusCode((int)result.HttpStatusCode,result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpPut("{roomId}/RejectUser/{userId}/Reason/{comment}")]
+        public async Task<IActionResult> RejectUserToRoom(int roomId,string userId,string comment = "")
+        {
+            try
+            {
+                var result =await mediator.Send(new OwnerChangeUserRoomStatusCommand
+                {
+                    RoomId = roomId,
+                    OwnerId  = UserId,
+                    UserId = userId,
+                    Reason =comment,
+                    StatusId = ConstantUserRoomStatus.REJECTED ,
                 });
                 return StatusCode((int)result.HttpStatusCode,result);
             }

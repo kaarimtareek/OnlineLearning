@@ -17,5 +17,7 @@ namespace OnlineLearning.Constants
         public const string INTEREST_ALREADY_EXIST = "INTEREST_ALREADY_EXIST";
         public const string THERE_ARE_SIMILAR_INTEREST = "THERE_ARE_SIMILAR_INTEREST";
         public const string CANT_JOIN_OWNED_ROOM = "CANT_JOIN_OWNED_ROOM";
+        public const string CANT_CHANGE_STATUS = "CANT_CHANGE_STATUS";
+        public const string INVALID_STATUS = "INVALID_STATUS";
     }
 }

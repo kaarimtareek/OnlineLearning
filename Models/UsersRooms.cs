@@ -20,6 +20,10 @@ namespace OnlineLearning.Models
         public string Comment { get;set; }
         [MaxLength(200)]
         public string RejectionReason { get; set; }
+        [MaxLength(200)]
+        public string SuspensionReason { get; set; }
+        [MaxLength(200)]
+        public string LeaveReason { get; set; }
         public virtual LookupUserRoomStatus Status { get; set; }
         public virtual ApplicationUser User { get; set; }
         public virtual Room Room { get; set; }

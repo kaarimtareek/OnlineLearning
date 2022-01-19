@@ -8,6 +8,8 @@ using OnlineLearning.Commands;
 using OnlineLearning.Constants;
 using OnlineLearning.Models.InputModels;
 using OnlineLearning.Queries;
+using OnlineLearning.QueryParameters;
+using OnlineLearning.Settings;
 
 using System;
 using System.Collections.Generic;
@@ -23,10 +25,12 @@ namespace OnlineLearning.Controllers
     public class RoomsController : SystemBaseController
     {
         private readonly IMediator mediator;
+        private readonly PaginationSettings paginationSettings;
 
-        public RoomsController(IMediator mediator)
+        public RoomsController(IMediator mediator,PaginationSettings paginationSettings)
         {
             this.mediator = mediator;
+            this.paginationSettings = paginationSettings;
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRoom(int id)
@@ -113,6 +117,62 @@ namespace OnlineLearning.Controllers
                 return StatusCode((int)result.HttpStatusCode,result);
             }
             catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpGet("/Interests/GetRooms/{interestId}")]
+        public async Task<IActionResult> GetRoomsByInterestId(string interestId, [FromQuery] GetRoomsByIntersetIdQueryParameters queryParameters)
+        {
+            try
+            {
+                int defaultPageNumber = paginationSettings.DefaultPageNumber;
+                int maxPageSize = paginationSettings.MaxPageSize;
+                int defaultPageSize = paginationSettings.DefaultPageSize;
+                if (queryParameters.PageNumber < 1)
+                    queryParameters.PageNumber = defaultPageNumber;
+                if (queryParameters.PageSize < 1)
+                    queryParameters.PageSize = defaultPageSize;
+                if (queryParameters.PageSize > maxPageSize)
+                    queryParameters.PageSize = maxPageSize;
+                var result = await mediator.Send(new GetRoomsByInterestIdQuery
+                {
+                    InterestId = interestId,
+                    PageNumber = queryParameters.PageNumber,
+                    PageSize = queryParameters.PageSize,
+
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpGet("/Interests/GetRooms")]
+        public async Task<IActionResult> GetRoomsByInterests([FromQuery] GetRoomsByIntersetsQueryParameters queryParameters)
+        {
+            try
+            {
+                int defaultPageNumber = paginationSettings.DefaultPageNumber;
+                int maxPageSize = paginationSettings.MaxPageSize;
+                int defaultPageSize = paginationSettings.DefaultPageSize;
+                if (queryParameters.PageNumber < 1)
+                    queryParameters.PageNumber = defaultPageNumber;
+                if (queryParameters.PageSize < 1)
+                    queryParameters.PageSize = defaultPageSize;
+                if (queryParameters.PageSize > maxPageSize)
+                    queryParameters.PageSize = maxPageSize;
+                var result = await mediator.Send(new GetRoomsByInterestsQuery
+                {
+                    Interests = queryParameters.Interests,
+                    PageNumber = queryParameters.PageNumber,
+                    PageSize = queryParameters.PageSize,
+
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }

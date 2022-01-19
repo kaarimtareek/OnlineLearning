@@ -80,8 +80,11 @@ namespace OnlineLearning
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LogBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             var jwtSettings = new JwtSettings();
+            var paginationSettings = new PaginationSettings();
             Configuration.Bind(nameof(jwtSettings), jwtSettings);
+            Configuration.Bind(nameof(paginationSettings), paginationSettings);
             services.AddSingleton(jwtSettings);
+            services.AddSingleton(paginationSettings);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

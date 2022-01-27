@@ -18,6 +18,6 @@ namespace OnlineLearning.DTOs
         public DateTime StartDate { get; set; }
         public DateTime? ExpectedEndDate { get; set; }
         public DateTime? FinishDate { get; set; }
-        public List<InterestDto> Interests { get;set; }
+        public IEnumerable<InterestDto> Interests { get;set; }
     }
 }

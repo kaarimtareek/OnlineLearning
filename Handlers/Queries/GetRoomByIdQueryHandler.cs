@@ -1,7 +1,13 @@
-﻿using MediatR;
+﻿using AutoMapper;
+
+using MediatR;
+
+using Microsoft.EntityFrameworkCore;
+
 using OnlineLearning.Commands;
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
+using OnlineLearning.DTOs;
 using OnlineLearning.Models;
 using OnlineLearning.Queries;
 using OnlineLearning.Services;
@@ -14,26 +20,41 @@ using System.Threading.Tasks;
 
 namespace OnlineLearning.Handlers.Queries
 {
-    public class GetRoomByIdQueryHandler : IRequestHandler<GetRoomByIdQuery, ResponseModel<Room>>
+    public class GetRoomByIdQueryHandler : IRequestHandler<GetRoomByIdQuery, ResponseModel<RoomDto>>
     {
-        private readonly IRoomService roomService;
+        private readonly DbContextOptions<AppDbContext> dbContextOptions;
+        private readonly IMapper mapper;
 
-        public GetRoomByIdQueryHandler(IRoomService roomService)
+        public GetRoomByIdQueryHandler(DbContextOptions<AppDbContext> dbContextOptions,IMapper mapper)
         {
-            this.roomService = roomService;
+            this.dbContextOptions = dbContextOptions;
+            this.mapper = mapper;
         }
        
-        public async Task<ResponseModel<Room>> Handle(GetRoomByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseModel<RoomDto>> Handle(GetRoomByIdQuery request, CancellationToken cancellationToken)
         {
-            var result = await roomService.GetRoomById(request.RoomId);
-
-            return new ResponseModel<Room>
+            using(AppDbContext context = new AppDbContext(dbContextOptions))
             {
-                IsSuccess = result.IsSuccess,
-                HttpStatusCode = result.ResponseCode.GetStatusCode(),
-                Result = result.Data,
-                MessageCode = result.Message,
-            };
+                var room = await context.Rooms.IsNotDeleted().IncludeOwner().IncludeInterests().FirstOrDefaultAsync(x => x.Id == request.RoomId && !x.IsDeleted);
+                if(room ==null)
+                {
+                    return new ResponseModel<RoomDto>
+                    {
+                        IsSuccess = false,
+                        HttpStatusCode = ResponseCodeEnum.NOT_FOUND.GetStatusCode(),
+                        MessageCode = ConstantMessageCodes.ROOM_NOT_FOUND,
+                    };
+                }
+                var roomDto = mapper.Map<RoomDto>(room);
+                return new ResponseModel<RoomDto>
+                {
+                    IsSuccess = true,
+                    HttpStatusCode = ResponseCodeEnum.SUCCESS.GetStatusCode(),
+                    MessageCode = ConstantMessageCodes.OPERATION_SUCCESS,
+                    Result = roomDto
+
+                };
+            }
         }
     }
 }

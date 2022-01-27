@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using OnlineLearning.Common;
+using OnlineLearning.DTOs;
 using OnlineLearning.Models;
 
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OnlineLearning.Queries
 {
-    public class GetRoomByIdQuery : IRequest<ResponseModel<Room>>
+    public class GetRoomByIdQuery : IRequest<ResponseModel<RoomDto>>
     {
         public int RoomId { get; set; }
     }

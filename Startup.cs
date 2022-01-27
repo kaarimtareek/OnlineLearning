@@ -76,6 +76,7 @@ namespace OnlineLearning
             #endregion
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
             services.AddMediatR(typeof(Startup));
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LogBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

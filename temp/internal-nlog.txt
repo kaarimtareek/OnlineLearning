@@ -388,3 +388,31 @@
 2022-01-19 12:58:07.1368 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=D:\GraduationProject\OnlineLearning\bin\Debug\net5.0\NLog.config
 2022-01-19 12:58:07.1559 Info Configuration initialized.
 2022-01-19 12:58:07.1559 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.11.13229. Product version: 4.7.11+33ed3a9f86277651e93ddf39cda64a046a06778b. GlobalAssemblyCache: False
+2022-01-27 20:00:27.1859 Info Message Template Auto Format enabled
+2022-01-27 20:00:27.2199 Info Loading assembly: NLog.Web.AspNetCore
+2022-01-27 20:00:27.2631 Info Adding target FileTarget(Name=allfile)
+2022-01-27 20:00:27.2631 Info Adding target FileTarget(Name=ownFile-web)
+2022-01-27 20:00:27.2804 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=D:\GraduationProject\OnlineLearning\bin\Debug\net5.0\NLog.config
+2022-01-27 20:00:27.2920 Info Configuration initialized.
+2022-01-27 20:00:27.2920 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.11.13229. Product version: 4.7.11+33ed3a9f86277651e93ddf39cda64a046a06778b. GlobalAssemblyCache: False
+2022-01-27 20:05:16.6063 Info Message Template Auto Format enabled
+2022-01-27 20:05:16.6237 Info Loading assembly: NLog.Web.AspNetCore
+2022-01-27 20:05:16.6664 Info Adding target FileTarget(Name=allfile)
+2022-01-27 20:05:16.6664 Info Adding target FileTarget(Name=ownFile-web)
+2022-01-27 20:05:16.6903 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=D:\GraduationProject\OnlineLearning\bin\Debug\net5.0\NLog.config
+2022-01-27 20:05:16.7038 Info Configuration initialized.
+2022-01-27 20:05:16.7038 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.11.13229. Product version: 4.7.11+33ed3a9f86277651e93ddf39cda64a046a06778b. GlobalAssemblyCache: False
+2022-01-27 20:17:59.1610 Info Message Template Auto Format enabled
+2022-01-27 20:17:59.1774 Info Loading assembly: NLog.Web.AspNetCore
+2022-01-27 20:17:59.2213 Info Adding target FileTarget(Name=allfile)
+2022-01-27 20:17:59.2213 Info Adding target FileTarget(Name=ownFile-web)
+2022-01-27 20:17:59.2457 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=D:\GraduationProject\OnlineLearning\bin\Debug\net5.0\NLog.config
+2022-01-27 20:17:59.2579 Info Configuration initialized.
+2022-01-27 20:17:59.2579 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.11.13229. Product version: 4.7.11+33ed3a9f86277651e93ddf39cda64a046a06778b. GlobalAssemblyCache: False
+2022-01-27 20:35:21.3275 Info Message Template Auto Format enabled
+2022-01-27 20:35:21.3399 Info Loading assembly: NLog.Web.AspNetCore
+2022-01-27 20:35:21.4810 Info Adding target FileTarget(Name=allfile)
+2022-01-27 20:35:21.4810 Info Adding target FileTarget(Name=ownFile-web)
+2022-01-27 20:35:21.4987 Info Validating config: TargetNames=allfile, ownFile-web, ConfigItems=45, FilePath=D:\GraduationProject\OnlineLearning\bin\Debug\net5.0\NLog.config
+2022-01-27 20:35:21.5107 Info Configuration initialized.
+2022-01-27 20:35:21.5107 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.7.11.13229. Product version: 4.7.11+33ed3a9f86277651e93ddf39cda64a046a06778b. GlobalAssemblyCache: False

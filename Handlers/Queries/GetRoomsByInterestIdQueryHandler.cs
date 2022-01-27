@@ -12,6 +12,7 @@ using OnlineLearning.Constants;
 using OnlineLearning.DTOs;
 using OnlineLearning.Models;
 using OnlineLearning.Queries;
+using OnlineLearning.Services;
 
 namespace OnlineLearning.Handlers.Queries
 {
@@ -29,8 +30,7 @@ namespace OnlineLearning.Handlers.Queries
             {
                 using (AppDbContext context = new AppDbContext(dbContextOptions))
                 {
-                    var rooms = context.RoomInterests.Include(r => r.Room).ThenInclude(x => x.Status).Include(x => x.Room).ThenInclude(x => x.Owner).AsNoTracking().Where(x => x.InterestId == request.InterestId && !x.IsDeleted && !x.Room.IsDeleted).OrderByDescending(x => x.Room.StartDate).Select(x => x.Room
-                    ).Skip(request.PageSize * (request.PageNumber - 1)).Take(request.PageSize).Select(x => new RoomDto
+                    var rooms = await context.Rooms.AsNoTracking().IncludeOwner().IncludeInterests().IncludeStatus().IsNotDeleted().Where(x=>x.RoomInterests.Any(a=>a.InterestId == request.InterestId && !a.IsDeleted)).OrderByDescending(x=>x.StartDate).Select(x => new RoomDto
                     {
                         Description = x.Description,
                         ExpectedEndDate = x.ExpectedEndDate,
@@ -49,15 +49,20 @@ namespace OnlineLearning.Handlers.Queries
                             NameArabic = x.Status.NameArabic,
                             NameEnglish = x.Status.NameEnglish,
                             IsDeleted = x.Status.IsDeleted
-                        }
-                    });
-                    var pagedList = await PagedList<RoomDto>.ToPagedList(rooms, request.PageNumber, request.PageSize);
+                        },
+                        Interests = x.RoomInterests.Select(i=> new InterestDto
+                        {
+                            Id = i.InterestId,
+                            IsDeleted = i.IsDeleted
+
+                        })
+                    }).ToPagedList(request.PageNumber,request.PageSize);
                     return new ResponseModel<PagedList<RoomDto>>
                     {
                         HttpStatusCode = ResponseCodeEnum.SUCCESS.GetStatusCode(),
                         IsSuccess = true,
                         MessageCode = ConstantMessageCodes.OPERATION_SUCCESS,
-                        Result = pagedList,
+                        Result = rooms,
                     };
                 }
             }

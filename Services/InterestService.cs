@@ -2,6 +2,7 @@
 
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
+using OnlineLearning.DTOs;
 using OnlineLearning.Models;
 using OnlineLearning.Utilities;
 using OnlineLearning.Utilities.Stemmer;
@@ -26,20 +27,23 @@ namespace OnlineLearning.Services
             this.stemmer = stemmer;
         }
 
-        public async Task<OperationResult<string>> GetInterests()
+        public async Task<OperationResult<List<InterestDto>>> GetInterests()
         {
             try
             {
                 using (AppDbContext context = new AppDbContext(contextOptions))
                 {
-                    var result = await context.Interests.AsNoTracking().Where(x => !x.IsDeleted).ToListAsync();
-                    return OperationResult.Success<string>(ConstantMessageCodes.OPERATION_SUCCESS, default, ResponseCodeEnum.SUCCESS);
+                    var result = await context.Interests.AsNoTracking().IsNotDeleted().Select(x=> new InterestDto
+                    {
+                        Id = x.Id
+                    }).ToListAsync();
+                    return OperationResult.Success(result);
                 }
             }
             catch (Exception e)
             {
                 logger.LogError($"error whilte GetInterests: {e}");
-                return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
+                return OperationResult.Fail<List<InterestDto>>();
             }
         }
 
@@ -89,7 +93,7 @@ namespace OnlineLearning.Services
                     await context.Interests.AddAsync(interest);
                 }
                 await context.SaveChangesAsync();
-                return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS, interest.Id, ResponseCodeEnum.SUCCESS);
+                return OperationResult.Success(interest.Id);
             }
             catch (Exception e)
             {
@@ -105,7 +109,7 @@ namespace OnlineLearning.Services
                 using (AppDbContext context = new AppDbContext(contextOptions))
                 {
                     var userInterests = await context.Interests.Include(x => x.UserInterests.Where(x => x.UserId == userId && !x.IsDeleted)).AsNoTracking().Where(x => !x.IsDeleted).ToListAsync();
-                    return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS, userInterests, ResponseCodeEnum.SUCCESS);
+                    return OperationResult.Success(userInterests);
                 }
             }
             catch (Exception e)
@@ -146,7 +150,7 @@ namespace OnlineLearning.Services
                     await context.UserInterests.AddAsync(userInterest);
                 }
                 await context.SaveChangesAsync();
-                return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS, userInterest.Id, ResponseCodeEnum.SUCCESS);
+                return OperationResult.Success(userInterest.Id);
             }
             catch (Exception e)
             {
@@ -168,7 +172,7 @@ namespace OnlineLearning.Services
                     //get all the interests in the db
                     var interests = await context.Interests.AsNoTracking().Where(x => !x.IsDeleted).ToListAsync();
                     var result = GetSimilarInterests(interestStemmedWords, interests);
-                    return OperationResult.Success(ConstantMessageCodes.OPERATION_FAILED, result, ResponseCodeEnum.FAILED);
+                    return OperationResult.Success( result,ConstantMessageCodes.THERE_ARE_SIMILAR_INTEREST,ResponseCodeEnum.FAILED);
                 }
             }
             catch (Exception e)

@@ -11,6 +11,8 @@ namespace OnlineLearning.Constants
         public const string OPERATION_FAILED = "OPERATION_FAILED";
         public const string VALIDATION_ERROR = "VALIDATION_ERROR";
         public const string USER_NOT_FOUND = "USER_NOT_FOUND";
+        public const string FILE_NOT_FOUND = "FILE_NOT_FOUND";
+        public const string FILE_NOT_SUPPORTED = "FILE_NOT_SUPPORTED";
         public const string ROOM_NOT_FOUND = "ROOM_NOT_FOUND";
         public const string ROOM_NOT_VAlID_TO_JOIN = "ROOM_NOT_VAlID_TO_JOIN";
         public const string ROOM_STATUS_NOT_FOUND = "ROOM_STATUS_NOT_FOUND";

@@ -14,6 +14,7 @@ namespace OnlineLearning.Constants
         NOT_FOUND = 3,
         BAD_INPUT = 4,
         INVALID_DATA = 5,
+        NOT_SUPPORTED = 6,
 
     }
     public static class ResponseCodeEnumExtension
@@ -32,6 +33,8 @@ namespace OnlineLearning.Constants
                 case ResponseCodeEnum.BAD_INPUT:
                 case ResponseCodeEnum.INVALID_DATA:
                     return HttpStatusCode.BadRequest;
+                case ResponseCodeEnum.NOT_SUPPORTED:
+                    return HttpStatusCode.UnsupportedMediaType;
                 default:
                     return HttpStatusCode.InternalServerError;
 

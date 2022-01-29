@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 using OnlineLearning.Common;
@@ -16,11 +17,13 @@ namespace OnlineLearning.Services
     {
         private readonly DbContextOptions<AppDbContext> contextOptions;
         private readonly ILoggerService<RoomService> logger;
+        private readonly IFileManager fileManager;
 
-        public RoomService(DbContextOptions<AppDbContext> contextOptions, ILoggerService<RoomService> logger)
+        public RoomService(DbContextOptions<AppDbContext> contextOptions, ILoggerService<RoomService> logger,IFileManager fileManager)
         {
             this.contextOptions = contextOptions;
             this.logger = logger;
+            this.fileManager = fileManager;
         }
 
         public async Task<OperationResult<int>> CreateRoom(AppDbContext context, string userId, string roomName, string roomDescription, decimal price, DateTime StartDate, DateTime? expectedEndDate, bool isPublic, List<string> interests)
@@ -227,9 +230,31 @@ namespace OnlineLearning.Services
                 UpdateAppropiateComment(userRoom,status,comment);
             }
             await context.SaveChangesAsync();
-            return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS,userRoom.Id,ResponseCodeEnum.SUCCESS);
+            return OperationResult.Success(userRoom.Id);
         }
 
+        public async Task<OperationResult<int>> AddMaterial(AppDbContext context,int roomId, IFormFile file )
+        {
+            var room = await context.Rooms.Select(x => new { x.Name ,x.Id}).FirstOrDefaultAsync(x => x.Id == roomId);
+            string roomName = room.Name;
+            //add the file , take its name and its path and add it in the room material
+            var addFileResult = await fileManager.Add(file,roomName);
+            if (!addFileResult.IsSuccess)
+            {
+                return OperationResult.Fail<int>(addFileResult.Message,default,addFileResult.ResponseCode);
+            }
+            var material = new RoomMaterial
+            {
+                FileName = addFileResult.Data.FileName,
+                IsActive = true,
+                RoomId = roomId,
+                FilePath = addFileResult.Data.FullPath,
+            };
+            await context.RoomMaterials.AddAsync(material);
+            await context.SaveChangesAsync();
+            return OperationResult.Success(material.Id);
+        }
+        
         #region Private Methods
 
         private bool IsValidRoomToJoin(Room room)

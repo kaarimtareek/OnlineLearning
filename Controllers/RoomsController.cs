@@ -9,6 +9,7 @@ using OnlineLearning.Constants;
 using OnlineLearning.Models.InputModels;
 using OnlineLearning.Queries;
 using OnlineLearning.QueryParameters;
+using OnlineLearning.Services;
 using OnlineLearning.Settings;
 
 using System;
@@ -213,6 +214,32 @@ namespace OnlineLearning.Controllers
                 return StatusCode((int)result.HttpStatusCode,result);
             }
             catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpPost("/{roomId}/Material")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> AddFile(int roomId)
+        {
+            try
+            {
+                var files = HttpContext.Request.Form?.Files.ToList();
+                if (files == null || files.Count == 0)
+                {
+                    return BadRequest("You must upload file");
+                }
+
+                var file = files.First();
+                var result = await mediator.Send(new AddRoomMaterialCommand
+                {
+                    File = file,
+                    RoomId = roomId,
+                    UserId = UserId
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }

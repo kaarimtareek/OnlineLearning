@@ -40,7 +40,7 @@ namespace OnlineLearning.Services
                     {
                         return OperationResult.Fail<ApplicationUser>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
                     }
-                    return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS, user, ResponseCodeEnum.SUCCESS);
+                    return OperationResult.Success(user);
                 }
             }
             catch (Exception e)

@@ -10,11 +10,11 @@ namespace OnlineLearning.Common
 {
     public class OperationResult : IOperationResult
     {
-        public static OperationResult<T> Fail<T>(string message, T data = default, ResponseCodeEnum responseCodeEnum = default)
+        public static OperationResult<T> Fail<T>(string message = ConstantMessageCodes.OPERATION_FAILED, T data = default, ResponseCodeEnum responseCodeEnum = ResponseCodeEnum.FAILED)
         {
             return new OperationResult<T>(data, false, responseCodeEnum, message);
         }
-        public static OperationResult<T> Success<T>(string message, T data = default, ResponseCodeEnum responseCodeEnum = default)
+        public static OperationResult<T> Success<T>( T data = default, string message = ConstantMessageCodes.OPERATION_SUCCESS, ResponseCodeEnum responseCodeEnum = ResponseCodeEnum.SUCCESS)
         {
             return new OperationResult<T>(data, true, responseCodeEnum, message);
         }

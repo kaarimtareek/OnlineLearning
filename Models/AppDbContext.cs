@@ -18,6 +18,8 @@ namespace OnlineLearning.Models
         public DbSet<Room> Rooms { get; set; }
         public DbSet<UsersRooms> UsersRooms { get; set; }
         public DbSet<RoomInterest> RoomInterests { get; set; }
+        public DbSet<RoomRoadMap> RoomRoadMaps { get; set; }
+        public DbSet<RoomMaterial> RoomMaterials { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserInterest> UserInterests { get; set; }
 

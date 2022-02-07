@@ -77,7 +77,7 @@ namespace OnlineLearning.Services
 
                 }
                 var token = CreateToken(user.Email, user.Id, validTokenDaysNumber);
-                return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS, token, ResponseCodeEnum.SUCCESS);
+                return OperationResult.Success( token);
 
             }
             catch (Exception e)
@@ -97,7 +97,7 @@ namespace OnlineLearning.Services
                     {
                         return OperationResult.Fail<ApplicationUser>(ConstantMessageCodes.USER_NOT_FOUND, default, ResponseCodeEnum.FAILED);
                     }
-                    return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS, user, ResponseCodeEnum.SUCCESS);
+                    return OperationResult.Success(user);
                 }
             }
             catch (Exception e)
@@ -121,7 +121,7 @@ namespace OnlineLearning.Services
                     return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
                 }
                 var token = CreateToken(user.Email, user.Id, validTokenDaysNumber);
-                return OperationResult.Success(ConstantMessageCodes.OPERATION_SUCCESS, token, ResponseCodeEnum.SUCCESS);
+                return OperationResult.Success(token);
 
             }
             catch (Exception e)

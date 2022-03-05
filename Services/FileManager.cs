@@ -20,7 +20,7 @@ namespace OnlineLearning.Services
             this.logger = logger;
         }
 
-        public async Task<OperationResult<FileManagerResult>> Add(IFormFile file, string folderName)
+        public async Task<OperationResult<FileManagerResult>> Add(IFormFile file, string folderName,string parentFolder ="")
         {
             string filename = file.FileName;
             try
@@ -29,10 +29,16 @@ namespace OnlineLearning.Services
                 var provider = new FileExtensionContentTypeProvider();
                 provider.TryGetContentType(filename, out contentType);
                 string currentDirectory = Directory.GetCurrentDirectory();
-                string folderPath = Path.Combine(currentDirectory, folderName);
+                string folderPath;
+                if(string.IsNullOrEmpty(parentFolder))
+                     folderPath = Path.Combine(currentDirectory, folderName);
+                else
+                    folderPath = Path.Combine(currentDirectory,parentFolder, folderName);
+
                 //if the directory is not there , it will create it , otherwise it will ignore
                 Directory.CreateDirectory(folderPath);
-                string fullPath = Path.Combine(currentDirectory, folderName, file.FileName);
+                string fullPath = Path.Combine(folderPath, file.FileName);
+                //if the file is there , it will overwrite it
                 using (var stream = new FileStream(fullPath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);

@@ -8,7 +8,7 @@ namespace OnlineLearning.Services
 {
     public interface IFileManager
     {
-        Task<OperationResult<FileManagerResult>> Add(IFormFile file, string folderName);
+        Task<OperationResult<FileManagerResult>> Add(IFormFile file, string folderName, string parentFolder = "");
         Task<OperationResult<FileManagerResult>> Get(string filePath);
         OperationResult<bool> Delete(string filePath);
     }

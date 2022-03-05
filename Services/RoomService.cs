@@ -236,9 +236,10 @@ namespace OnlineLearning.Services
         public async Task<OperationResult<int>> AddMaterial(AppDbContext context,int roomId, IFormFile file )
         {
             var room = await context.Rooms.Select(x => new { x.Name ,x.Id}).FirstOrDefaultAsync(x => x.Id == roomId);
+            string parentFolder = "RoomMaterials";
             string roomName = room.Name;
             //add the file , take its name and its path and add it in the room material
-            var addFileResult = await fileManager.Add(file,roomName);
+            var addFileResult = await fileManager.Add(file,roomName,parentFolder);
             if (!addFileResult.IsSuccess)
             {
                 return OperationResult.Fail<int>(addFileResult.Message,default,addFileResult.ResponseCode);

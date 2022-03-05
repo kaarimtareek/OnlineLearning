@@ -20,27 +20,10 @@ namespace OnlineLearning.Controllers
         {
             this.fileManager = fileManager;
         }
-        [HttpPost]
-        //[Consumes("*/*")]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> AddFile(
-            //[FromBody] IFormFile file2
-            )
-        {
-            var file = HttpContext.Request.Form.Files.FirstOrDefault();
-            var result2 = await fileManager.Add(file, "Test2");
-            if(result2.IsSuccess)
-            {
-                return Ok(result2.Data);
-            }
-            return BadRequest(result2.Message);
-        }
+       
         [HttpGet("/{path}")]
-        //[Consumes("*/*")]
-        public async Task<IActionResult> AddFile(
-            //[FromBody] IFormFile file2
-            string path
-            )
+      
+        public async Task<IActionResult> GetFile(string path)
         {
             var result = await fileManager.Get(path);
 

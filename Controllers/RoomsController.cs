@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using OnlineLearning.Commands;
+using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.Models.InputModels;
 using OnlineLearning.Queries;
 using OnlineLearning.QueryParameters;
-using OnlineLearning.Services;
 using OnlineLearning.Settings;
 
 using System;
@@ -28,7 +28,7 @@ namespace OnlineLearning.Controllers
         private readonly IMediator mediator;
         private readonly PaginationSettings paginationSettings;
 
-        public RoomsController(IMediator mediator,PaginationSettings paginationSettings)
+        public RoomsController(IMediator mediator, PaginationSettings paginationSettings)
         {
             this.mediator = mediator;
             this.paginationSettings = paginationSettings;
@@ -38,13 +38,13 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                var result =await mediator.Send(new GetRoomByIdQuery
+                var result = await mediator.Send(new GetRoomByIdQuery
                 {
                     RoomId = id
                 });
-                return StatusCode((int)result.HttpStatusCode,result);
+                return StatusCode((int)result.HttpStatusCode, result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -54,13 +54,13 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                var result =await mediator.Send(new GetAvailableRoomsQuery
+                var result = await mediator.Send(new GetAvailableRoomsQuery
                 {
                     UserId = UserId
                 });
-                return StatusCode((int)result.HttpStatusCode,result);
+                return StatusCode((int)result.HttpStatusCode, result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -70,7 +70,7 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                var result =await mediator.Send(new AddRoomCommand
+                var result = await mediator.Send(new AddRoomCommand
                 {
                     RoomDescription = inputModel.RoomDescription,
                     ExpectedEndDate = inputModel.ExpectedEndDate,
@@ -78,11 +78,11 @@ namespace OnlineLearning.Controllers
                     Price = inputModel.Price,
                     RoomName = inputModel.RoomName,
                     StartDate = inputModel.StartDate,
-                    UserId  = UserId
+                    UserId = UserId
                 });
-                return StatusCode((int)result.HttpStatusCode,result);
+                return StatusCode((int)result.HttpStatusCode, result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -92,15 +92,15 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                var result =await mediator.Send(new UserChangeUserRoomStatusCommand
+                var result = await mediator.Send(new UserChangeUserRoomStatusCommand
                 {
                     RoomId = roomId,
-                    UserId  = UserId,
+                    UserId = UserId,
                     StatusId = ConstantRoomStatus.PENDING
                 });
-                return StatusCode((int)result.HttpStatusCode,result);
+                return StatusCode((int)result.HttpStatusCode, result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -110,14 +110,14 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                var result =await mediator.Send(new GetRequestedUsersToRoomQuery
+                var result = await mediator.Send(new GetRequestedUsersToRoomQuery
                 {
                     RoomId = roomId,
-                    RoomOwnerId  = UserId
+                    RoomOwnerId = UserId
                 });
-                return StatusCode((int)result.HttpStatusCode,result);
+                return StatusCode((int)result.HttpStatusCode, result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -179,27 +179,27 @@ namespace OnlineLearning.Controllers
             }
         }
         [HttpPut("{roomId}/AcceptUser/{userId}")]
-        public async Task<IActionResult> AcceptUserToRoom(int roomId,string userId)
+        public async Task<IActionResult> AcceptUserToRoom(int roomId, string userId)
         {
             try
             {
-                var result =await mediator.Send(new OwnerChangeUserRoomStatusCommand
+                var result = await mediator.Send(new OwnerChangeUserRoomStatusCommand
                 {
                     RoomId = roomId,
-                    OwnerId  = UserId,
+                    OwnerId = UserId,
                     UserId = userId,
-                    Reason ="",
-                    StatusId = ConstantUserRoomStatus.ACCEPTED ,
+                    Reason = "",
+                    StatusId = ConstantUserRoomStatus.ACCEPTED,
                 });
-                return StatusCode((int)result.HttpStatusCode,result);
+                return StatusCode((int)result.HttpStatusCode, result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
         [HttpPut("{roomId}/RejectUser/{userId}/Reason/{comment}")]
-        public async Task<IActionResult> RejectUserToRoom(int roomId,string userId,string comment = "")
+        public async Task<IActionResult> RejectUserToRoom(int roomId, string userId, [FromBody] RejectUserInRoomInputModel inputModel)
         {
             try
             {
@@ -208,7 +208,7 @@ namespace OnlineLearning.Controllers
                     RoomId = roomId,
                     OwnerId  = UserId,
                     UserId = userId,
-                    Reason =comment,
+                    Reason =inputModel.Comment,
                     StatusId = ConstantUserRoomStatus.REJECTED ,
                 });
                 return StatusCode((int)result.HttpStatusCode,result);
@@ -218,24 +218,63 @@ namespace OnlineLearning.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
-        [HttpPost("/{roomId}/Material")]
+        [HttpPost("{roomId}/Materials")]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> AddFile(int roomId)
+        public async Task<IActionResult> AddRoomMaterial(int roomId)
         {
             try
             {
-                var files = HttpContext.Request.Form?.Files.ToList();
-                if (files == null || files.Count == 0)
+                var file = HttpContext.Request?.Form?.Files.FirstOrDefault();
+                if(file ==null)
                 {
-                    return BadRequest("You must upload file");
+                    var badResponse = ResponseModel.Fail<int>(ConstantMessageCodes.FILE_NOT_FOUND);
+                    return StatusCode((int)HttpStatusCode.BadRequest, badResponse);
                 }
-
-                var file = files.First();
-                var result = await mediator.Send(new AddRoomMaterialCommand
+                var result =await mediator.Send(new AddRoomMaterialCommand
                 {
-                    File = file,
                     RoomId = roomId,
-                    UserId = UserId
+                    UserId = UserId,
+                    File = file,
+                });
+                return StatusCode((int)result.HttpStatusCode,result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpGet("{roomId}/Materials")]
+        public async Task<IActionResult> GetRoomMaterials(int roomId)
+        {
+            try
+            {
+                
+                var result =await mediator.Send(new GetRoomMaterialsQuery
+                {
+                    RoomId = roomId,
+                    UserId = UserId,
+                 
+                });
+                return StatusCode((int)result.HttpStatusCode,result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpGet("{roomId}/Materials/{id}")]
+        public async Task<IActionResult> GetRoomMaterialById(int roomId, int id)
+        {
+            try
+            {
+
+                var result = await mediator.Send(new GetRoomMaterialQuery
+                {
+                    RoomId = roomId,
+                    UserId = UserId,
+                    MaterialId = id,
+                    
+
                 });
                 return StatusCode((int)result.HttpStatusCode, result);
             }

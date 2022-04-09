@@ -12,6 +12,7 @@ namespace OnlineLearning.Models
         public DbSet<Answer> Answers { get; set; }
         public DbSet<LookupUserStatus> LookupUserStatuses{ get; set; }
         public DbSet<LookupUserRoomStatus> LookupUserRoomStatuses{ get; set; }
+        public DbSet<LookupRoomMeetingStatus> LookupRoomMeetingStatuses{ get; set; }
         public DbSet<LookupRoomStatus> LookupRoomStatuses{ get; set; }
         public DbSet<Interest> Interests { get; set; }
         public DbSet<Question> Questions { get; set; }
@@ -20,6 +21,7 @@ namespace OnlineLearning.Models
         public DbSet<RoomInterest> RoomInterests { get; set; }
         public DbSet<RoomRoadMap> RoomRoadMaps { get; set; }
         public DbSet<RoomMaterial> RoomMaterials { get; set; }
+        public DbSet<RoomMeeting> RoomMeetings { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserInterest> UserInterests { get; set; }
 

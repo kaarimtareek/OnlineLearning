@@ -21,5 +21,6 @@ namespace OnlineLearning.Constants
         public const string CANT_JOIN_OWNED_ROOM = "CANT_JOIN_OWNED_ROOM";
         public const string CANT_CHANGE_STATUS = "CANT_CHANGE_STATUS";
         public const string INVALID_STATUS = "INVALID_STATUS";
+        public const string OVERLAPPED_MEETINGS = "OVERLAPPED_MEETINGS";
     }
 }

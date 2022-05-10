@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
+using OnlineLearning.Models.InputModels;
+
 using RestSharp;
 
 using System;
@@ -16,7 +18,7 @@ namespace OnlineLearning.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class ZoomController : ControllerBase
     {
         private readonly IConfiguration configuration;
@@ -54,14 +56,11 @@ namespace OnlineLearning.Controllers
             var result = await client.PostAsync(request);
             if(!result.IsSuccessful)
             {
-
-            }
-            else
-            {
-
+                return BadRequest(result.Content);
             }
             return Ok(result.Content);
 
         }
+      
     }
 }

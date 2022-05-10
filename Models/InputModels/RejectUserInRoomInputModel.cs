@@ -7,6 +7,6 @@ namespace OnlineLearning.Models.InputModels
 {
     public class RejectUserInRoomInputModel
     {
-        public string Comment { get; set; }
+        public string Reason { get; set; }
     }
 }

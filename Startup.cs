@@ -65,6 +65,8 @@ namespace OnlineLearning
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IInterestService, InterestService>();
             services.AddScoped<IInterestService, InterestService>();
+            services.AddScoped<IMeetingService, MeetingService>();
+            services.AddScoped<IZoomService, ZoomService>();
             services.AddScoped<IFileManager, FileManager>();
             //services.AddScoped<IConstatQueries, ConstatQueries>();
             services.AddScoped<IStemmer, EnglishPorter2Stemmer>();

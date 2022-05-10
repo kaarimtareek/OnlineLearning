@@ -20,6 +20,8 @@ namespace OnlineLearning.Models.InputModels
         public string Name { get; set; }
 
         public DateTime? BrithDate { get; set; }
+        [MinLength(9)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

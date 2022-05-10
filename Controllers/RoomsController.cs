@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineLearning.Commands;
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
+using OnlineLearning.Models;
 using OnlineLearning.Models.InputModels;
 using OnlineLearning.Queries;
 using OnlineLearning.QueryParameters;
 using OnlineLearning.Settings;
+using OnlineLearning.Utilities;
 
 using System;
 using System.Collections.Generic;
@@ -164,6 +166,8 @@ namespace OnlineLearning.Controllers
                     queryParameters.PageSize = defaultPageSize;
                 if (queryParameters.PageSize > maxPageSize)
                     queryParameters.PageSize = maxPageSize;
+                if (queryParameters.Interests == null)
+                    queryParameters.Interests = new string[] { };
                 var result = await mediator.Send(new GetRoomsByInterestsQuery
                 {
                     Interests = queryParameters.Interests,
@@ -198,7 +202,7 @@ namespace OnlineLearning.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
-        [HttpPut("{roomId}/RejectUser/{userId}/Reason/{comment}")]
+        [HttpPut("{roomId}/RejectUser/{userId}")]
         public async Task<IActionResult> RejectUserToRoom(int roomId, string userId, [FromBody] RejectUserInRoomInputModel inputModel)
         {
             try
@@ -208,7 +212,7 @@ namespace OnlineLearning.Controllers
                     RoomId = roomId,
                     OwnerId  = UserId,
                     UserId = userId,
-                    Reason =inputModel.Comment,
+                    Reason =inputModel.Reason,
                     StatusId = ConstantUserRoomStatus.REJECTED ,
                 });
                 return StatusCode((int)result.HttpStatusCode,result);
@@ -282,6 +286,25 @@ namespace OnlineLearning.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
+        }
+
+        [HttpPost("CreateMeeting/{roomId}")]
+        public async Task<IActionResult> CreateMeeting(int roomId,[FromBody] AddRoomMeetingInputModel inputModel)
+        {
+            var result = await mediator.Send(new AddRoomMeetingCommand
+            {
+                RoomId = roomId,
+                UserId = UserId,
+                StartNow =  inputModel.StartNow,
+                EndTime = inputModel.EndTime,
+                Duration = DatetimeHelper.GetDurationFromDates(inputModel.StartTime,inputModel.EndTime),
+                StartTime = inputModel.StartTime,
+                TopicName = inputModel.TopicName,
+                TopicDescription = inputModel.TopicDescription,
+                ZoomToken = inputModel.ZoomToken,
+                
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
         }
     }
 }

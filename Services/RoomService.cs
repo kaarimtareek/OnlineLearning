@@ -39,7 +39,7 @@ namespace OnlineLearning.Services
                     StartDate = StartDate,
                     ExpectedEndDate = expectedEndDate,
                     Description = roomDescription,
-                    StatusId = ConstantRoomStatus.PENDING,
+                    StatusId = ConstantRoomStatus.ACTIVE,
                     IsPublic = isPublic
                 };
                 //adding room interests

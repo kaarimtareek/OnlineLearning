@@ -33,69 +33,72 @@ namespace OnlineLearning.Handlers.Queries
                                    .GetCreatedRoomsForUser()
                                    .GetAllRoomsForUser()
                                    .GetUserInterests()
-                                   .Select(x => new UserDto
-                                   {
-                                       Id = request.Id,
-                                       JoinedRooms = x.RequestedRooms.Where(x => x.StatusId == ConstantUserRoomStatus.JOINED).Select(r => new RoomDto
-                                       {
-                                           Description = r.Room.Description,
-                                           Id = r.Room.Id,
-                                           ExpectedEndDate = r.Room.ExpectedEndDate,
-                                           FinishDate = r.Room.FinishDate,
-                                           Name = r.Room.Name,
-                                           OwnerId = r.Room.OwnerId,
-                                           Price = r.Room.Price,
-                                           StatusId = r.Room.StatusId,
-                                           StartDate = r.Room.StartDate,
-                                           IsPublic = r.Room.IsPublic,
-                                       }).ToList(),
-                                       StatusId = x.StatusId,
-                                       UserName = x.UserName,
-                                       Name = x.Name,
-                                       CreatedAt = x.CreatedAt,
-                                       Birthdate = x.Birthdate,
-                                       PhoneNumber = x.PhoneNumber,
-                                       Status = x.Status == null ? null : new UserStatusDto
-                                       {
-                                           Id = x.Status.Id,
-                                           NameArabic = x.Status.NameArabic,
-                                           NameEnglish = x.Status.NameEnglish,
-                                       },
-                                       CreatedRooms = x.CreatedRooms.Select(r => new RoomDto
-                                       {
-                                           Id = r.Id,
-                                           Description = r.Description,
-                                           ExpectedEndDate = r.ExpectedEndDate,
-                                           FinishDate = r.FinishDate,
-                                           Name = r.Name,
-                                           Price = r.Price,
-                                           OwnerId = r.OwnerId,
-                                           StatusId = r.StatusId,
-                                           StartDate = r.StartDate,
-                                           IsPublic = r.IsPublic,
-                                           
-                                       }).ToList(),
-                                       Interests = x.UserInterests.Select(r => new InterestDto
-                                       {
-                                           Id = r.InterestId,
-                                           IsDeleted = r.IsDeleted
-                                       }).ToList(),
-                                   })
+                                   .GetUserStatus()
                                    .FirstOrDefaultAsync(x => x.Id == request.Id);
-
-                return user == null
-                    ? new ResponseModel<UserDto>
+                
+                if(user == null)
+                {
+                 return new ResponseModel<UserDto>
                     {
                         IsSuccess = false,
                         HttpStatusCode = ResponseCodeEnum.FAILED.GetStatusCode(),
                         Result = null,
                         MessageCode = ConstantMessageCodes.USER_NOT_FOUND,
-                    }
-                    : new ResponseModel<UserDto>
+                    };
+                }
+                return new ResponseModel<UserDto>
                 {
                     IsSuccess = true,
                     HttpStatusCode = ResponseCodeEnum.SUCCESS.GetStatusCode(),
-                    Result = user,
+                    Result = new UserDto
+                    {
+                        Id = request.Id,
+                        Birthdate = user.Birthdate,
+                        CreatedAt = user.CreatedAt,
+                        Name = user.Name,
+                        StatusId = user.StatusId,
+                        UserName = user.UserName,
+                        PhoneNumber = user.PhoneNumber,
+                        IsDeleted = user.IsDeleted,
+                        Status = user.Status==null? null : new UserStatusDto
+                        {
+                            Id = user.Status.Id,
+                            NameArabic = user.Status.NameArabic,
+                            NameEnglish = user.Status.NameEnglish,
+                        },
+                        JoinedRooms = user.RequestedRooms.Where(x => x.StatusId == ConstantUserRoomStatus.JOINED).Select(r => new RoomDto
+                        {
+                            Description = r.Room.Description,
+                            Id = r.Room.Id,
+                            ExpectedEndDate = r.Room.ExpectedEndDate,
+                            FinishDate = r.Room.FinishDate,
+                            Name = r.Room.Name,
+                            OwnerId = r.Room.OwnerId,
+                            Price = r.Room.Price,
+                            StatusId = r.Room.StatusId,
+                            StartDate = r.Room.StartDate,
+                            IsPublic = r.Room.IsPublic,
+                        }).ToList(),
+                        CreatedRooms = user.CreatedRooms.Select(r => new RoomDto
+                        {
+                            Id = r.Id,
+                            Description = r.Description,
+                            ExpectedEndDate = r.ExpectedEndDate,
+                            FinishDate = r.FinishDate,
+                            Name = r.Name,
+                            Price = r.Price,
+                            OwnerId = r.OwnerId,
+                            StatusId = r.StatusId,
+                            StartDate = r.StartDate,
+                            IsPublic = r.IsPublic,
+
+                        }).ToList(),
+                        Interests = user.UserInterests.Select(r => new InterestDto
+                        {
+                            Id = r.InterestId,
+                            IsDeleted = r.IsDeleted
+                        }).ToList(),
+                    },
                     MessageCode = ConstantMessageCodes.OPERATION_SUCCESS,
                 };
             }

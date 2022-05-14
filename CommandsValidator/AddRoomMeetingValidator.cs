@@ -20,7 +20,7 @@ namespace OnlineLearning.CommandsValidator
              {
                  RuleFor(x => x.EndTime).GreaterThan(x => x.StartTime).WithMessage("End time must be greater than start time");
              });
-          //  RuleFor(x => x.UserId).MustAsync((model, m, c) => roomValidator.IsUserCanCreateMeeting(model.UserId, model.StartTime, model.EndTime, c)).WithMessage((model) => roomValidator.GetOverlappedMeetings(model.UserId, model.StartTime, model.EndTime));
+            RuleFor(x => x.UserId).MustAsync((model, m, c) => roomValidator.IsUserCanCreateMeeting(model.UserId, model.StartTime, model.EndTime, c)).WithMessage((model) => roomValidator.GetOverlappedMeetings(model.UserId, model.StartTime, model.EndTime));
         }
     }
 }

@@ -7,26 +7,27 @@ using OnlineLearning.Models;
 using OnlineLearning.Services;
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace OnlineLearning.Handlers.Commands
 {
-    public class CreateRoomMeetingCommandHandler : IRequestHandler<AddRoomMeetingCommand, ResponseModel<int>>
+    public class DeleteRoomMeetingCommandHandler : IRequestHandler<DeleteRoomMeetingCommand, ResponseModel<int>>
 
     {
         private readonly IZoomService zoomService;
         private readonly IMeetingService meetingService;
         private readonly DbContextOptions<AppDbContext> contextOptions;
 
-        public CreateRoomMeetingCommandHandler(IZoomService zoomService, IMeetingService meetingService, DbContextOptions<AppDbContext> contextOptions)
+        public DeleteRoomMeetingCommandHandler(IZoomService zoomService, IMeetingService meetingService, DbContextOptions<AppDbContext> contextOptions)
         {
-			this.meetingService = meetingService;
+            this.meetingService = meetingService;
             this.zoomService = zoomService;
             this.contextOptions = contextOptions;
         }
 
-        public async Task<ResponseModel<int>> Handle(AddRoomMeetingCommand request, CancellationToken cancellationToken)
+        public async Task<ResponseModel<int>> Handle(DeleteRoomMeetingCommand request, CancellationToken cancellationToken)
         {
 			using (var context = new AppDbContext(contextOptions))
 			{
@@ -35,18 +36,17 @@ namespace OnlineLearning.Handlers.Commands
 				{
 					try
 					{
-						OperationResult<int> result;
-						var zoomResult = await zoomService.CreateZoomMeeting(request.ZoomToken, new Models.NetworkModels.UpsertZoomMeetingRequest {
-						agenda = request.TopicName,
-						default_password =true,
-						duration = request.Duration,
-						password = "123123123",
-						pre_schedule = false,
-						start_time = request.StartTime,
-						timezone = "Africa/Cairo",
-						type = 2,
-						topic = request.TopicName
-						});
+						var roomMeeting = await context.RoomMeetings.Where(x => x.Id == request.MeetingId && !x.IsDeleted).FirstOrDefaultAsync();
+						if(roomMeeting == null)
+                        {
+							return new ResponseModel<int>
+							{
+								IsSuccess = false,
+								MessageCode = ConstantMessageCodes.NOT_FOUND,
+								HttpStatusCode = ResponseCodeEnum.NOT_FOUND.GetStatusCode()
+							};
+						}
+						var zoomResult = await zoomService.DeleteZoomMeeting(request.ZoomToken,roomMeeting.ZoomMeetingId);
 
 						if (!zoomResult.IsSuccess)
 						{
@@ -58,12 +58,12 @@ namespace OnlineLearning.Handlers.Commands
 								HttpStatusCode = zoomResult.ResponseCode.GetStatusCode()
 							};
 						}
-						result = await  meetingService.AddMeeting(context, request.UserId, request.RoomId, zoomResult.Data.join_url, request.StartTime, request.EndTime, request.TopicName, request.TopicDescription,zoomResult.Data.id, zoomResult.Data.password, request.StartNow);
-						if(!result.IsSuccess)
-                        {
+						var result = await meetingService.DeleteMeeting(context,roomMeeting);
+						if (!result.IsSuccess)
+						{
 							await transactionScope.RollbackAsync();
 
-                        }
+						}
 						await transactionScope.CommitAsync();
 						return new ResponseModel<int>
 						{

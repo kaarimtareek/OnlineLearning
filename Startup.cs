@@ -76,6 +76,7 @@ namespace OnlineLearning
             services.AddScoped<IUserValidator, UserValidator>();
             services.AddScoped<IRoomValidator, RoomValidator>();
             services.AddScoped<IInterestValidator, InterestValidator>();
+            services.AddScoped<IMeetingValidator, MeetingValidator>();
             #endregion
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
             services.AddMediatR(typeof(Startup));

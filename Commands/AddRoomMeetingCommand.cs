@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using OnlineLearning.Common;
+using OnlineLearning.Utilities;
 
 using System;
 
@@ -13,7 +14,7 @@ namespace OnlineLearning.Commands
         public string TopicName { get; set; }
         public string TopicDescription { get; set; }
         public int RoomId { get; set; }
-        public int Duration { get; set; }
+        public int Duration { get { return DatetimeHelper.GetDurationFromDates(StartTime, EndTime); }}
         public string UserId { get; set; }
         public string ZoomToken { get; set; }
     }

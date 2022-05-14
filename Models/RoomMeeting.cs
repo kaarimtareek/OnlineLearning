@@ -28,7 +28,7 @@ namespace OnlineLearning.Models
         public string MeetingDescription { get; set; }
         [MaxLength(200)]
         public string MeetingPassword { get; set; }
-        public int ZoomMeetingId { get; set; }
+        public long ZoomMeetingId { get; set; }
         public virtual Room Room { get; set; }
         public virtual LookupRoomMeetingStatus Status { get; set; }
     }

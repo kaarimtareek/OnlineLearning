@@ -6,11 +6,13 @@ namespace OnlineLearning.Utilities
     {
         public static bool IsIntervalsOverlap(DateTime startA,DateTime endA, DateTime startB, DateTime endB)
         {
-            return !((endA < startB && startA < startB ) || (endB < startA && startB < startA));
+
+            return (startA < endB &&  startB < endA);
         }
         public static int GetDurationFromDates(DateTime start, DateTime end)
         {
-            return (int)(start - end).TotalMinutes;
+            var result = (int)Math.Abs(end.Subtract(start).TotalMinutes);
+            return result;
         }
     }
 }

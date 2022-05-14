@@ -93,7 +93,7 @@ namespace OnlineLearning.Services
                     await context.Interests.AddAsync(interest);
                 }
                 await context.SaveChangesAsync();
-                return OperationResult.Success(interest.Id);
+                return OperationResult.Success<string>(interest.Id);
             }
             catch (Exception e)
             {

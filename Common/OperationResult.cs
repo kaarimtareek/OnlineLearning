@@ -14,9 +14,17 @@ namespace OnlineLearning.Common
         {
             return new OperationResult<T>(data, false, responseCodeEnum, message);
         }
+        public static OperationResult Fail(string message = ConstantMessageCodes.OPERATION_FAILED, ResponseCodeEnum responseCodeEnum = ResponseCodeEnum.FAILED)
+        {
+            return new OperationResult(false, responseCodeEnum, message);
+        }
         public static OperationResult<T> Success<T>( T data = default, string message = ConstantMessageCodes.OPERATION_SUCCESS, ResponseCodeEnum responseCodeEnum = ResponseCodeEnum.SUCCESS)
         {
             return new OperationResult<T>(data, true, responseCodeEnum, message);
+        }
+        public static OperationResult Success(string message = ConstantMessageCodes.OPERATION_SUCCESS, ResponseCodeEnum responseCodeEnum = ResponseCodeEnum.SUCCESS)
+        {
+            return new OperationResult(true, responseCodeEnum, message);
         }
         public static OperationResult<T,E> Fail<T,E>(string message = ConstantMessageCodes.OPERATION_FAILED, T data = default, ResponseCodeEnum responseCodeEnum = ResponseCodeEnum.FAILED, E error = default)
         {
@@ -25,6 +33,13 @@ namespace OnlineLearning.Common
         public static OperationResult<T,E> Success<T,E>( T data = default, string message = ConstantMessageCodes.OPERATION_SUCCESS, ResponseCodeEnum responseCodeEnum = ResponseCodeEnum.SUCCESS, E error = default)
         {
             return new OperationResult<T,E>(data, true, responseCodeEnum, message,error);
+        }
+        public OperationResult(bool IsSuccess, ResponseCodeEnum codeEnum, string message)
+        {
+
+            this.IsSuccess = IsSuccess;
+            ResponseCode = codeEnum;
+            Message = message;
         }
         public bool IsSuccess { get; set; }
         [JsonIgnore]
@@ -44,6 +59,7 @@ namespace OnlineLearning.Common
             ResponseCode = codeEnum;
             Message = message;
         }
+        
         public bool IsSuccess { get; set; }
         public T Data { get; set; }
         [JsonIgnore]

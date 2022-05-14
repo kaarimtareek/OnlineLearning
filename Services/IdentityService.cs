@@ -77,7 +77,7 @@ namespace OnlineLearning.Services
 
                 }
                 var token = CreateToken(user.Email, user.Id, validTokenDaysNumber);
-                return OperationResult.Success( token);
+                return OperationResult.Success<string>( token);
 
             }
             catch (Exception e)
@@ -121,7 +121,7 @@ namespace OnlineLearning.Services
                     return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
                 }
                 var token = CreateToken(user.Email, user.Id, validTokenDaysNumber);
-                return OperationResult.Success(token);
+                return OperationResult.Success<string>(token);
 
             }
             catch (Exception e)

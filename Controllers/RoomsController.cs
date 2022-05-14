@@ -288,7 +288,7 @@ namespace OnlineLearning.Controllers
             }
         }
 
-        [HttpPost("CreateMeeting/{roomId}")]
+        [HttpPost("{roomId}/Meetings")]
         public async Task<IActionResult> CreateMeeting(int roomId,[FromBody] AddRoomMeetingInputModel inputModel)
         {
             var result = await mediator.Send(new AddRoomMeetingCommand
@@ -297,11 +297,54 @@ namespace OnlineLearning.Controllers
                 UserId = UserId,
                 StartNow =  inputModel.StartNow,
                 EndTime = inputModel.EndTime,
-                Duration = DatetimeHelper.GetDurationFromDates(inputModel.StartTime,inputModel.EndTime),
                 StartTime = inputModel.StartTime,
                 TopicName = inputModel.TopicName,
                 TopicDescription = inputModel.TopicDescription,
                 ZoomToken = inputModel.ZoomToken,
+                
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        [HttpDelete("{roomId}/Meetings/{meetingId}")]
+        public async Task<IActionResult> DeleteMeeting(int roomId,int meetingId,[FromBody] DeleteRoomMeetingInputModel inputModel)
+        {
+            var result = await mediator.Send(new DeleteRoomMeetingCommand
+            {
+                RoomId = roomId,
+                UserId = UserId,
+                MeetingId = meetingId,
+                ZoomToken = inputModel.ZoomToken,
+                
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        [HttpPut("{roomId}/Meetings/{meetingId}")]
+        public async Task<IActionResult> UpdateMeeting(int roomId,int meetingId,[FromBody] UpdateRoomMeetingInputModel inputModel)
+        {
+            var result = await mediator.Send(new UpdateRoomMeetingCommand
+            {
+                RoomId = roomId,
+                UserId = UserId,
+                MeetingId = meetingId,
+                ZoomToken = inputModel.ZoomToken,
+                Duration = inputModel.Duration,
+                EndDate = inputModel.EndTime,
+                MeetingDescription = inputModel.TopicDescription,
+                MeetingName = inputModel.TopicName,
+                StartDate = inputModel.StartTime,
+                StartNow = inputModel.StartNow,
+                
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        [HttpGet("/Meetings/{meetingId}")]
+        public async Task<IActionResult> GetMeeting(int meetingId)
+        {
+            var result = await mediator.Send(new GetRoomMeetingByIdQuery
+            {
+                RoomMeetingId = meetingId,
+                UserId = UserId,
+                
                 
             });
             return StatusCode((int)result.HttpStatusCode, result);

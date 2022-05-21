@@ -8,5 +8,6 @@ namespace OnlineLearning.Queries
     public class GetRoomByIdQuery : IRequest<ResponseModel<RoomDto>>
     {
         public int RoomId { get; set; }
+        public string UserId { get; set; }
     }
 }

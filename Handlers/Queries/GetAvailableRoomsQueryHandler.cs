@@ -36,7 +36,12 @@ namespace OnlineLearning.Handlers.Queries
                     var roomsForEachUserInterest = (from userinterest in context.Interests
                                                     let rooms = (from room in context.Rooms
                                                                  join owner in context.Users on room.OwnerId equals owner.Id
+                                                                 join roomStatus  in context.LookupRoomStatuses on room.StatusId equals roomStatus.Id
                                                                  let roomInterests = (from roomInterest in context.RoomInterests where roomInterest.RoomId == room.Id && !roomInterest.IsDeleted select roomInterest).Take(3).ToList()
+                                                                 let userRoomStatus = (from userRoomStatuesses in context.UsersRooms where userRoomStatuesses.UserId ==  request.UserId  
+                                             join lookupUserRoomStatus in context.LookupUserRoomStatuses on userRoomStatuesses.StatusId equals lookupUserRoomStatus.Id select new UserRoomStatusDto  
+                                             { Id = lookupUserRoomStatus.Id,NameArabic = lookupUserRoomStatus.NameArabic , NameEnglish = lookupUserRoomStatus.NameEnglish
+                                             }).FirstOrDefault()
                                                                  where !room.IsDeleted && roomInterests.Any(x => x.InterestId == userinterest.Id)
                                                                   && room.StartDate > DateTime.Now && room.StatusId != ConstantRoomStatus.FINISHED && room.StatusId != ConstantRoomStatus.CANCELED
                                                                  select new RoomDto
@@ -56,6 +61,15 @@ namespace OnlineLearning.Handlers.Queries
                                                                      Price = room.Price,
                                                                      StartDate = room.StartDate,
                                                                      StatusId = room.StatusId,
+                                                                    IsPublic = room.IsPublic,
+                                                                    UserRoomStatus = userRoomStatus?? null,
+                                                                    Status = roomStatus ==null ?null : new RoomStatusDto
+                                                                    {
+                                                                        Id = roomStatus.Id,
+                                                                        IsDeleted = roomStatus.IsDeleted,
+                                                                        NameArabic = roomStatus.NameArabic,
+                                                                        NameEnglish = roomStatus.NameEnglish,
+                                                                    },
                                                                  }).Take(5).ToList()
                                                     where userInterests.Contains(userinterest.Id) && !userinterest.IsDeleted
                                                     select new { userinterest.Id, rooms }

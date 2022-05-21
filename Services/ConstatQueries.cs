@@ -108,6 +108,10 @@ namespace OnlineLearning.Services
         {
             return query.Include(x => x.Status);
         }
+        public static IQueryable<Room> IncludeUserRoomStatus(this IQueryable<Room> query,string userId)
+        {
+            return query.Include(x => x.RequestedUsers.Where(x=>x.UserId == userId)).ThenInclude(x=>x.Status);
+        }
 
         #endregion Room
     }

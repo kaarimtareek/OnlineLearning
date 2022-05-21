@@ -30,7 +30,7 @@ namespace OnlineLearning.Handlers.Queries
             {
                 using (AppDbContext context = new AppDbContext(dbContextOptions))
                 {
-                    var rooms = await context.Rooms.AsNoTracking().IncludeOwner().IncludeInterests().IncludeStatus().IsNotDeleted().Where(x => x.RoomInterests.Any(a => a.InterestId == request.InterestId && !a.IsDeleted)).OrderByDescending(x => x.StartDate).Select(x => new RoomDto
+                    var rooms = await context.Rooms.AsNoTracking().IncludeOwner().IncludeInterests().IncludeStatus().IncludeUserRoomStatus(request.UserId).IsNotDeleted().Where(x => x.RoomInterests.Any(a => a.InterestId == request.InterestId && !a.IsDeleted)).OrderByDescending(x => x.StartDate).Select(x => new RoomDto
                     {
                         Description = x.Description,
                         ExpectedEndDate = x.ExpectedEndDate,
@@ -55,7 +55,13 @@ namespace OnlineLearning.Handlers.Queries
                             Id = i.InterestId,
                             IsDeleted = i.IsDeleted
 
-                        })
+                        }),
+                        UserRoomStatus = x.RequestedUsers.FirstOrDefault() == null ? null : new UserRoomStatusDto
+                        {
+                            Id = x.RequestedUsers.First().StatusId,
+                            NameArabic = x.RequestedUsers.First().Status.NameArabic,
+                            NameEnglish = x.RequestedUsers.First().Status.NameEnglish,
+                        }
                     }).ToPagedList(request.PageNumber, request.PageSize);
                     return new ResponseModel<PagedList<RoomDto>>
                     {

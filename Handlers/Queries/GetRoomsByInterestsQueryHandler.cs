@@ -29,7 +29,7 @@ namespace OnlineLearning.Handlers.Queries
             {
                 using (AppDbContext context = new AppDbContext(dbContextOptions))
                 {
-                    var rooms = context.RoomInterests.Include(r => r.Room).ThenInclude(x => x.Status).Include(x => x.Room).ThenInclude(x => x.Owner).AsNoTracking().Where(x => request.Interests.Contains(x.InterestId) && !x.IsDeleted && !x.Room.IsDeleted).OrderByDescending(x => x.Room.StartDate).Select(x => x.Room
+                    var rooms = context.RoomInterests.Include(r => r.Room).ThenInclude(x => x.Status).Include(x => x.Room).ThenInclude(x => x.Owner).Include(x=>x.Room).ThenInclude(x=>x.RequestedUsers.Where(x=>x.UserId == request.UserId)).ThenInclude(x=>x.Status).AsNoTracking().Where(x => request.Interests.Contains(x.InterestId) && !x.IsDeleted && !x.Room.IsDeleted).OrderByDescending(x => x.Room.StartDate).Select(x => x.Room
                    ).Skip(request.PageSize * (request.PageNumber - 1)).Take(request.PageSize).Select(x => new RoomDto
                    {
                        Description = x.Description,
@@ -49,7 +49,15 @@ namespace OnlineLearning.Handlers.Queries
                            NameArabic = x.Status.NameArabic,
                            NameEnglish = x.Status.NameEnglish,
                            IsDeleted = x.Status.IsDeleted
+                       },
+                       UserRoomStatus = x.RequestedUsers.FirstOrDefault() ==null? null : new UserRoomStatusDto
+                       {
+                           Id = x.RequestedUsers.First().Status.Id,
+                           NameArabic = x.RequestedUsers.First().Status.NameArabic,
+                           NameEnglish = x.RequestedUsers.First().Status.NameEnglish,
+
                        }
+
                    });
                     var pagedList = await PagedList<RoomDto>.ToPagedList(rooms, request.PageNumber, request.PageSize);
                     return new ResponseModel<PagedList<RoomDto>>

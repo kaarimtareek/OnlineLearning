@@ -31,7 +31,7 @@ namespace OnlineLearning.Handlers.Queries
         {
             using (AppDbContext context = new AppDbContext(dbContextOptions))
             {
-                var room = await context.Rooms.IsNotDeleted().IncludeOwner().IncludeInterests().FirstOrDefaultAsync(x => x.Id == request.RoomId && !x.IsDeleted);
+                var room = await context.Rooms.IsNotDeleted().IncludeOwner().IncludeInterests().IncludeUserRoomStatus(request.UserId).FirstOrDefaultAsync(x => x.Id == request.RoomId && !x.IsDeleted);
                 if (room ==null)
                 {
                     return new ResponseModel<RoomDto>

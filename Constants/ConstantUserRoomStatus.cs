@@ -5,7 +5,9 @@ namespace OnlineLearning.Constants
 {
     public static class ConstantUserRoomStatus
     {
-        public const string EMPTY = "";
+        public const string NO_REQUEST = "NO_REQUEST";
+        public const string NO_REQUEST_ARABIC = "غير مشترك";
+        public const string NO_REQUEST_ENGLISH = "not joined";
         public const string PENDING = "PENDING";
         public const string JOINED = "JOINED";
         public const string ACCEPTED = "ACCEPTED";
@@ -42,7 +44,7 @@ namespace OnlineLearning.Constants
 
         public static Dictionary<string, List<string>> RoomOwnerAllowedStatus = new Dictionary<string, List<string>>
         {
-            { EMPTY ,new List<string>{ } },
+            { NO_REQUEST ,new List<string>{ } },
             { PENDING ,new List<string>{ JOINED, ACCEPTED , REJECTED } },
             { ACCEPTED ,new List<string>{  SUSPENDED , REJECTED } },
             { REJECTED ,new List<string>{ ACCEPTED }},
@@ -53,7 +55,7 @@ namespace OnlineLearning.Constants
         };
         public static Dictionary<string, List<string>> UserAllowedStatus = new Dictionary<string, List<string>>
         {
-            { EMPTY ,new List<string>{ PENDING } },
+            { NO_REQUEST ,new List<string>{ PENDING } },
             { PENDING ,new List<string>{ CANCELED } },
             { ACCEPTED ,new List<string>{  LEFT ,CANCELED } },
             { REJECTED ,new List<string>{  }},

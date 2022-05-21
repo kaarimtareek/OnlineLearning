@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-
-using MediatR;
+﻿using MediatR;
 
 using OnlineLearning.Common;
 using OnlineLearning.DTOs;
+
+using System.Collections.Generic;
 
 namespace OnlineLearning.Queries
 {

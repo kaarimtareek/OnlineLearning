@@ -1,10 +1,6 @@
 ﻿using MediatR;
-using OnlineLearning.Common;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using OnlineLearning.Common;
 
 namespace OnlineLearning.Commands
 {

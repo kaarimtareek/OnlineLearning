@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+
 using OnlineLearning.Models;
 using OnlineLearning.Services;
-using OnlineLearning.Utilities;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -28,7 +27,7 @@ namespace OnlineLearning.EntitiesValidators
                 return await context.Interests.AsNoTracking().AnyAsync(x => x.Id == interestId && !x.IsDeleted);
             }
         }
-        public  bool IsAllInterestsExist(List<string> interestIds)
+        public bool IsAllInterestsExist(List<string> interestIds)
         {
             using (var context = new AppDbContext(contextOptions))
             {

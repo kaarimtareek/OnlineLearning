@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace OnlineLearning.Controllers
 {
-   // [Route("api/[controller]")]
+    // [Route("api/[controller]")]
     [ApiController]
     public class SystemBaseController : ControllerBase
     {

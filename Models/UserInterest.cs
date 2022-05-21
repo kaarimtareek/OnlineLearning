@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace OnlineLearning.Models
 {
-    [Index(nameof(UserId), nameof(InterestId),IsUnique = true)]
+    [Index(nameof(UserId), nameof(InterestId), IsUnique = true)]
     public class UserInterest : BaseEntity
     {
         [Key]

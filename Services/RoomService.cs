@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.Models;
 using OnlineLearning.Utilities;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnlineLearning.Services
 {
@@ -19,7 +19,7 @@ namespace OnlineLearning.Services
         private readonly ILoggerService<RoomService> logger;
         private readonly IFileManager fileManager;
 
-        public RoomService(DbContextOptions<AppDbContext> contextOptions, ILoggerService<RoomService> logger,IFileManager fileManager)
+        public RoomService(DbContextOptions<AppDbContext> contextOptions, ILoggerService<RoomService> logger, IFileManager fileManager)
         {
             this.contextOptions = contextOptions;
             this.logger = logger;
@@ -156,7 +156,7 @@ namespace OnlineLearning.Services
                     result.ResponseCode = ResponseCodeEnum.INVALID_DATA;
                     return result;
                 }
-                if(await context.UsersRooms.AnyAsync(x=>x.UserId == userId && x.RoomId == roomId && !x.IsDeleted))
+                if (await context.UsersRooms.AnyAsync(x => x.UserId == userId && x.RoomId == roomId && !x.IsDeleted))
                 {
 
                 }
@@ -187,12 +187,12 @@ namespace OnlineLearning.Services
         public async Task<OperationResult<int>> ChangeUserRoomStatus(AppDbContext context, string userId, int roomId, string status, Dictionary<string, List<string>> allowedStatuses, string comment = "")
         {
             var room = await context.Rooms.FirstOrDefaultAsync(x => x.Id == roomId && !x.IsDeleted);
-            if(room == null)
+            if (room == null)
             {
-                return OperationResult.Fail<int>(ConstantMessageCodes.ROOM_NOT_FOUND,default,ResponseCodeEnum.NOT_FOUND);
+                return OperationResult.Fail<int>(ConstantMessageCodes.ROOM_NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
             }
             //can't change the status of user room if the room is finished or stopped
-            if(!IsValidRoomToJoin(room))
+            if (!IsValidRoomToJoin(room))
             {
                 return OperationResult.Fail<int>(ConstantMessageCodes.ROOM_NOT_VAlID_TO_JOIN, default, ResponseCodeEnum.BAD_INPUT);
             }
@@ -215,34 +215,34 @@ namespace OnlineLearning.Services
             else
             {
                 var allowedStatusList = allowedStatuses.GetValueOrDefault(userRoom.StatusId);
-                if(allowedStatusList == null)
+                if (allowedStatusList == null)
                 {
                     return OperationResult.Fail<int>(ConstantMessageCodes.INVALID_STATUS, default, ResponseCodeEnum.BAD_INPUT);
                 }
                 //if the status is not in the allowed status list it mean the user can't change to this status
                 if (!allowedStatusList.Contains(status))
                 {
-                    
-                    return OperationResult.Fail<int>(ConstantMessageCodes.INVALID_STATUS,default,ResponseCodeEnum.BAD_INPUT);
+
+                    return OperationResult.Fail<int>(ConstantMessageCodes.INVALID_STATUS, default, ResponseCodeEnum.BAD_INPUT);
                 }
                 userRoom.StatusId = status;
                 //accroding to the status , the reason will be updated , ( rejection reason for reject staus , etc.. )
-                UpdateAppropiateComment(userRoom,status,comment);
+                UpdateAppropiateComment(userRoom, status, comment);
             }
             await context.SaveChangesAsync();
             return OperationResult.Success(userRoom.Id);
         }
 
-        public async Task<OperationResult<int>> AddMaterial(AppDbContext context,int roomId, IFormFile file )
+        public async Task<OperationResult<int>> AddMaterial(AppDbContext context, int roomId, IFormFile file)
         {
-            var room = await context.Rooms.Select(x => new { x.Name ,x.Id}).FirstOrDefaultAsync(x => x.Id == roomId);
+            var room = await context.Rooms.Select(x => new { x.Name, x.Id }).FirstOrDefaultAsync(x => x.Id == roomId);
             string parentFolder = "RoomMaterials";
             string roomName = room.Name;
             //add the file , take its name and its path and add it in the room material
-            var addFileResult = await fileManager.Add(file,roomName,parentFolder);
+            var addFileResult = await fileManager.Add(file, roomName, parentFolder);
             if (!addFileResult.IsSuccess)
             {
-                return OperationResult.Fail<int>(addFileResult.Message,default,addFileResult.ResponseCode);
+                return OperationResult.Fail<int>(addFileResult.Message, default, addFileResult.ResponseCode);
             }
             var material = new RoomMaterial
             {
@@ -255,7 +255,7 @@ namespace OnlineLearning.Services
             await context.SaveChangesAsync();
             return OperationResult.Success(material.Id);
         }
-        
+
         #region Private Methods
 
         private bool IsValidRoomToJoin(Room room)

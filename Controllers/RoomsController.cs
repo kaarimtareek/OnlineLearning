@@ -7,15 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineLearning.Commands;
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
-using OnlineLearning.Models;
 using OnlineLearning.Models.InputModels;
 using OnlineLearning.Queries;
 using OnlineLearning.QueryParameters;
 using OnlineLearning.Settings;
-using OnlineLearning.Utilities;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -207,17 +204,17 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                var result =await mediator.Send(new OwnerChangeUserRoomStatusCommand
+                var result = await mediator.Send(new OwnerChangeUserRoomStatusCommand
                 {
                     RoomId = roomId,
                     OwnerId  = UserId,
                     UserId = userId,
                     Reason =inputModel.Reason,
-                    StatusId = ConstantUserRoomStatus.REJECTED ,
+                    StatusId = ConstantUserRoomStatus.REJECTED,
                 });
-                return StatusCode((int)result.HttpStatusCode,result);
+                return StatusCode((int)result.HttpStatusCode, result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -229,20 +226,20 @@ namespace OnlineLearning.Controllers
             try
             {
                 var file = HttpContext.Request?.Form?.Files.FirstOrDefault();
-                if(file ==null)
+                if (file ==null)
                 {
                     var badResponse = ResponseModel.Fail<int>(ConstantMessageCodes.FILE_NOT_FOUND);
                     return StatusCode((int)HttpStatusCode.BadRequest, badResponse);
                 }
-                var result =await mediator.Send(new AddRoomMaterialCommand
+                var result = await mediator.Send(new AddRoomMaterialCommand
                 {
                     RoomId = roomId,
                     UserId = UserId,
                     File = file,
                 });
-                return StatusCode((int)result.HttpStatusCode,result);
+                return StatusCode((int)result.HttpStatusCode, result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -252,16 +249,16 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                
-                var result =await mediator.Send(new GetRoomMaterialsQuery
+
+                var result = await mediator.Send(new GetRoomMaterialsQuery
                 {
                     RoomId = roomId,
                     UserId = UserId,
-                 
+
                 });
-                return StatusCode((int)result.HttpStatusCode,result);
+                return StatusCode((int)result.HttpStatusCode, result);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
@@ -277,7 +274,7 @@ namespace OnlineLearning.Controllers
                     RoomId = roomId,
                     UserId = UserId,
                     MaterialId = id,
-                    
+
 
                 });
                 return StatusCode((int)result.HttpStatusCode, result);
@@ -289,7 +286,7 @@ namespace OnlineLearning.Controllers
         }
 
         [HttpPost("{roomId}/Meetings")]
-        public async Task<IActionResult> CreateMeeting(int roomId,[FromBody] AddRoomMeetingInputModel inputModel)
+        public async Task<IActionResult> CreateMeeting(int roomId, [FromBody] AddRoomMeetingInputModel inputModel)
         {
             var result = await mediator.Send(new AddRoomMeetingCommand
             {
@@ -301,12 +298,12 @@ namespace OnlineLearning.Controllers
                 TopicName = inputModel.TopicName,
                 TopicDescription = inputModel.TopicDescription,
                 ZoomToken = inputModel.ZoomToken,
-                
+
             });
             return StatusCode((int)result.HttpStatusCode, result);
         }
         [HttpDelete("{roomId}/Meetings/{meetingId}")]
-        public async Task<IActionResult> DeleteMeeting(int roomId,int meetingId,[FromBody] DeleteRoomMeetingInputModel inputModel)
+        public async Task<IActionResult> DeleteMeeting(int roomId, int meetingId, [FromBody] DeleteRoomMeetingInputModel inputModel)
         {
             var result = await mediator.Send(new DeleteRoomMeetingCommand
             {
@@ -314,12 +311,12 @@ namespace OnlineLearning.Controllers
                 UserId = UserId,
                 MeetingId = meetingId,
                 ZoomToken = inputModel.ZoomToken,
-                
+
             });
             return StatusCode((int)result.HttpStatusCode, result);
         }
         [HttpPut("{roomId}/Meetings/{meetingId}")]
-        public async Task<IActionResult> UpdateMeeting(int roomId,int meetingId,[FromBody] UpdateRoomMeetingInputModel inputModel)
+        public async Task<IActionResult> UpdateMeeting(int roomId, int meetingId, [FromBody] UpdateRoomMeetingInputModel inputModel)
         {
             var result = await mediator.Send(new UpdateRoomMeetingCommand
             {
@@ -333,7 +330,7 @@ namespace OnlineLearning.Controllers
                 MeetingName = inputModel.TopicName,
                 StartDate = inputModel.StartTime,
                 StartNow = inputModel.StartNow,
-                
+
             });
             return StatusCode((int)result.HttpStatusCode, result);
         }
@@ -344,8 +341,8 @@ namespace OnlineLearning.Controllers
             {
                 RoomMeetingId = meetingId,
                 UserId = UserId,
-                
-                
+
+
             });
             return StatusCode((int)result.HttpStatusCode, result);
         }

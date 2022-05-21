@@ -4,7 +4,7 @@ namespace OnlineLearning.Utilities
 {
     public static class DatetimeHelper
     {
-        public static bool IsIntervalsOverlap(DateTime startA,DateTime endA, DateTime startB, DateTime endB)
+        public static bool IsIntervalsOverlap(DateTime startA, DateTime endA, DateTime startB, DateTime endB)
         {
 
             return (startA < endB &&  startB < endA);

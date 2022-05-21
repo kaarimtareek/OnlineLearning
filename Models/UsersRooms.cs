@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore;
 
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineLearning.Models
 {
-    [Index(nameof(UserId),nameof(RoomId),IsUnique = true)]
+    [Index(nameof(UserId), nameof(RoomId), IsUnique = true)]
     public class UsersRooms : BaseEntity
     {
         [Key]
@@ -17,7 +17,7 @@ namespace OnlineLearning.Models
         [MaxLength(50)]
         public string StatusId { get; set; }
         [MaxLength(200)]
-        public string Comment { get;set; }
+        public string Comment { get; set; }
         [MaxLength(200)]
         public string RejectionReason { get; set; }
         [MaxLength(200)]

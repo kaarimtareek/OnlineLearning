@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using FluentValidation;
 
 using MediatR;
@@ -11,18 +5,14 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-using OnlineLearning.Common;
 using OnlineLearning.EntitiesValidators;
 using OnlineLearning.Models;
 using OnlineLearning.PipelineBehaviors;
@@ -31,7 +21,8 @@ using OnlineLearning.Settings;
 using OnlineLearning.Utilities;
 using OnlineLearning.Utilities.Stemmer;
 
-using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.Text;
 
 namespace OnlineLearning
 {
@@ -49,12 +40,13 @@ namespace OnlineLearning
         {
 
             services.AddDbContext<AppDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("OnlineLearningDb")));
-            services.AddIdentity<ApplicationUser, IdentityRole>(policy => {
+            services.AddIdentity<ApplicationUser, IdentityRole>(policy =>
+            {
                 policy.Password.RequireUppercase = false;
                 policy.Password.RequireNonAlphanumeric = false;
                 policy.Password.RequireLowercase = false;
                 policy.Password.RequiredLength =8;
-            
+
             })
                 .AddRoles<IdentityRole>()
                 .AddDefaultTokenProviders()
@@ -71,7 +63,7 @@ namespace OnlineLearning
             //services.AddScoped<IConstatQueries, ConstatQueries>();
             services.AddScoped<IStemmer, EnglishPorter2Stemmer>();
             #endregion
-            services.AddScoped(typeof( ILoggerService<>), typeof( LoggerService<>));
+            services.AddScoped(typeof(ILoggerService<>), typeof(LoggerService<>));
             #region Validators
             services.AddScoped<IUserValidator, UserValidator>();
             services.AddScoped<IRoomValidator, RoomValidator>();
@@ -113,7 +105,7 @@ namespace OnlineLearning
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OnlineLearning", Version = "v1" });
-              
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -137,9 +129,9 @@ namespace OnlineLearning
                     },
                         new string[]{}
                     },
-                    
+
                 });
-               
+
             });
         }
 

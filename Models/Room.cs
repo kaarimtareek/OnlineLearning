@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineLearning.Models
 {
@@ -22,10 +20,10 @@ namespace OnlineLearning.Models
         //indication if the room doesn't need approval or not
         public bool IsPublic { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime? ExpectedEndDate{ get; set; }
-        public DateTime? FinishDate{ get; set; }
+        public DateTime? ExpectedEndDate { get; set; }
+        public DateTime? FinishDate { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
-        public virtual ICollection<RoomInterest> RoomInterests{ get; set; }
+        public virtual ICollection<RoomInterest> RoomInterests { get; set; }
         public virtual ApplicationUser Owner { get; set; }
         public virtual LookupRoomStatus Status { get; set; }
         public virtual ICollection<UsersRooms> RequestedUsers { get; set; }

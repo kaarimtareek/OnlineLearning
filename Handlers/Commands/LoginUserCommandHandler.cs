@@ -1,5 +1,7 @@
 ﻿using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
 using OnlineLearning.Commands;
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
@@ -7,8 +9,6 @@ using OnlineLearning.Models;
 using OnlineLearning.Services;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,7 +37,7 @@ namespace OnlineLearning.Handlers.Commands
                 {
                     try
                     {
-                        var result = await identityService.Login(request.Username,request.Password);
+                        var result = await identityService.Login(request.Username, request.Password);
                         if (!result.IsSuccess)
                         {
                             await transactionScope.RollbackAsync();

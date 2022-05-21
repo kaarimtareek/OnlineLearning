@@ -31,13 +31,13 @@ namespace OnlineLearning.Services
                 var response = JsonSerializer.Deserialize<CreatedZoomMeetingResponse>(successContent);
                 return OperationResult.Success(response);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return OperationResult.Fail<CreatedZoomMeetingResponse>();
 
             }
         }
-        public async Task<OperationResult> UpdateZoomMeeting(string token,long meetingId, UpsertZoomMeetingRequest request)
+        public async Task<OperationResult> UpdateZoomMeeting(string token, long meetingId, UpsertZoomMeetingRequest request)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace OnlineLearning.Services
                 var successContent = await jsonResponse.Content.ReadAsStringAsync();
                 return OperationResult.Success();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return OperationResult.Fail();
 
@@ -75,7 +75,7 @@ namespace OnlineLearning.Services
                 var successContent = await jsonResponse.Content.ReadAsStringAsync();
                 return OperationResult.Success();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return OperationResult.Fail();
 

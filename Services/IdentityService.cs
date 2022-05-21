@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.Models;
 using OnlineLearning.Settings;
 
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +24,7 @@ namespace OnlineLearning.Services
         private readonly int validTokenDaysNumber = 7;
         private readonly RoleManager<IdentityRole> roleManager;
 
-        public IdentityService(DbContextOptions<AppDbContext> contextOptions, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,RoleManager<IdentityRole> roleManager, JwtSettings jwtSettings)
+        public IdentityService(DbContextOptions<AppDbContext> contextOptions, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager, JwtSettings jwtSettings)
         {
             this.contextOptions = contextOptions;
             this.userManager = userManager;
@@ -52,32 +51,32 @@ namespace OnlineLearning.Services
                     StatusId =  ConstantUserStatus.ACTIVE
                 };
                 //create the user
-               var createUserResult = await userManager.CreateAsync(user, passwrod);
-                if(!createUserResult.Succeeded)
+                var createUserResult = await userManager.CreateAsync(user, passwrod);
+                if (!createUserResult.Succeeded)
                 {
                     return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
 
                 }
                 await context.SaveChangesAsync();
                 var customerRole = await roleManager.FindByNameAsync(ConstantUserRoles.Customer);
-                var createdUser = await  userManager.FindByNameAsync(user.UserName);
-                if(customerRole ==null)
+                var createdUser = await userManager.FindByNameAsync(user.UserName);
+                if (customerRole ==null)
                 {
-                    var createRoleResult  = await roleManager.CreateAsync(new IdentityRole(ConstantUserRoles.Customer));
-                    if(!createRoleResult.Succeeded)
-                    return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
+                    var createRoleResult = await roleManager.CreateAsync(new IdentityRole(ConstantUserRoles.Customer));
+                    if (!createRoleResult.Succeeded)
+                        return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
 
                 }
                 customerRole = await roleManager.FindByNameAsync(ConstantUserRoles.Customer);
                 //create the claims and roles for the user
                 var roleResult = await userManager.AddToRoleAsync(createdUser, customerRole.Name);
-                if(!roleResult.Succeeded)
+                if (!roleResult.Succeeded)
                 {
                     return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
 
                 }
                 var token = CreateToken(user.Email, user.Id, validTokenDaysNumber);
-                return OperationResult.Success<string>( token);
+                return OperationResult.Success<string>(token);
 
             }
             catch (Exception e)

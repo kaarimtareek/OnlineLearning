@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
+
 using MediatR;
+
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace OnlineLearning.PipelineBehaviors
 {
-    public class ValidationBehavior<TRequest,TResponse> : IPipelineBehavior<TRequest,TResponse>
-       where TResponse: class , IResponseModel, new ()
-     
+    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+       where TResponse : class, IResponseModel, new()
+
 
 
     {
@@ -39,9 +40,9 @@ namespace OnlineLearning.PipelineBehaviors
                     Code = x.ErrorCode,
                     FieldName = x.PropertyName,
                     Message = x.ErrorMessage,
-                    
+
                 });
-                return new TResponse { IsSuccess = false,HttpStatusCode= HttpStatusCode.BadRequest  ,Errors = errors, MessageCode = ConstantMessageCodes.VALIDATION_ERROR };
+                return new TResponse { IsSuccess = false, HttpStatusCode= HttpStatusCode.BadRequest, Errors = errors, MessageCode = ConstantMessageCodes.VALIDATION_ERROR };
             }
             return await next();
         }

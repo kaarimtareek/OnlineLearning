@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+
 using OnlineLearning.Commands;
 using OnlineLearning.EntitiesValidators;
 
@@ -14,7 +15,7 @@ namespace OnlineLearning.CommandsValidator
             When(x => !x.StartNow, () =>
                {
                    RuleFor(x => x.EndDate).NotNull();
-                   RuleFor(x => x.StartDate).NotNull().MustAsync((model, d, c) => roomValidator.IsUserCanCreateMeeting(model.UserId, model.StartDate.Value, model.EndDate.Value, c,model.MeetingId)).WithMessage((model)=>  roomValidator.GetOverlappedMeetings(model.UserId,model.StartDate.Value,model.EndDate.Value,model.MeetingId));
+                   RuleFor(x => x.StartDate).NotNull().MustAsync((model, d, c) => roomValidator.IsUserCanCreateMeeting(model.UserId, model.StartDate.Value, model.EndDate.Value, c, model.MeetingId)).WithMessage((model) => roomValidator.GetOverlappedMeetings(model.UserId, model.StartDate.Value, model.EndDate.Value, model.MeetingId));
                });
         }
     }

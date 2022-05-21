@@ -1,13 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
-
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.Utilities;
+
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace OnlineLearning.Services
 {
@@ -20,7 +20,7 @@ namespace OnlineLearning.Services
             this.logger = logger;
         }
 
-        public async Task<OperationResult<FileManagerResult>> Add(IFormFile file, string folderName,string parentFolder ="")
+        public async Task<OperationResult<FileManagerResult>> Add(IFormFile file, string folderName, string parentFolder = "")
         {
             string filename = file.FileName;
             try
@@ -30,10 +30,10 @@ namespace OnlineLearning.Services
                 provider.TryGetContentType(filename, out contentType);
                 string currentDirectory = Directory.GetCurrentDirectory();
                 string folderPath;
-                if(string.IsNullOrEmpty(parentFolder))
-                     folderPath = Path.Combine(currentDirectory, folderName);
+                if (string.IsNullOrEmpty(parentFolder))
+                    folderPath = Path.Combine(currentDirectory, folderName);
                 else
-                    folderPath = Path.Combine(currentDirectory,parentFolder, folderName);
+                    folderPath = Path.Combine(currentDirectory, parentFolder, folderName);
 
                 //if the directory is not there , it will create it , otherwise it will ignore
                 Directory.CreateDirectory(folderPath);
@@ -43,7 +43,7 @@ namespace OnlineLearning.Services
                 {
                     await file.CopyToAsync(stream);
                 }
-                return OperationResult.Success( new FileManagerResult
+                return OperationResult.Success(new FileManagerResult
                 {
                     ContentType = contentType,
                     FileName = filename,
@@ -119,15 +119,15 @@ namespace OnlineLearning.Services
             try
             {
                 var file = new FileInfo(filePath);
-                if(file.Exists)
+                if (file.Exists)
                 {
                     file.Delete();
                     return OperationResult.Success(true);
                 }
                 return OperationResult.Fail(ConstantMessageCodes.FILE_NOT_FOUND, false, ResponseCodeEnum.NOT_FOUND);
-               
+
             }
-            
+
             catch (Exception e)
             {
                 logger.LogError($"error while deleting file with path {filePath} ,error {e}");

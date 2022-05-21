@@ -4,7 +4,7 @@ namespace OnlineLearning.Models.InputModels
 {
     public class UpdateRoomMeetingInputModel
     {
-       
+
         public string TopicName { get; set; }
         public bool StartNow { get; set; }
         public DateTime? StartTime { get; set; }

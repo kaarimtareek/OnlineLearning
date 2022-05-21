@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using OnlineLearning.Commands;
+
 using OnlineLearning.EntitiesValidators;
 using OnlineLearning.Queries;
 

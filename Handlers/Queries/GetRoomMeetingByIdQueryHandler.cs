@@ -1,11 +1,11 @@
 ﻿using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.DTOs;
 using OnlineLearning.Models;
-using OnlineLearning.Models.OutputModels;
 using OnlineLearning.Queries;
 
 using System.Linq;
@@ -25,7 +25,7 @@ namespace OnlineLearning.Handlers.Queries
 
         public async Task<ResponseModel<RoomMeetingDto>> Handle(GetRoomMeetingByIdQuery request, CancellationToken cancellationToken)
         {
-            using(AppDbContext context = new AppDbContext(dbContextOptions))
+            using (AppDbContext context = new AppDbContext(dbContextOptions))
             {
                 var roomMeetingDto = await context.RoomMeetings.Include(x => x.Status).AsNoTracking().Where(x => x.Id == request.RoomMeetingId && !x.IsDeleted).Select(x => new RoomMeetingDto
                 {
@@ -49,7 +49,7 @@ namespace OnlineLearning.Handlers.Queries
                     RoomId = x.RoomId,
                     ZoomMeetingId = x.ZoomMeetingId
                 }).FirstOrDefaultAsync();
-                if(roomMeetingDto == null)
+                if (roomMeetingDto == null)
                 {
                     return new ResponseModel<RoomMeetingDto>
                     {

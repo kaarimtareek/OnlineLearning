@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +8,10 @@ using OnlineLearning.DTOs;
 using OnlineLearning.Models;
 using OnlineLearning.Queries;
 using OnlineLearning.Services;
+
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OnlineLearning.Handlers.Queries
 {
@@ -35,10 +35,10 @@ namespace OnlineLearning.Handlers.Queries
                                    .GetUserInterests()
                                    .GetUserStatus()
                                    .FirstOrDefaultAsync(x => x.Id == request.Id);
-                
-                if(user == null)
+
+                if (user == null)
                 {
-                 return new ResponseModel<UserDto>
+                    return new ResponseModel<UserDto>
                     {
                         IsSuccess = false,
                         HttpStatusCode = ResponseCodeEnum.FAILED.GetStatusCode(),
@@ -60,7 +60,7 @@ namespace OnlineLearning.Handlers.Queries
                         UserName = user.UserName,
                         PhoneNumber = user.PhoneNumber,
                         IsDeleted = user.IsDeleted,
-                        Status = user.Status==null? null : new UserStatusDto
+                        Status = user.Status==null ? null : new UserStatusDto
                         {
                             Id = user.Status.Id,
                             NameArabic = user.Status.NameArabic,

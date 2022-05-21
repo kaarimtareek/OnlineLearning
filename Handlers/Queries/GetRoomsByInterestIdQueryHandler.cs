@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +8,11 @@ using OnlineLearning.DTOs;
 using OnlineLearning.Models;
 using OnlineLearning.Queries;
 using OnlineLearning.Services;
+
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OnlineLearning.Handlers.Queries
 {
@@ -30,7 +30,7 @@ namespace OnlineLearning.Handlers.Queries
             {
                 using (AppDbContext context = new AppDbContext(dbContextOptions))
                 {
-                    var rooms = await context.Rooms.AsNoTracking().IncludeOwner().IncludeInterests().IncludeStatus().IsNotDeleted().Where(x=>x.RoomInterests.Any(a=>a.InterestId == request.InterestId && !a.IsDeleted)).OrderByDescending(x=>x.StartDate).Select(x => new RoomDto
+                    var rooms = await context.Rooms.AsNoTracking().IncludeOwner().IncludeInterests().IncludeStatus().IsNotDeleted().Where(x => x.RoomInterests.Any(a => a.InterestId == request.InterestId && !a.IsDeleted)).OrderByDescending(x => x.StartDate).Select(x => new RoomDto
                     {
                         Description = x.Description,
                         ExpectedEndDate = x.ExpectedEndDate,
@@ -50,13 +50,13 @@ namespace OnlineLearning.Handlers.Queries
                             NameEnglish = x.Status.NameEnglish,
                             IsDeleted = x.Status.IsDeleted
                         },
-                        Interests = x.RoomInterests.Select(i=> new InterestDto
+                        Interests = x.RoomInterests.Select(i => new InterestDto
                         {
                             Id = i.InterestId,
                             IsDeleted = i.IsDeleted
 
                         })
-                    }).ToPagedList(request.PageNumber,request.PageSize);
+                    }).ToPagedList(request.PageNumber, request.PageSize);
                     return new ResponseModel<PagedList<RoomDto>>
                     {
                         HttpStatusCode = ResponseCodeEnum.SUCCESS.GetStatusCode(),
@@ -66,7 +66,7 @@ namespace OnlineLearning.Handlers.Queries
                     };
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new ResponseModel<PagedList<RoomDto>>
                 {

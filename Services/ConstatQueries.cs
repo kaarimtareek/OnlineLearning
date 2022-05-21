@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.Models;
+
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnlineLearning.Services
 {
@@ -24,7 +24,7 @@ namespace OnlineLearning.Services
         }
         public static async Task<PagedList<T>> ToPagedList<T>(this IQueryable<T> query, int pageNumber, int pageSize)
         {
-            return await PagedList<T>.ToPagedList(query,pageNumber,pageSize);
+            return await PagedList<T>.ToPagedList(query, pageNumber, pageSize);
         }
 
         public static IQueryable<T> OrderByCreatedAt<T>(this IQueryable<T> query, bool desc = false) where T : BaseEntity

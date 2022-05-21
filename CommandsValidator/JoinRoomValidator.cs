@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+
 using OnlineLearning.Commands;
 using OnlineLearning.EntitiesValidators;
 
@@ -9,7 +10,7 @@ namespace OnlineLearning.CommandsValidator
         private readonly IRoomValidator roomValidator;
         private readonly IUserValidator userValidator;
 
-        public JoinRoomValidator(IRoomValidator roomValidator,IUserValidator userValidator)
+        public JoinRoomValidator(IRoomValidator roomValidator, IUserValidator userValidator)
         {
             this.roomValidator = roomValidator;
             this.userValidator = userValidator;

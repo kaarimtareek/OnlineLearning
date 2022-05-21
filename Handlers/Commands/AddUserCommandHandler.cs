@@ -36,10 +36,10 @@ namespace OnlineLearning.Handlers.Commands
                 {
                     try
                     {
-                        var result = await identityService.Add(context,request.Name, request.Email, request.Phonenumber, request.Password, request.BrithDate);
-                        if(!result.IsSuccess)
+                        var result = await identityService.Add(context, request.Name, request.Email, request.Phonenumber, request.Password, request.BrithDate);
+                        if (!result.IsSuccess)
                         {
-                          await transactionScope.RollbackAsync();
+                            await transactionScope.RollbackAsync();
                         }
                         else
                         {
@@ -55,7 +55,7 @@ namespace OnlineLearning.Handlers.Commands
                     }
                     catch (Exception e)
                     {
-                       await transactionScope.RollbackAsync();
+                        await transactionScope.RollbackAsync();
                         return new ResponseModel<string>
                         {
                             IsSuccess = false,

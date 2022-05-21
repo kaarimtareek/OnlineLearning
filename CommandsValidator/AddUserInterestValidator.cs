@@ -1,11 +1,7 @@
 ﻿using FluentValidation;
+
 using OnlineLearning.Commands;
 using OnlineLearning.EntitiesValidators;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineLearning.CommandsValidator
 {
@@ -18,7 +14,7 @@ namespace OnlineLearning.CommandsValidator
             this.userValidator = userValidator;
             RuleFor(x => x.UserId)
                 .NotEmpty()
-                .MustAsync((id,cancellationToken) => userValidator.IsExistingUserId(id,cancellationToken))
+                .MustAsync((id, cancellationToken) => userValidator.IsExistingUserId(id, cancellationToken))
                 .WithMessage("User doesn't exist");
         }
     }

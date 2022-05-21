@@ -29,6 +29,6 @@ namespace OnlineLearning.Utilities
             value = value.Replace(' ', '-');
             return value;
         }
-       
+
     }
 }

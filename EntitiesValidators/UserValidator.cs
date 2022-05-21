@@ -3,9 +3,6 @@
 using OnlineLearning.Constants;
 using OnlineLearning.Models;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -59,11 +56,11 @@ namespace OnlineLearning.EntitiesValidators
 
             }
         }
-        public async Task<bool> IsExistingUserId(string id,CancellationToken cancellationToken)
+        public async Task<bool> IsExistingUserId(string id, CancellationToken cancellationToken)
         {
             using (var context = new AppDbContext(contextOptions))
             {
-                return await context.ApplicationUsers.AnyAsync(x => x.Id == id && !x.IsDeleted,cancellationToken);
+                return await context.ApplicationUsers.AnyAsync(x => x.Id == id && !x.IsDeleted, cancellationToken);
 
             }
         }
@@ -75,7 +72,7 @@ namespace OnlineLearning.EntitiesValidators
 
             }
         }
-        public async Task<bool> IsActiveUserId(string id,CancellationToken cancellationToken)
+        public async Task<bool> IsActiveUserId(string id, CancellationToken cancellationToken)
         {
             using (var context = new AppDbContext(contextOptions))
             {

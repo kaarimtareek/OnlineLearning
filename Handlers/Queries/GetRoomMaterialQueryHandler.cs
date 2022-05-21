@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.DTOs;
 using OnlineLearning.Models;
 using OnlineLearning.Queries;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,7 +31,7 @@ namespace OnlineLearning.Handlers.Queries
             using (var context = new AppDbContext(dbContextOptions))
             {
                 var material = await context.RoomMaterials.AsNoTracking().FirstOrDefaultAsync(x => x.Id == request.MaterialId && x.RoomId == request.RoomId);
-                if(material ==null)
+                if (material ==null)
                 {
                     return ResponseModel.Fail<RoomMaterialDto>(ConstantMessageCodes.FILE_NOT_FOUND);
 

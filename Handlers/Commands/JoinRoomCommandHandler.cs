@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +7,10 @@ using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.Models;
 using OnlineLearning.Services;
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OnlineLearning.Handlers.Commands
 {

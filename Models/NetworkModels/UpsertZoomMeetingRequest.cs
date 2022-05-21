@@ -9,7 +9,7 @@ namespace OnlineLearning.Models.NetworkModels
         /// Topic name
         /// </summary>
         public string agenda { get; set; }
-        public bool? default_password {  get; set; } = false;
+        public bool? default_password { get; set; } = false;
         public int? duration { get; set; }
         public string? password { get; set; }
         public bool? pre_schedule { get; set; }

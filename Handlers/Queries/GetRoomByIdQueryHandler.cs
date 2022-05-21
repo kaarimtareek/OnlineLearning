@@ -4,7 +4,6 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using OnlineLearning.Commands;
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.DTOs;
@@ -12,9 +11,6 @@ using OnlineLearning.Models;
 using OnlineLearning.Queries;
 using OnlineLearning.Services;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,18 +21,18 @@ namespace OnlineLearning.Handlers.Queries
         private readonly DbContextOptions<AppDbContext> dbContextOptions;
         private readonly IMapper mapper;
 
-        public GetRoomByIdQueryHandler(DbContextOptions<AppDbContext> dbContextOptions,IMapper mapper)
+        public GetRoomByIdQueryHandler(DbContextOptions<AppDbContext> dbContextOptions, IMapper mapper)
         {
             this.dbContextOptions = dbContextOptions;
             this.mapper = mapper;
         }
-       
+
         public async Task<ResponseModel<RoomDto>> Handle(GetRoomByIdQuery request, CancellationToken cancellationToken)
         {
-            using(AppDbContext context = new AppDbContext(dbContextOptions))
+            using (AppDbContext context = new AppDbContext(dbContextOptions))
             {
                 var room = await context.Rooms.IsNotDeleted().IncludeOwner().IncludeInterests().FirstOrDefaultAsync(x => x.Id == request.RoomId && !x.IsDeleted);
-                if(room ==null)
+                if (room ==null)
                 {
                     return new ResponseModel<RoomDto>
                     {

@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
-using OnlineLearning.Constants;
 using OnlineLearning.Models;
 
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 

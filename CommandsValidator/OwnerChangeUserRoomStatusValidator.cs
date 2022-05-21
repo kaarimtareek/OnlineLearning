@@ -16,7 +16,7 @@ namespace OnlineLearning.CommandsValidator
             RuleFor(x => x.RoomId).NotEmpty()
                 .MustAsync((id, canelationToken) => roomValidator.IsRoomExist(id, canelationToken));
             RuleFor(x => x.UserId).NotEmpty()
-                .MustAsync((id, cancelationToken)=> userValidator.IsActiveUserId(id,cancelationToken));
+                .MustAsync((id, cancelationToken) => userValidator.IsActiveUserId(id, cancelationToken));
             RuleFor(x => x.OwnerId).NotEmpty()
                 .MustAsync((model, id, cancelationToken) => roomValidator.IsUserRoomOwner(model.RoomId, id, cancelationToken))
                 .WithMessage("Not the room owner");

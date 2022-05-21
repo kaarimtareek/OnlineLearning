@@ -3,9 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnlineLearning.Models
 {
@@ -22,10 +19,10 @@ namespace OnlineLearning.Models
         [Timestamp]
         public byte[] RowVersion { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
-        public virtual ICollection<Answer> Answers{ get; set; }
-        public virtual ICollection<Room> CreatedRooms{ get; set; }
-        public virtual ICollection<UsersRooms> RequestedRooms{ get; set; }
-        public virtual ICollection<UserInterest> UserInterests{ get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
+        public virtual ICollection<Room> CreatedRooms { get; set; }
+        public virtual ICollection<UsersRooms> RequestedRooms { get; set; }
+        public virtual ICollection<UserInterest> UserInterests { get; set; }
         public virtual LookupUserStatus Status { get; set; }
     }
 }

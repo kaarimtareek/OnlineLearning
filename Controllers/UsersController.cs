@@ -1,18 +1,12 @@
 ﻿using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using OnlineLearning.Commands;
-using OnlineLearning.Common;
-using OnlineLearning.Constants;
 using OnlineLearning.Models.InputModels;
 using OnlineLearning.Queries;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnlineLearning.Controllers
@@ -20,7 +14,7 @@ namespace OnlineLearning.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    
+
     public class UsersController : SystemBaseController
     {
         private readonly IMediator mediator;
@@ -29,9 +23,9 @@ namespace OnlineLearning.Controllers
         {
             this.mediator = mediator;
         }
-       
+
         [HttpGet("")]
-        public async Task<IActionResult>Get()
+        public async Task<IActionResult> Get()
         {
             var query = new GetUserByIdQuery
             {
@@ -40,9 +34,9 @@ namespace OnlineLearning.Controllers
             var result = await mediator.Send(query);
             return StatusCode((int)result.HttpStatusCode, result);
         }
-        
+
         [HttpPost("/Interests")]
-        public async Task<IActionResult>AddInterest(AddUserInterestInputModel inputModel)
+        public async Task<IActionResult> AddInterest(AddUserInterestInputModel inputModel)
         {
             var query = new AddUserInterestCommand
             {
@@ -55,7 +49,7 @@ namespace OnlineLearning.Controllers
             return StatusCode((int)result.HttpStatusCode, result);
         }
         [HttpGet("/Interests")]
-        public async Task<IActionResult>GetInterests()
+        public async Task<IActionResult> GetInterests()
         {
             var query = new GetUserInterestsQuery
             {

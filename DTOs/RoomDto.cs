@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace OnlineLearning.DTOs
@@ -18,6 +17,6 @@ namespace OnlineLearning.DTOs
         public DateTime StartDate { get; set; }
         public DateTime? ExpectedEndDate { get; set; }
         public DateTime? FinishDate { get; set; }
-        public IEnumerable<InterestDto> Interests { get;set; }
+        public IEnumerable<InterestDto> Interests { get; set; }
     }
 }

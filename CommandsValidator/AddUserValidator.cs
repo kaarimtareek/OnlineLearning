@@ -3,11 +3,6 @@
 using OnlineLearning.Commands;
 using OnlineLearning.EntitiesValidators;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace OnlineLearning.CommandsValidator
 {
     public class AddUserValidator : AbstractValidator<AddUserCommand>

@@ -6,9 +6,6 @@ using OnlineLearning.Models;
 using OnlineLearning.Utilities;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlineLearning.Services
@@ -49,16 +46,16 @@ namespace OnlineLearning.Services
             try
             {
                 //delete only pending meetings
-                var meeting = await context.RoomMeetings.SingleOrDefaultAsync(x=>x.Id == meetingId && x.RoomId == roomId && !x.IsDeleted);
+                var meeting = await context.RoomMeetings.SingleOrDefaultAsync(x => x.Id == meetingId && x.RoomId == roomId && !x.IsDeleted);
                 if (meeting == null)
-                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND,default,ResponseCodeEnum.NOT_FOUND);
-                if(meeting.StatusId == ConstantRoomMeetingStatus.ACTIVE)
+                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
+                if (meeting.StatusId == ConstantRoomMeetingStatus.ACTIVE)
                 {
                     return OperationResult.Fail<int>();
                 }
                 if (meeting.StatusId == ConstantRoomMeetingStatus.CLOSED)
                 {
-                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND,default,ResponseCodeEnum.NOT_FOUND);
+                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
                 }
                 meeting.IsDeleted = true;
                 meeting.StatusId = ConstantRoomMeetingStatus.CANCELED;
@@ -76,16 +73,16 @@ namespace OnlineLearning.Services
             try
             {
                 //delete only pending meetings
-                
+
                 if (roomMeeting == null)
-                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND,default,ResponseCodeEnum.NOT_FOUND);
-                if(roomMeeting.StatusId == ConstantRoomMeetingStatus.ACTIVE)
+                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
+                if (roomMeeting.StatusId == ConstantRoomMeetingStatus.ACTIVE)
                 {
                     return OperationResult.Fail<int>();
                 }
                 if (roomMeeting.StatusId == ConstantRoomMeetingStatus.CLOSED)
                 {
-                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND,default,ResponseCodeEnum.NOT_FOUND);
+                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
                 }
                 roomMeeting.IsDeleted = true;
                 roomMeeting.StatusId = ConstantRoomMeetingStatus.CANCELED;
@@ -98,21 +95,21 @@ namespace OnlineLearning.Services
             }
 
         }
-        public async Task<OperationResult<int>> UpdateMeeting(AppDbContext context, int roomId, int meetingId,string topicName,string topicDescription, bool startNow, DateTime? startTime, DateTime? endTime)
+        public async Task<OperationResult<int>> UpdateMeeting(AppDbContext context, int roomId, int meetingId, string topicName, string topicDescription, bool startNow, DateTime? startTime, DateTime? endTime)
         {
             try
             {
                 //update only pending meetings
-                var meeting = await context.RoomMeetings.SingleOrDefaultAsync(x=>x.Id == meetingId && x.RoomId == roomId && !x.IsDeleted);
+                var meeting = await context.RoomMeetings.SingleOrDefaultAsync(x => x.Id == meetingId && x.RoomId == roomId && !x.IsDeleted);
                 if (meeting == null)
-                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND,default,ResponseCodeEnum.NOT_FOUND);
-                if(meeting.StatusId != ConstantRoomMeetingStatus.WAITING)
+                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
+                if (meeting.StatusId != ConstantRoomMeetingStatus.WAITING)
                 {
                     return OperationResult.Fail<int>();
                 }
                 meeting.MeetingName = topicName;
                 meeting.MeetingDescription = topicDescription;
-                if(startNow)
+                if (startNow)
                 {
                     meeting.StartDate = DateTime.Now;
                     meeting.StatusId = ConstantRoomMeetingStatus.ACTIVE;
@@ -130,21 +127,21 @@ namespace OnlineLearning.Services
             }
 
         }
-        public async Task<OperationResult<int>> UpdateMeeting(AppDbContext context, RoomMeeting roomMeeting,string topicName,string topicDescription, bool startNow, DateTime? startTime, DateTime? endTime)
+        public async Task<OperationResult<int>> UpdateMeeting(AppDbContext context, RoomMeeting roomMeeting, string topicName, string topicDescription, bool startNow, DateTime? startTime, DateTime? endTime)
         {
             try
             {
                 //update only pending meetings
-                
+
                 if (roomMeeting == null)
-                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND,default,ResponseCodeEnum.NOT_FOUND);
-                if(roomMeeting.StatusId != ConstantRoomMeetingStatus.WAITING)
+                    return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
+                if (roomMeeting.StatusId != ConstantRoomMeetingStatus.WAITING)
                 {
                     return OperationResult.Fail<int>();
                 }
                 roomMeeting.MeetingName = topicName;
                 roomMeeting.MeetingDescription = topicDescription;
-                if(startNow)
+                if (startNow)
                 {
                     roomMeeting.StartDate = DateTime.Now;
                     roomMeeting.StatusId = ConstantRoomMeetingStatus.ACTIVE;

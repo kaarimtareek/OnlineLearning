@@ -16,7 +16,7 @@ namespace OnlineLearning.CommandsValidator
         {
             this.userValidator = userValidator;
             this.interestValidator = interestValidator;
-            
+
 
             RuleFor(x => x.UserId)
                 .NotEmpty()

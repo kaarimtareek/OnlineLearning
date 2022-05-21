@@ -1,7 +1,6 @@
 ﻿using OnlineLearning.Common;
 using OnlineLearning.Models;
 
-using System;
 using System.Threading.Tasks;
 
 namespace OnlineLearning.Services
@@ -9,6 +8,6 @@ namespace OnlineLearning.Services
     public interface IUserService
     {
         Task<OperationResult<ApplicationUser>> Get(string id);
-       
+
     }
 }

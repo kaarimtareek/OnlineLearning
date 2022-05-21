@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +7,11 @@ using OnlineLearning.Constants;
 using OnlineLearning.DTOs;
 using OnlineLearning.Models;
 using OnlineLearning.Queries;
+
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OnlineLearning.Handlers.Queries
 {

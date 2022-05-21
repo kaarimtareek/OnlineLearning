@@ -36,7 +36,7 @@ namespace OnlineLearning.Handlers.Commands
                     try
                     {
                         //validate the interests before creating the room
-                      var result = await roomService.CreateRoom(context, request.UserId, request.RoomName, request.RoomDescription, request.Price, request.StartDate, request.ExpectedEndDate,request.IsPublic, request.Interests);
+                        var result = await roomService.CreateRoom(context, request.UserId, request.RoomName, request.RoomDescription, request.Price, request.StartDate, request.ExpectedEndDate, request.IsPublic, request.Interests);
                         if (!result.IsSuccess)
                         {
                             await transactionScope.RollbackAsync();

@@ -1,7 +1,7 @@
 ﻿using MediatR;
+
 using OnlineLearning.Common;
 using OnlineLearning.DTOs;
-using OnlineLearning.Models.OutputModels;
 
 namespace OnlineLearning.Queries
 {

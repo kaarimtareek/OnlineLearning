@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-
+﻿
 using MediatR;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace OnlineLearning.Controllers
@@ -13,7 +11,7 @@ namespace OnlineLearning.Controllers
     {
         private readonly IMediator mediator;
 
-        public InterestsController(IMediator mediator )
+        public InterestsController(IMediator mediator)
         {
             this.mediator = mediator;
         }

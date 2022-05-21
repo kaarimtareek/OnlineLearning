@@ -1,16 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-
-using OnlineLearning.Models.InputModels;
 
 using RestSharp;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +11,7 @@ namespace OnlineLearning.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
+    // [Authorize]
     public class ZoomController : ControllerBase
     {
         private readonly IConfiguration configuration;
@@ -52,15 +45,15 @@ namespace OnlineLearning.Controllers
             var encodedHeaer = Encoding.UTF8.GetBytes($"{clientId}:{clientSecret}");
             var encodedString = Convert.ToBase64String(encodedHeaer);
             var authorizationHeader = $"Basic {encodedString}";
-            request.AddHeader("Authorization",authorizationHeader);
+            request.AddHeader("Authorization", authorizationHeader);
             var result = await client.PostAsync(request);
-            if(!result.IsSuccessful)
+            if (!result.IsSuccessful)
             {
                 return BadRequest(result.Content);
             }
             return Ok(result.Content);
 
         }
-      
+
     }
 }

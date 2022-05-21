@@ -1,12 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace OnlineLearning.DTOs
 {
     public class UserDto
     {
-        public string Id { get;set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string StatusId { get; set; }
         public DateTime? Birthdate { get; set; }

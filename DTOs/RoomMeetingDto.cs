@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System;
+﻿using System;
 
 namespace OnlineLearning.DTOs
 {
@@ -17,7 +16,7 @@ namespace OnlineLearning.DTOs
         public string MeetingDescription { get; set; }
         public string MeetingPassword { get; set; }
         public long ZoomMeetingId { get; set; }
-        public RoomMeetingStatusDto Status { get; set; } 
+        public RoomMeetingStatusDto Status { get; set; }
 
     }
 }

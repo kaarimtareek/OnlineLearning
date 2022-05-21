@@ -13,7 +13,7 @@ namespace OnlineLearning.Constants
         public const string SUSPENDED = "SUSPENDED";
         public const string LEFT = "LEFT";
         public const string CANCELED = "CANCELED";
-        public static readonly string[] ALL = new string[] { PENDING, JOINED, ACCEPTED, REJECTED, SUSPENDED, LEFT , CANCELED };
+        public static readonly string[] ALL = new string[] { PENDING, JOINED, ACCEPTED, REJECTED, SUSPENDED, LEFT, CANCELED };
         public static bool IsValidStatus(string status) => ALL.Contains(status);
 
         public static bool IsJoined(string status) => status == JOINED;
@@ -26,7 +26,7 @@ namespace OnlineLearning.Constants
 
         public static bool IsSuspended(string status) => status == SUSPENDED;
         public static bool IsLeft(string status) => status == LEFT;
-    
+
 
 
         //public static Dictionary<string, List<string>> AllowedStatus = new Dictionary<string, List<string>>

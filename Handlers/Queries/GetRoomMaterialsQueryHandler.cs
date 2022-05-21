@@ -10,7 +10,6 @@ using OnlineLearning.DTOs;
 using OnlineLearning.Models;
 using OnlineLearning.Queries;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -32,7 +31,7 @@ namespace OnlineLearning.Handlers.Queries
 
         public async Task<ResponseModel<List<RoomMaterialDto>>> Handle(GetRoomMaterialsQuery request, CancellationToken cancellationToken)
         {
-            using(var context = new AppDbContext(dbContextOptions))
+            using (var context = new AppDbContext(dbContextOptions))
             {
                 var materials = await context.RoomMaterials.Where(x => x.RoomId == request.RoomId && x.IsActive && !x.IsDeleted).Select(x => new RoomMaterialDto
                 {

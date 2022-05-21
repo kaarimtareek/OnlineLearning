@@ -33,7 +33,7 @@ namespace OnlineLearning.Services
             {
                 using (AppDbContext context = new AppDbContext(contextOptions))
                 {
-                    var result = await context.Interests.AsNoTracking().IsNotDeleted().Select(x=> new InterestDto
+                    var result = await context.Interests.AsNoTracking().IsNotDeleted().Select(x => new InterestDto
                     {
                         Id = x.Id
                     }).ToListAsync();
@@ -172,7 +172,7 @@ namespace OnlineLearning.Services
                     //get all the interests in the db
                     var interests = await context.Interests.AsNoTracking().Where(x => !x.IsDeleted).ToListAsync();
                     var result = GetSimilarInterests(interestStemmedWords, interests);
-                    return OperationResult.Success( result,ConstantMessageCodes.THERE_ARE_SIMILAR_INTEREST,ResponseCodeEnum.FAILED);
+                    return OperationResult.Success(result, ConstantMessageCodes.THERE_ARE_SIMILAR_INTEREST, ResponseCodeEnum.FAILED);
                 }
             }
             catch (Exception e)

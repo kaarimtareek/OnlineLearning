@@ -1,17 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
 
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.Models;
-using OnlineLearning.Settings;
 using OnlineLearning.Utilities;
 
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlineLearning.Services
@@ -27,7 +21,7 @@ namespace OnlineLearning.Services
             this.logger = logger;
         }
 
-       
+
         public async Task<OperationResult<ApplicationUser>> Get(string id)
         {
             try
@@ -49,6 +43,6 @@ namespace OnlineLearning.Services
             }
         }
 
-       
+
     }
 }

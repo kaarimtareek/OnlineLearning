@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +9,10 @@ using OnlineLearning.Models;
 using OnlineLearning.Services;
 using OnlineLearning.Utilities;
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
 namespace OnlineLearning.Handlers.Commands
 {
     public class AddRoomMaterialCommandHandler : IRequestHandler<AddRoomMaterialCommand, ResponseModel<int>>
@@ -23,7 +21,7 @@ namespace OnlineLearning.Handlers.Commands
         private readonly IRoomService roomService;
         private readonly ILoggerService<AddRoomCommandHandler> logger;
 
-        public AddRoomMaterialCommandHandler(DbContextOptions<AppDbContext> dbContextOptions,IRoomService roomService,ILoggerService<AddRoomCommandHandler> logger)
+        public AddRoomMaterialCommandHandler(DbContextOptions<AppDbContext> dbContextOptions, IRoomService roomService, ILoggerService<AddRoomCommandHandler> logger)
         {
             this.dbContextOptions = dbContextOptions;
             this.roomService = roomService;
@@ -56,7 +54,7 @@ namespace OnlineLearning.Handlers.Commands
                     };
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError($"Error in add room material command handler {e}");
                 return ResponseModel.Fail<int>();

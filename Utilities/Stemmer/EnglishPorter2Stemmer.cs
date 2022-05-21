@@ -9,18 +9,18 @@ namespace OnlineLearning.Utilities.Stemmer
     /// </summary>
     public class EnglishPorter2Stemmer : IPorter2Stemmer
     {
-        
-        private readonly char[] _alphabet = 
+
+        private readonly char[] _alphabet =
             Enumerable
                 .Range('a', 'z' - 'a' + 1)
                 .Select(c => (char)c)
-                .Concat(new[]{'\''}).ToArray();
+                .Concat(new[] { '\'' }).ToArray();
         public char[] Alphabet { get { return _alphabet; } }
 
         private readonly char[] _vowels = "aeiouy".ToArray();
         public char[] Vowels { get { return _vowels; } }
 
-        private readonly string[] _doubles = 
+        private readonly string[] _doubles =
             { "bb", "dd", "ff", "gg", "mm", "nn", "pp", "rr", "tt" };
         public string[] Doubles { get { return _doubles; } }
 
@@ -258,7 +258,7 @@ namespace OnlineLearning.Utilities.Stemmer
                         chars[i] = 'Y';
                     }
                 }
-                else if(Vowels.Contains(chars[i - 1]) && chars[i] == 'y')
+                else if (Vowels.Contains(chars[i - 1]) && chars[i] == 'y')
                 {
                     chars[i] = 'Y';
                 }
@@ -269,7 +269,7 @@ namespace OnlineLearning.Utilities.Stemmer
         public string Step0RemoveSPluralSuffix(string word)
         {
             // Ordered from longest to shortest
-            var suffixes = new[] {"'s'", "'s", "'"};
+            var suffixes = new[] { "'s'", "'s", "'" };
             foreach (var suffix in suffixes)
             {
                 if (word.EndsWith(suffix))
@@ -320,21 +320,21 @@ namespace OnlineLearning.Utilities.Stemmer
 
         public string Step1BRemoveLySuffixes(string word, int r1)
         {
-            foreach (var suffix in new [] {"eedly", "eed"}.Where(word.EndsWith))
+            foreach (var suffix in new[] { "eedly", "eed" }.Where(word.EndsWith))
             {
-                if(SuffixInR1(word, r1, suffix))
+                if (SuffixInR1(word, r1, suffix))
                 {
                     return ReplaceSuffix(word, suffix, "ee");
                 }
                 return word;
             }
 
-            foreach (var suffix in new [] {"ed", "edly", "ing", "ingly"}.Where(word.EndsWith))
+            foreach (var suffix in new[] { "ed", "edly", "ing", "ingly" }.Where(word.EndsWith))
             {
                 var trunc = ReplaceSuffix(word, suffix);//word.Substring(0, word.Length - suffix.Length);
                 if (trunc.Any(IsVowel))
                 {
-                    if (new[] {"at", "bl", "iz"}.Any(trunc.EndsWith))
+                    if (new[] { "at", "bl", "iz" }.Any(trunc.EndsWith))
                     {
                         return trunc + "e";
                     }
@@ -406,8 +406,8 @@ namespace OnlineLearning.Utilities.Stemmer
                 }
             }
 
-            if (word.EndsWith("ogi") 
-                && SuffixInR1(word, r1, "ogi") 
+            if (word.EndsWith("ogi")
+                && SuffixInR1(word, r1, "ogi")
                 && word[word.Length - 4] == 'l')
             {
                 return ReplaceSuffix(word, "ogi", "og");
@@ -449,7 +449,7 @@ namespace OnlineLearning.Utilities.Stemmer
 
             if (word.EndsWith("ative"))
             {
-                if(SuffixInR1(word, r1, "ative") && SuffixInR2(word, r2, "ative"))
+                if (SuffixInR1(word, r1, "ative") && SuffixInR2(word, r2, "ative"))
                 {
                     return ReplaceSuffix(word, "ative", null);
                 }
@@ -462,8 +462,8 @@ namespace OnlineLearning.Utilities.Stemmer
         {
             foreach (var suffix in new[]
                 {
-                    "al", "ance", "ence", "er", "ic", "able", "ible", "ant", 
-                    "ement", "ment", "ent", "ism", "ate", "iti", "ous", 
+                    "al", "ance", "ence", "er", "ic", "able", "ible", "ant",
+                    "ement", "ment", "ent", "ism", "ate", "iti", "ous",
                     "ive", "ize"
                 })
             {
@@ -477,9 +477,9 @@ namespace OnlineLearning.Utilities.Stemmer
                 }
             }
 
-            if (word.EndsWith("ion") && 
+            if (word.EndsWith("ion") &&
                 SuffixInR2(word, r2, "ion") &&
-                new[] {'s', 't'}.Contains(word[word.Length - 4]))
+                new[] { 's', 't' }.Contains(word[word.Length - 4]))
             {
                 return ReplaceSuffix(word, "ion");
             }
@@ -490,14 +490,14 @@ namespace OnlineLearning.Utilities.Stemmer
         {
             if (word.EndsWith("e") &&
                 (SuffixInR2(word, r2, "e") ||
-                    (SuffixInR1(word, r1, "e") && 
+                    (SuffixInR1(word, r1, "e") &&
                         !EndsInShortSyllable(ReplaceSuffix(word, "e")))))
             {
                 return ReplaceSuffix(word, "e");
             }
 
-            if (word.EndsWith("l") && 
-                SuffixInR2(word, r2, "l") && 
+            if (word.EndsWith("l") &&
+                SuffixInR2(word, r2, "l") &&
                 word.Length > 1 &&
                 word[word.Length - 2] == 'l')
             {

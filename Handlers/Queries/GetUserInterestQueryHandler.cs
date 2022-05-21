@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using MediatR;
 
-using MediatR;
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
 using OnlineLearning.DTOs;
-using OnlineLearning.Models;
 using OnlineLearning.Queries;
 using OnlineLearning.Services;
+
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OnlineLearning.Handlers.Queries
 {
@@ -26,7 +26,7 @@ namespace OnlineLearning.Handlers.Queries
             return new ResponseModel<List<InterestDto>>
             {
                 HttpStatusCode = result.ResponseCode.GetStatusCode(),
-                Result = result.Data.ConvertAll(x=> new InterestDto
+                Result = result.Data.ConvertAll(x => new InterestDto
                 {
                     Id = x.Id,
                     IsDeleted = x.IsDeleted,

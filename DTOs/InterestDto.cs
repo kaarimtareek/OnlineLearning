@@ -3,6 +3,6 @@
     public class InterestDto
     {
         public string Id { get; set; }
-        public bool IsDeleted{ get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

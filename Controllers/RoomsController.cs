@@ -64,6 +64,22 @@ namespace OnlineLearning.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
+        [HttpGet("CreatedRooms")]
+        public async Task<IActionResult> GetCreatedRooms()
+        {
+            try
+            {
+                var result = await mediator.Send(new GetCreatedRoomsQuery
+                {
+                    UserId = UserId
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
         [HttpPost("")]
         public async Task<IActionResult> CreateRoom(AddRoomInputModel inputModel)
         {
@@ -140,6 +156,7 @@ namespace OnlineLearning.Controllers
                     InterestId = interestId,
                     PageNumber = queryParameters.PageNumber,
                     PageSize = queryParameters.PageSize,
+                    UserId = UserId
 
                 });
                 return StatusCode((int)result.HttpStatusCode, result);
@@ -170,6 +187,7 @@ namespace OnlineLearning.Controllers
                     Interests = queryParameters.Interests,
                     PageNumber = queryParameters.PageNumber,
                     PageSize = queryParameters.PageSize,
+                    UserId = UserId
 
                 });
                 return StatusCode((int)result.HttpStatusCode, result);

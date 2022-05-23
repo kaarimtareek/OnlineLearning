@@ -108,7 +108,7 @@ namespace OnlineLearning.Services
             {
                 using (AppDbContext context = new AppDbContext(contextOptions))
                 {
-                    var userInterests = await context.Interests.Include(x => x.UserInterests.Where(x => x.UserId == userId && !x.IsDeleted)).AsNoTracking().Where(x => !x.IsDeleted).ToListAsync();
+                    var userInterests = await context.UserInterests.Include(x=>x.Interest).Where(x=>x.UserId == userId && !x.IsDeleted).Select(x=>new Interest { Id = x.InterestId, IsDeleted = x.IsDeleted}).ToListAsync();
                     return OperationResult.Success(userInterests);
                 }
             }
@@ -126,7 +126,7 @@ namespace OnlineLearning.Services
                 var interest = await context.Interests.AsNoTracking().FirstOrDefaultAsync(x => x.Id == interestId && !x.IsDeleted);
                 if (interest == null)
                 {
-                    return OperationResult.Fail<int>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.NOT_FOUND);
+                    return OperationResult.Fail<int>(ConstantMessageCodes.INTEREST_NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
                 }
                 var userInterest = await context.UserInterests.FirstOrDefaultAsync(x => x.UserId == userId && x.InterestId == interestId);
                 if (userInterest != null)
@@ -137,7 +137,7 @@ namespace OnlineLearning.Services
                     }
                     else
                     {
-                        return OperationResult.Fail<int>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.DUPLICATE_DATA);
+                        return OperationResult.Fail<int>(ConstantMessageCodes.INTEREST_ALREADY_EXIST, default, ResponseCodeEnum.DUPLICATE_DATA);
                     }
                 }
                 else
@@ -159,6 +159,17 @@ namespace OnlineLearning.Services
             }
         }
 
+        public async Task<OperationResult<int>> DeleteUserInterest(AppDbContext context,string userId, string interestId)
+        {
+            var userInterest = await context.UserInterests.FirstOrDefaultAsync(x=> x.UserId == userId && x.InterestId == interestId && !x.IsDeleted);
+            if(userInterest == null)
+            {
+                return OperationResult.Fail<int>(ConstantMessageCodes.INTEREST_NOT_FOUND,default,ResponseCodeEnum.NOT_FOUND);
+            }
+            userInterest.IsDeleted = true;
+            await context.SaveChangesAsync();
+            return OperationResult.Success(userInterest.Id);
+        }
         public async Task<OperationResult<List<Interest>>> GetSimilarInterests(string normalizedInterest)
         {
             try
@@ -181,7 +192,6 @@ namespace OnlineLearning.Services
                 return OperationResult.Fail<List<Interest>>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
             }
         }
-
         private List<Interest> GetSimilarInterests(List<string> separatedInterest, List<Interest> interests)
         {
             List<Interest> similarInterests = new List<Interest>();
@@ -211,5 +221,6 @@ namespace OnlineLearning.Services
             }
             return similarInterests;
         }
+
     }
 }

@@ -14,5 +14,6 @@ namespace OnlineLearning.Services
         Task<OperationResult<List<InterestDto>>> GetInterests();
         Task<OperationResult<List<Interest>>> GetSimilarInterests(string normalizedInterest);
         Task<OperationResult<List<Interest>>> GetUserIntersts(string userId);
+        Task<OperationResult<int>> DeleteUserInterest(AppDbContext context, string userId, string interestId);
     }
 }

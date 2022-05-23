@@ -38,31 +38,7 @@ namespace OnlineLearning.Handlers.Commands
                     try
                     {
                         OperationResult<int> result;
-                        if (string.IsNullOrWhiteSpace(request.InterestId))
-                        {
-                            var interestresult = await interestService.AddInterest(context, request.Interest, request.IgnoreSimilarity);
-                            if (!interestresult.IsSuccess)
-                            {
-                                await transactionScope.RollbackAsync();
-                                return new ResponseModel<int>
-                                {
-                                    IsSuccess = interestresult.IsSuccess,
-                                    MessageCode = interestresult.Message,
-                                    Errors = interestresult.Data?.Split(',').ToList().ConvertAll(x => new ValidationErrorModel
-                                    {
-                                        Message = x
-                                    }),
-                                    HttpStatusCode = interestresult.ResponseCode.GetStatusCode()
-                                };
-                            }
-                            result = await interestService.AddUserInterest(context, request.UserId, interestresult.Data);
-
-                        }
-                        else
-                        {
-                            result = await interestService.AddUserInterest(context, request.UserId, request.InterestId);
-                        }
-
+                        result = await interestService.AddUserInterest(context, request.UserId, request.InterestId);
                         if (!result.IsSuccess)
                         {
                             await transactionScope.RollbackAsync();

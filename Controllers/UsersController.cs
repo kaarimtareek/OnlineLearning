@@ -41,9 +41,7 @@ namespace OnlineLearning.Controllers
             var query = new AddUserInterestCommand
             {
                 UserId= UserId,
-                Interest = inputModel.Interest,
                 InterestId = inputModel.InterestId,
-                IgnoreSimilarity = inputModel.IgnoreSimilarity,
             };
             var result = await mediator.Send(query);
             return StatusCode((int)result.HttpStatusCode, result);
@@ -56,6 +54,17 @@ namespace OnlineLearning.Controllers
                 UserId= UserId,
             };
             var result = await mediator.Send(query);
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        [HttpDelete("/Interests/{interestId}")]
+        public async Task<IActionResult> DeleteInterest(string interestId)
+        {
+            var command = new DeleteUserInterestCommand
+            {
+                UserId= UserId,
+                InterestId= interestId
+            };
+            var result = await mediator.Send(command);
             return StatusCode((int)result.HttpStatusCode, result);
         }
 

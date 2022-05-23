@@ -1,4 +1,8 @@
-﻿namespace OnlineLearning.Common
+﻿using OnlineLearning.Settings;
+
+using RestSharp;
+
+namespace OnlineLearning.Common
 {
     public abstract class QueryStringParameters
     {
@@ -16,6 +20,18 @@
             {
                 _pageSize = (value > maxPageSize) ? maxPageSize : value;
             }
+        }
+        public virtual void HandleSettings(PaginationSettings paginationSettings)
+        {
+            int defaultPageNumber = paginationSettings.DefaultPageNumber;
+            int maxPageSize = paginationSettings.MaxPageSize;
+            int defaultPageSize = paginationSettings.DefaultPageSize;
+            if (PageNumber < 1)
+                PageNumber = defaultPageNumber;
+            if (PageSize < 1)
+                PageSize = defaultPageSize;
+            if (PageSize > maxPageSize)
+                PageSize = maxPageSize;
         }
     }
 }

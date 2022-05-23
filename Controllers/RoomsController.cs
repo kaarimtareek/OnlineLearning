@@ -142,15 +142,7 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                int defaultPageNumber = paginationSettings.DefaultPageNumber;
-                int maxPageSize = paginationSettings.MaxPageSize;
-                int defaultPageSize = paginationSettings.DefaultPageSize;
-                if (queryParameters.PageNumber < 1)
-                    queryParameters.PageNumber = defaultPageNumber;
-                if (queryParameters.PageSize < 1)
-                    queryParameters.PageSize = defaultPageSize;
-                if (queryParameters.PageSize > maxPageSize)
-                    queryParameters.PageSize = maxPageSize;
+               queryParameters.HandleSettings(paginationSettings);
                 var result = await mediator.Send(new GetRoomsByInterestIdQuery
                 {
                     InterestId = interestId,
@@ -171,17 +163,8 @@ namespace OnlineLearning.Controllers
         {
             try
             {
-                int defaultPageNumber = paginationSettings.DefaultPageNumber;
-                int maxPageSize = paginationSettings.MaxPageSize;
-                int defaultPageSize = paginationSettings.DefaultPageSize;
-                if (queryParameters.PageNumber < 1)
-                    queryParameters.PageNumber = defaultPageNumber;
-                if (queryParameters.PageSize < 1)
-                    queryParameters.PageSize = defaultPageSize;
-                if (queryParameters.PageSize > maxPageSize)
-                    queryParameters.PageSize = maxPageSize;
-                if (queryParameters.Interests == null)
-                    queryParameters.Interests = new string[] { };
+                queryParameters.HandleSettings(paginationSettings);
+                
                 var result = await mediator.Send(new GetRoomsByInterestsQuery
                 {
                     Interests = queryParameters.Interests,

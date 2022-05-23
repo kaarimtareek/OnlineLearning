@@ -6,6 +6,7 @@
         public const string OPERATION_FAILED = "OPERATION_FAILED";
         public const string VALIDATION_ERROR = "VALIDATION_ERROR";
         public const string NOT_FOUND = "NOT_FOUND";
+        public const string INTEREST_NOT_FOUND = "INTEREST_NOT_FOUND";
         public const string USER_NOT_FOUND = "USER_NOT_FOUND";
         public const string FILE_NOT_FOUND = "FILE_NOT_FOUND";
         public const string FILE_NOT_SUPPORTED = "FILE_NOT_SUPPORTED";

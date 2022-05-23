@@ -112,12 +112,12 @@ namespace OnlineLearning.Services
                 var user = await userManager.FindByEmailAsync(username);
                 if (user == null)
                 {
-                    return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
+                    return OperationResult.Fail<string>(ConstantMessageCodes.INCORRECT_USERNAME_OR_PASSWORD, default, ResponseCodeEnum.BAD_INPUT);
                 }
                 var signInResult = await signInManager.PasswordSignInAsync(user, password, true, false);
                 if (!signInResult.Succeeded)
                 {
-                    return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
+                    return OperationResult.Fail<string>(ConstantMessageCodes.INCORRECT_USERNAME_OR_PASSWORD, default, ResponseCodeEnum.BAD_INPUT);
                 }
                 var token = CreateToken(user.Email, user.Id, validTokenDaysNumber);
                 return OperationResult.Success<string>(token);

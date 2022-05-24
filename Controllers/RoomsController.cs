@@ -278,6 +278,10 @@ namespace OnlineLearning.Controllers
 
 
                 });
+                if(result.IsSuccess)
+                {
+                    return File(result.Result.Content, result.Result.ContentType);
+                }
                 return StatusCode((int)result.HttpStatusCode, result);
             }
             catch (Exception e)

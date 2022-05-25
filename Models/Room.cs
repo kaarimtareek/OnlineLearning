@@ -22,6 +22,10 @@ namespace OnlineLearning.Models
         public DateTime StartDate { get; set; }
         public DateTime? ExpectedEndDate { get; set; }
         public DateTime? FinishDate { get; set; }
+        public int NumberOfJoinedUsers { get; set; }
+        public int NumberOfRequestedUsers { get; set; }
+        public int NumberOfRejectedUsers { get; set; }
+        public int NumberOfLeftUsers { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<RoomInterest> RoomInterests { get; set; }
         public virtual ApplicationUser Owner { get; set; }

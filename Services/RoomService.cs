@@ -158,7 +158,7 @@ namespace OnlineLearning.Services
                 }
                 if (await context.UsersRooms.AnyAsync(x => x.UserId == userId && x.RoomId == roomId && !x.IsDeleted))
                 {
-
+                    return OperationResult.Fail<int>(ConstantMessageCodes.ALREADY_REQUESTED_TO_ROOM,default,ResponseCodeEnum.BAD_INPUT);
                 }
                 UsersRooms userRoom = new UsersRooms
                 {
@@ -207,6 +207,7 @@ namespace OnlineLearning.Services
                 {
                     UserId = userId,
                     RoomId = roomId,
+                    IsDeleted = false,
                 };
                 //for requsting join to the room
                 userRoom.StatusId = GetStatusForUserRoom(room);
@@ -255,6 +256,57 @@ namespace OnlineLearning.Services
             await context.SaveChangesAsync();
             return OperationResult.Success(material.Id);
         }
+        public async Task<OperationResult<int>> UpdateNumberOfUsers(AppDbContext context, int roomId , int? requestedNumber = null,int? joinedNumber = null , int? leftNumber = null, int? rejectedNumber = null)
+        {
+            var room = await context.Rooms.FirstOrDefaultAsync(x => x.Id == roomId && !x.IsDeleted);
+            if(room == null)
+            {
+                return OperationResult.Fail<int>(ConstantMessageCodes.ROOM_NOT_FOUND,default, ResponseCodeEnum.NOT_FOUND);
+            }
+            if(requestedNumber != null)
+                room.NumberOfRequestedUsers += requestedNumber.Value;
+            if(joinedNumber != null)
+                room.NumberOfJoinedUsers += joinedNumber.Value;
+            if(leftNumber != null)
+                room.NumberOfLeftUsers += leftNumber.Value;
+            if(rejectedNumber != null)
+                room.NumberOfRejectedUsers += rejectedNumber.Value;
+            await context.SaveChangesAsync();
+            return OperationResult.Success(room.NumberOfRequestedUsers);
+        }
+        public async Task<OperationResult<int>> UpdateNumberOfUsers(AppDbContext context, int roomId,string status, int number = 1)
+        {
+            var room = await context.Rooms.FirstOrDefaultAsync(x => x.Id == roomId && !x.IsDeleted);
+            if(room == null)
+            {
+                return OperationResult.Fail<int>(ConstantMessageCodes.ROOM_NOT_FOUND,default, ResponseCodeEnum.NOT_FOUND);
+            }
+            if(string.IsNullOrEmpty( status))
+                return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND,default,ResponseCodeEnum.NOT_FOUND);
+           if(status == ConstantUserRoomStatus.REJECTED)
+            {
+                room.NumberOfRejectedUsers += number;
+            }
+           else if(status == ConstantUserRoomStatus.JOINED)
+            {
+                room.NumberOfJoinedUsers+=number;
+            }
+            else if(status == ConstantUserRoomStatus.ACCEPTED)
+            {
+                room.NumberOfJoinedUsers+=number;
+            }
+            else if(status == ConstantUserRoomStatus.LEFT || status == ConstantUserRoomStatus.CANCELED)
+            {
+                room.NumberOfLeftUsers+=number;
+            }
+            else if(status == ConstantUserRoomStatus.PENDING)
+            {
+                room.NumberOfRequestedUsers+=number;
+            }
+            await context.SaveChangesAsync();
+            return OperationResult.Success(room.NumberOfRequestedUsers);
+        }
+
 
         #region Private Methods
 

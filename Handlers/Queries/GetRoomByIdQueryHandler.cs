@@ -50,6 +50,10 @@ namespace OnlineLearning.Handlers.Queries
                     StartDate = room.StartDate,
                     StatusId = room.StatusId,
                     IsPublic = room.IsPublic,
+                    NumberOfJoinedUsers = room.NumberOfJoinedUsers,
+                    NumberOfLeftUsers = room.NumberOfLeftUsers,
+                    NumberOfRejectedUsers = room.NumberOfRejectedUsers,
+                    NumberOfRequestedUsers = room.NumberOfRequestedUsers,
                     UserRoomStatus = room.RequestedUsers.FirstOrDefault()==null ? null : new UserRoomStatusDto
                     {
                         Id = room.RequestedUsers.First().StatusId,

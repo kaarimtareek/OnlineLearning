@@ -30,37 +30,41 @@ namespace OnlineLearning.Handlers.Queries
             {
                 using (AppDbContext context = new AppDbContext(dbContextOptions))
                 {
-                    var rooms = await context.Rooms.AsNoTracking().IncludeOwner().IncludeInterests().IncludeStatus().IncludeUserRoomStatus(request.UserId).IsNotDeleted().Where(x => x.RoomInterests.Any(a => a.InterestId == request.InterestId && !a.IsDeleted)).OrderByDescending(x => x.StartDate).Select(x => new RoomDto
+                    var rooms = await context.Rooms.AsNoTracking().IncludeOwner().IncludeInterests().IncludeStatus().IncludeUserRoomStatus(request.UserId).IsNotDeleted().Where(x => x.RoomInterests.Any(a => a.InterestId == request.InterestId && !a.IsDeleted)).OrderByDescending(x => x.StartDate).Select(room => new RoomDto
                     {
-                        Description = x.Description,
-                        ExpectedEndDate = x.ExpectedEndDate,
-                        FinishDate = x.FinishDate,
-                        Id = x.Id,
-                        IsPublic = x.IsPublic,
-                        Name = x.Name,
-                        OwnerId = x.OwnerId,
-                        OwnerName = x.Owner.Name,
-                        Price = x.Price,
-                        StartDate = x.StartDate,
-                        StatusId = x.StatusId,
-                        Status = x.Status == null ? null : new RoomStatusDto
+                        Description = room.Description,
+                        ExpectedEndDate = room.ExpectedEndDate,
+                        FinishDate = room.FinishDate,
+                        Id = room.Id,
+                        IsPublic = room.IsPublic,
+                        Name = room.Name,
+                        OwnerId = room.OwnerId,
+                        OwnerName = room.Owner.Name,
+                        Price = room.Price,
+                        StartDate = room.StartDate,
+                        StatusId = room.StatusId,
+                        NumberOfJoinedUsers = room.NumberOfJoinedUsers,
+                        NumberOfLeftUsers = room.NumberOfLeftUsers,
+                        NumberOfRejectedUsers = room.NumberOfRejectedUsers,
+                        NumberOfRequestedUsers = room.NumberOfRequestedUsers,
+                        Status = room.Status == null ? null : new RoomStatusDto
                         {
-                            Id = x.Status.Id,
-                            NameArabic = x.Status.NameArabic,
-                            NameEnglish = x.Status.NameEnglish,
-                            IsDeleted = x.Status.IsDeleted
+                            Id = room.Status.Id,
+                            NameArabic = room.Status.NameArabic,
+                            NameEnglish = room.Status.NameEnglish,
+                            IsDeleted = room.Status.IsDeleted
                         },
-                        Interests = x.RoomInterests.Select(i => new InterestDto
+                        Interests = room.RoomInterests.Select(i => new InterestDto
                         {
                             Id = i.InterestId,
                             IsDeleted = i.IsDeleted
 
                         }),
-                        UserRoomStatus = x.RequestedUsers.FirstOrDefault() == null ? null : new UserRoomStatusDto
+                        UserRoomStatus = room.RequestedUsers.FirstOrDefault() == null ? null : new UserRoomStatusDto
                         {
-                            Id = x.RequestedUsers.First().StatusId,
-                            NameArabic = x.RequestedUsers.First().Status.NameArabic,
-                            NameEnglish = x.RequestedUsers.First().Status.NameEnglish,
+                            Id = room.RequestedUsers.First().StatusId,
+                            NameArabic = room.RequestedUsers.First().Status.NameArabic,
+                            NameEnglish = room.RequestedUsers.First().Status.NameEnglish,
                         }
                     }).ToPagedList(request.PageNumber, request.PageSize);
                     return new ResponseModel<PagedList<RoomDto>>

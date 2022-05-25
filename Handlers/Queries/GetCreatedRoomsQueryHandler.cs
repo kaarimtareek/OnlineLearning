@@ -37,6 +37,10 @@ namespace OnlineLearning.Handlers.Queries
                     Description = room.Description,
                     ExpectedEndDate = room.ExpectedEndDate,
                     FinishDate = room.FinishDate,
+                    NumberOfJoinedUsers = room.NumberOfJoinedUsers,
+                    NumberOfLeftUsers = room.NumberOfLeftUsers,
+                    NumberOfRejectedUsers = room.NumberOfRejectedUsers,
+                    NumberOfRequestedUsers = room.NumberOfRequestedUsers,
                     Interests = room.RoomInterests.Select(x => new InterestDto
                     {
                         Id = x.InterestId,

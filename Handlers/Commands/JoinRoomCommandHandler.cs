@@ -36,18 +36,17 @@ namespace OnlineLearning.Handlers.Commands
                     if (!result.IsSuccess)
                     {
                         await transactionScope.RollbackAsync();
+                        return ResponseModel.Fail<int>(result.Message, default, null, result.ResponseCode.GetStatusCode());
+
                     }
-                    else
+                    var updateUserNumberResult = await roomService.UpdateNumberOfUsers(context, request.RoomId, 1);
+                    if(!updateUserNumberResult.IsSuccess)
                     {
-                        await transactionScope.CommitAsync();
+                        await transactionScope.RollbackAsync();
+                        return ResponseModel.Fail<int>(result.Message, default, null, result.ResponseCode.GetStatusCode());
                     }
-                    return new ResponseModel<int>
-                    {
-                        IsSuccess = true,
-                        HttpStatusCode = result.ResponseCode.GetStatusCode(),
-                        MessageCode = result.Message,
-                        Result = result.Data,
-                    };
+                    await transactionScope.CommitAsync();
+                    return ResponseModel.Success<int>(result.Message, result.Data, null, result.ResponseCode.GetStatusCode());
                 }
                 catch (Exception e)
                 {

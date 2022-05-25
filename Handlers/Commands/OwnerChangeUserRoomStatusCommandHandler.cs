@@ -31,15 +31,18 @@ namespace OnlineLearning.Handlers.Commands
                 using var transactionScope = await context.Database.BeginTransactionAsync();
                 try
                 {
+                    var roomResult = await context.UsersRooms.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.RoomId == request.RoomId);
+
+                    var oldRoomStatus = roomResult==null ? "" : roomResult.StatusId;
                     var result = await roomService.ChangeUserRoomStatus(context, request.UserId, request.RoomId, request.StatusId, Constants.ConstantUserRoomStatus.RoomOwnerAllowedStatus, request.Reason);
                     if (!result.IsSuccess)
                     {
                         await transactionScope.RollbackAsync();
+                        return ResponseModel.Fail<int>(result.Message, default, null, result.ResponseCode.GetStatusCode());
                     }
-                    else
-                    {
-                        await transactionScope.CommitAsync();
-                    }
+                    var changeUserNumberOldStatusResult = await roomService.UpdateNumberOfUsers(context, request.RoomId, oldRoomStatus, -1);
+                    var changeUserNumbernewStatusResult = await roomService.UpdateNumberOfUsers(context, request.RoomId, request.StatusId, 1);
+                    await transactionScope.CommitAsync();
                     return new ResponseModel<int>
                     {
                         IsSuccess = result.IsSuccess,

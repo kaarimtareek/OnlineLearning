@@ -16,5 +16,7 @@ namespace OnlineLearning.Services
         Task<OperationResult<int>> RequestToJoinRoom(AppDbContext context, int roomId, string userId);
         Task<OperationResult<int>> AddMaterial(AppDbContext context, int roomId, IFormFile file);
         Task<OperationResult<int>> ChangeUserRoomStatus(AppDbContext context, string userId, int roomId, string status, Dictionary<string, List<string>> allowedStatuses, string comment = "");
+        Task<OperationResult<int>> UpdateNumberOfUsers(AppDbContext context, int roomId, int? requestedNumber = null, int? joinedNumber = null, int? leftNumber = null, int? rejectedNumber = null);
+        Task<OperationResult<int>> UpdateNumberOfUsers(AppDbContext context, int roomId, string status, int number = 1);
     }
 }

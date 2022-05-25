@@ -60,6 +60,10 @@ namespace OnlineLearning.Handlers.Queries
                                                                      StartDate = room.StartDate,
                                                                      StatusId = room.StatusId,
                                                                     IsPublic = room.IsPublic,
+                                                                    NumberOfJoinedUsers = room.NumberOfJoinedUsers,
+                                                                    NumberOfLeftUsers = room.NumberOfLeftUsers,
+                                                                    NumberOfRejectedUsers = room.NumberOfRejectedUsers,
+                                                                    NumberOfRequestedUsers = room.NumberOfRequestedUsers,
                                                                      UserRoomStatus =lookupUserRoomStatus ==null ? null : new UserRoomStatusDto
                                                                      {
                                                                          Id = lookupUserRoomStatus.Id,

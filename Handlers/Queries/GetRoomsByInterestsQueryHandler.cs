@@ -30,31 +30,35 @@ namespace OnlineLearning.Handlers.Queries
                 using (AppDbContext context = new AppDbContext(dbContextOptions))
                 {
                     var rooms = context.RoomInterests.Include(r => r.Room).ThenInclude(x => x.Status).Include(x => x.Room).ThenInclude(x => x.Owner).Include(x=>x.Room).ThenInclude(x=>x.RequestedUsers.Where(x=>x.UserId == request.UserId)).ThenInclude(x=>x.Status).AsNoTracking().Where(x => request.Interests.Contains(x.InterestId) && !x.IsDeleted && !x.Room.IsDeleted).OrderByDescending(x => x.Room.StartDate).Select(x => x.Room
-                   ).Skip(request.PageSize * (request.PageNumber - 1)).Take(request.PageSize).Select(x => new RoomDto
+                   ).Skip(request.PageSize * (request.PageNumber - 1)).Take(request.PageSize).Select(room => new RoomDto
                    {
-                       Description = x.Description,
-                       ExpectedEndDate = x.ExpectedEndDate,
-                       FinishDate = x.FinishDate,
-                       Id = x.Id,
-                       IsPublic = x.IsPublic,
-                       Name = x.Name,
-                       OwnerId = x.OwnerId,
-                       OwnerName = x.Owner.Name,
-                       Price = x.Price,
-                       StartDate = x.StartDate,
-                       StatusId = x.StatusId,
-                       Status = x.Status == null ? null : new RoomStatusDto
+                       Description = room.Description,
+                       ExpectedEndDate = room.ExpectedEndDate,
+                       FinishDate = room.FinishDate,
+                       Id = room.Id,
+                       IsPublic = room.IsPublic,
+                       Name = room.Name,
+                       OwnerId = room.OwnerId,
+                       OwnerName = room.Owner.Name,
+                       Price = room.Price,
+                       StartDate = room.StartDate,
+                       StatusId = room.StatusId,
+                       NumberOfJoinedUsers = room.NumberOfJoinedUsers,
+                       NumberOfLeftUsers = room.NumberOfLeftUsers,
+                       NumberOfRejectedUsers = room.NumberOfRejectedUsers,
+                       NumberOfRequestedUsers = room.NumberOfRequestedUsers,
+                       Status = room.Status == null ? null : new RoomStatusDto
                        {
-                           Id = x.Status.Id,
-                           NameArabic = x.Status.NameArabic,
-                           NameEnglish = x.Status.NameEnglish,
-                           IsDeleted = x.Status.IsDeleted
+                           Id = room.Status.Id,
+                           NameArabic = room.Status.NameArabic,
+                           NameEnglish = room.Status.NameEnglish,
+                           IsDeleted = room.Status.IsDeleted
                        },
-                       UserRoomStatus = x.RequestedUsers.FirstOrDefault() ==null? null : new UserRoomStatusDto
+                       UserRoomStatus = room.RequestedUsers.FirstOrDefault() ==null? null : new UserRoomStatusDto
                        {
-                           Id = x.RequestedUsers.First().Status.Id,
-                           NameArabic = x.RequestedUsers.First().Status.NameArabic,
-                           NameEnglish = x.RequestedUsers.First().Status.NameEnglish,
+                           Id = room.RequestedUsers.First().Status.Id,
+                           NameArabic = room.RequestedUsers.First().Status.NameArabic,
+                           NameEnglish = room.RequestedUsers.First().Status.NameEnglish,
 
                        }
 

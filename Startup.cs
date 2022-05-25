@@ -51,6 +51,8 @@ namespace OnlineLearning
                 .AddRoles<IdentityRole>()
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<AppDbContext>();
+            services.AddTransient<IStartupFilter, MigrationStartupFilter<AppDbContext>>();
+
             #region Services
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IRoomService, RoomService>();

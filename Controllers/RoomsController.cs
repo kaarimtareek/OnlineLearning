@@ -220,6 +220,24 @@ namespace OnlineLearning.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
+        [HttpPut("{roomId}/users/status/{statusId}")]
+        public async Task<IActionResult> RejectUserToRoom(int roomId, string statusId)
+        {
+            try
+            {
+                var result = await mediator.Send(new UserChangeUserRoomStatusCommand
+                {
+                    RoomId = roomId,
+                    UserId = UserId,
+                    StatusId = statusId,
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
         [HttpPost("{roomId}/Materials")]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> AddRoomMaterial(int roomId)

@@ -34,7 +34,7 @@ namespace OnlineLearning.Handlers.Commands
                     var roomResult = await context.UsersRooms.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.RoomId == request.RoomId);
 
                     var oldRoomStatus = roomResult==null ? "" : roomResult.StatusId;
-                    var result = await roomService.ChangeUserRoomStatus(context, request.UserId, request.RoomId, request.StatusId, Constants.ConstantUserRoomStatus.RoomOwnerAllowedStatus, request.Reason);
+                    var result = await roomService.ChangeUserRoomStatus(context, request.UserId, request.RoomId, request.StatusId, ConstantUserRoomStatus.RoomOwnerAllowedStatus, request.Reason);
                     if (!result.IsSuccess)
                     {
                         await transactionScope.RollbackAsync();

@@ -62,6 +62,7 @@ namespace OnlineLearning
             services.AddScoped<IMeetingService, MeetingService>();
             services.AddScoped<IZoomService, ZoomService>();
             services.AddScoped<IFileManager, FileManager>();
+            services.AddScoped<IQuestionService, QuestionService>();
             //services.AddScoped<IConstatQueries, ConstatQueries>();
             services.AddScoped<IStemmer, EnglishPorter2Stemmer>();
             #endregion
@@ -71,6 +72,7 @@ namespace OnlineLearning
             services.AddScoped<IRoomValidator, RoomValidator>();
             services.AddScoped<IInterestValidator, InterestValidator>();
             services.AddScoped<IMeetingValidator, MeetingValidator>();
+            services.AddScoped<IQuestionValidator, QuestionValidator>();
             #endregion
             services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
             services.AddMediatR(typeof(Startup));

@@ -13,6 +13,7 @@ namespace OnlineLearning.EntitiesValidators
         Task<bool> IsActiveRoom(int roomId, CancellationToken cancellationToken = default);
         Task<bool> IsRoomExist(int id, CancellationToken cancellationToken = default);
         Task<bool> IsUserRoomOwner(int roomId, string userId, CancellationToken cancellationToken = default);
+        Task<bool> IsUserJoinedRoom(int roomId, string userId, CancellationToken cancellationToken = default);
         Task<bool> IsUserCanCreateMeeting(string userId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default, int meetingId = 0);
         string GetOverlappedMeetings(string userId, DateTime startDate, DateTime endDate, int meetingId = 0, CancellationToken cancellationToken = default);
     }

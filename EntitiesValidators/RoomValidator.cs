@@ -49,6 +49,13 @@ namespace OnlineLearning.EntitiesValidators
                 return await context.Rooms.AnyAsync(x => x.Id == roomId && x.StatusId == ConstantRoomStatus.ACTIVE && !x.IsDeleted, cancellationToken);
             }
         }
+        public async Task<bool> IsUserJoinedRoom(int roomId,string userId, CancellationToken cancellationToken = default)
+        {
+            using (var context = new AppDbContext(contextOptions))
+            {
+                return await context.UsersRooms.AnyAsync(x => x.RoomId == roomId &&x.UserId == userId && (x.StatusId == ConstantUserRoomStatus.JOINED || x.StatusId == ConstantUserRoomStatus.ACCEPTED)  && !x.IsDeleted, cancellationToken);
+            }
+        }
         public async Task<bool> IsUserCanCreateMeeting(string userId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default, int meetingId = 0)
         {
             using (var context = new AppDbContext(contextOptions))

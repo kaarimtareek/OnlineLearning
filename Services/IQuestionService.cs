@@ -11,6 +11,8 @@ namespace OnlineLearning.Services
         Task<OperationResult<int>> AcceptAnswer(AppDbContext context, int answerId);
         Task<OperationResult<int>> AddAnswer(AppDbContext context, int questionId, string userId, string answerBody);
         Task<OperationResult<int>> AddQuestion(AppDbContext context, int roomId, string userId, string questionTitle, string questionDescription);
+        Task<OperationResult<int>> ChangeQuestionStatus(AppDbContext context, int questionId, string statusId);
+        Task<OperationResult<int>> ChangeQuestionStatus(AppDbContext context, Question question, string statusId);
         Task<OperationResult<int>> DeleteAnswer(AppDbContext context, Answer answer);
         Task<OperationResult<int>> DeleteAnswer(AppDbContext context, int answerId);
         Task<OperationResult<int>> DeleteQuestion(AppDbContext context, int questionId);

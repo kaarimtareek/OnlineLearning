@@ -44,11 +44,29 @@ namespace OnlineLearning.Services
             await context.SaveChangesAsync();
             return OperationResult.Success(question.Id);
         }
+        public async Task<OperationResult<int>> ChangeQuestionStatus(AppDbContext context, int questionId,string statusId)
+        {
+            var question = await context.Questions.FirstOrDefaultAsync(x => x.Id == questionId && !x.IsDeleted);
+            if (question == null)
+                return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
+            question.StatusId = statusId;
+            await context.SaveChangesAsync();
+            return OperationResult.Success(question.Id);
+        }
+        public async Task<OperationResult<int>> ChangeQuestionStatus(AppDbContext context, Question question,string statusId)
+        {
+            if (question == null)
+                return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
+            question.StatusId = statusId;
+            await context.SaveChangesAsync();
+            return OperationResult.Success(question.Id);
+        }
         public async Task<OperationResult<int>> DeleteQuestion(AppDbContext context, Question question)
         {
             if (question == null)
                 return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
             question.IsDeleted = true;
+            question.StatusId = ConstantQuestionStatus.DELETED;
             await context.SaveChangesAsync();
             return OperationResult.Success(question.Id);
         }
@@ -58,6 +76,7 @@ namespace OnlineLearning.Services
             if (question == null)
                 return OperationResult.Fail<int>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
             question.IsDeleted = true;
+            question.StatusId = ConstantQuestionStatus.DELETED;
             await context.SaveChangesAsync();
             return OperationResult.Success(question.Id);
         }

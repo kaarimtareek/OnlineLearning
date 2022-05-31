@@ -83,7 +83,7 @@ namespace OnlineLearning.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
-        [HttpGet("Questions/{questionId}")]
+        [HttpGet("{questionId}")]
         public async Task<IActionResult> GetQuestion(int questionId)
         {
             try
@@ -93,6 +93,97 @@ namespace OnlineLearning.Controllers
                    
                     UserId = UserId,
                     QuestionId =questionId,
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpDelete("{questionId}")]
+        public async Task<IActionResult> DeleteQuestion(int questionId)
+        {
+            try
+            {
+                var result = await mediator.Send(new DeleteQuestionCommand
+                {
+                   
+                    UserId = UserId,
+                    QuestionId =questionId,
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpPut("{questionId}")]
+        public async Task<IActionResult> EditQuestion(int questionId, [FromBody] EditQuestionInputModel inputModel)
+        {
+            try
+            {
+                var result = await mediator.Send(new EditQuestionCommand
+                {
+                   
+                    UserId = UserId,
+                    QuestionId =questionId,
+                    QuestionDescription = inputModel.QuestionDescription,
+                    QuestionTitle = inputModel.QuestionTitle,
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpDelete("Answers/{answerId}")]
+        public async Task<IActionResult> DeleteAnswer(int answerId)
+        {
+            try
+            {
+                var result = await mediator.Send(new DeleteAnswerCommand
+                {
+                   
+                    UserId = UserId,
+                    AnswerId = answerId
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpPut("Answers/{answerId}/Accept")]
+        public async Task<IActionResult> AcceptAnswer(int answerId)
+        {
+            try
+            {
+                var result = await mediator.Send(new AcceptAnswerCommand
+                {
+                    UserId = UserId,
+                    AnswerId = answerId
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch(Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+        [HttpPut("Answers/{answerId}")]
+        public async Task<IActionResult> EditAnswer(int answerId, [FromBody] EditAnswerInputModel inputModel)
+        {
+            try
+            {
+                var result = await mediator.Send(new EditAnswerCommand
+                {
+                    UserId = UserId,
+                    AnswerId = answerId,
+                    AnswerDescription = inputModel.AnswerDescription
                 });
                 return StatusCode((int)result.HttpStatusCode, result);
             }

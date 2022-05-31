@@ -27,7 +27,7 @@ namespace OnlineLearning.Handlers.Queries
             using (AppDbContext context = new AppDbContext(dbContextOptions))
             {
 
-                var questions = await context.Questions.AsNoTracking().Include(x => x.User).Include(x=>x.Answers).ThenInclude(x=>x.User).Where(x => x.Id == request.QuestionId && !x.IsDeleted).Select(x => new QuestionDto
+                var question = await context.Questions.AsNoTracking().Include(x => x.User).Include(x=>x.Answers.Where(x=>!x.IsDeleted)).ThenInclude(x=>x.User).Where(x => x.Id == request.QuestionId && !x.IsDeleted).Select(x => new QuestionDto
                 {
                     RoomId = x.RoomId,
                     StatusId = x.StatusId,
@@ -35,7 +35,9 @@ namespace OnlineLearning.Handlers.Queries
                     QuestionTitle = x.Title,
                     UserId = x.UserId,
                     UserName = x.User.Name,
-                    Answers = x.Answers.Select(a=>
+                     Id = x.Id,
+                     IsAnswered = x.StatusId == ConstantQuestionStatus.ANSWERED,
+                    Answers = x.Answers.Where(x=>!x.IsDeleted).Select(a=>
                     new AnswerDto
                     {
                         AnswerId = a.Id,
@@ -46,9 +48,9 @@ namespace OnlineLearning.Handlers.Queries
                         UserName = a.User.Name
                     }).ToList()
                 }).FirstOrDefaultAsync();
-                if (questions == null)
+                if (question == null)
                     return ResponseModel.Fail<QuestionDto>(ConstantMessageCodes.NOT_FOUND, default, null, HttpStatusCode.NotFound);
-                return ResponseModel.Success(ConstantMessageCodes.OPERATION_SUCCESS, questions, null, System.Net.HttpStatusCode.OK);
+                return ResponseModel.Success(ConstantMessageCodes.OPERATION_SUCCESS, question, null, System.Net.HttpStatusCode.OK);
 
             }
         }

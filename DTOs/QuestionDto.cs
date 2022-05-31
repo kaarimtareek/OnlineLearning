@@ -6,6 +6,7 @@ namespace OnlineLearning.DTOs
     {
         public int RoomId { get; set; }
         public string QuestionTitle { get; set; }
+        public int Id { get; set; }
         public string QuestionDescription { get; set; }
         public bool IsAnswered { get; set; }
         public string StatusId { get; set; }

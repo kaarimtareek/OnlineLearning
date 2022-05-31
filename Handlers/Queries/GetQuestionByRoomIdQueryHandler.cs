@@ -35,6 +35,8 @@ namespace OnlineLearning.Handlers.Queries
                     QuestionTitle = x.Title,
                     UserId = x.UserId,
                     UserName = x.User.Name,
+                    Id = x.Id,
+                    IsAnswered = ConstantQuestionStatus.ANSWERED == x.StatusId
                 }).ToListAsync();
                 return ResponseModel.Success(ConstantMessageCodes.OPERATION_SUCCESS, questions, null, System.Net.HttpStatusCode.OK);
 

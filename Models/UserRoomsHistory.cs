@@ -1,18 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineLearning.Models
 {
-    [Index(nameof(UserId), nameof(RoomId), IsUnique = true)]
-    public class UsersRooms : BaseEntity
+    public class UserRoomsHistory : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public int UserRoomsId { get; set; }
         [MaxLength(450)]
         public string UserId { get; set; }
         public int RoomId { get; set; }
@@ -26,9 +22,7 @@ namespace OnlineLearning.Models
         public string SuspensionReason { get; set; }
         [MaxLength(200)]
         public string LeaveReason { get; set; }
-        public virtual LookupUserRoomStatus Status { get; set; }
-        public virtual ApplicationUser User { get; set; }
-        public virtual Room Room { get; set; }
-        public virtual ICollection<UserRoomsHistory> UserRoomHistories { get; set; }
+        public virtual UsersRooms UsersRooms { get; set; }
+        public virtual ApplicationUser User{ get; set; }
     }
 }

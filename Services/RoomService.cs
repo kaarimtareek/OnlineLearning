@@ -166,6 +166,18 @@ namespace OnlineLearning.Services
                     UserId = userId,
                 };
                 userRoom.StatusId = GetStatusForUserRoom(room);
+                var userRoomHistory = new UserRoomsHistory
+                {
+                    Comment = userRoom.Comment,
+                    LeaveReason = userRoom.LeaveReason,
+                    RejectionReason = userRoom.RejectionReason,
+                    StatusId = userRoom.StatusId,
+                    UserId = userId,
+                    UserRoomsId = userRoom.Id,
+                    SuspensionReason = userRoom.SuspensionReason,
+                    RoomId=roomId,
+                };
+                await context.UserRoomsHistories.AddAsync(userRoomHistory);
                 await context.UsersRooms.AddAsync(userRoom);
                 await context.SaveChangesAsync();
                 result.Data = userRoom.Id;
@@ -211,6 +223,18 @@ namespace OnlineLearning.Services
                 };
                 //for requsting join to the room
                 userRoom.StatusId = GetStatusForUserRoom(room);
+                var userRoomHistory = new UserRoomsHistory
+                {
+                    Comment = userRoom.Comment,
+                    LeaveReason = userRoom.LeaveReason,
+                    RejectionReason = userRoom.RejectionReason,
+                    StatusId = userRoom.StatusId,
+                    UserId = userId,
+                    UserRoomsId = userRoom.Id,
+                    SuspensionReason = userRoom.SuspensionReason,
+                    RoomId=roomId,
+                };
+                await context.UserRoomsHistories.AddAsync(userRoomHistory);
                 await context.UsersRooms.AddAsync(userRoom);
             }
             else
@@ -227,6 +251,18 @@ namespace OnlineLearning.Services
                     return OperationResult.Fail<int>(ConstantMessageCodes.INVALID_STATUS, default, ResponseCodeEnum.BAD_INPUT);
                 }
                 userRoom.StatusId = status;
+                var userRoomHistory = new UserRoomsHistory
+                {
+                    Comment = userRoom.Comment,
+                    LeaveReason = userRoom.LeaveReason,
+                    RejectionReason = userRoom.RejectionReason,
+                    StatusId = userRoom.StatusId,
+                    UserId = userId,
+                    UserRoomsId = userRoom.Id,
+                    SuspensionReason = userRoom.SuspensionReason,
+                    RoomId=roomId,
+                };
+                await context.UserRoomsHistories.AddAsync(userRoomHistory);
                 //accroding to the status , the reason will be updated , ( rejection reason for reject staus , etc.. )
                 UpdateAppropiateComment(userRoom, status, comment);
             }

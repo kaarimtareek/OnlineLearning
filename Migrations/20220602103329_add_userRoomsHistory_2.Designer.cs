@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineLearning.Models;
 
 namespace OnlineLearning.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220602103329_add_userRoomsHistory_2")]
+    partial class add_userRoomsHistory_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -841,17 +843,17 @@ namespace OnlineLearning.Migrations
                         .HasMaxLength(450)
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("UserRoomsId")
+                    b.Property<int>("UserRoomId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UsersRoomsId")
+                    b.Property<int?>("UsersRoomId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("UsersRoomsId");
+                    b.HasIndex("UsersRoomId");
 
                     b.ToTable("UserRoomsHistories");
                 });
@@ -1104,13 +1106,13 @@ namespace OnlineLearning.Migrations
                         .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.HasOne("OnlineLearning.Models.UsersRooms", "UsersRooms")
+                    b.HasOne("OnlineLearning.Models.UsersRooms", "UsersRoom")
                         .WithMany("UserRoomHistories")
-                        .HasForeignKey("UsersRoomsId");
+                        .HasForeignKey("UsersRoomId");
 
                     b.Navigation("User");
 
-                    b.Navigation("UsersRooms");
+                    b.Navigation("UsersRoom");
                 });
 
             modelBuilder.Entity("OnlineLearning.Models.UsersRooms", b =>

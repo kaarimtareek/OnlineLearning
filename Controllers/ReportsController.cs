@@ -30,5 +30,14 @@ namespace OnlineLearning.Controllers
             });
             return StatusCode((int)result.HttpStatusCode, result);
         }
+        [HttpGet("UserRooms")]
+        public async Task<IActionResult> GetReportForUserRooms()
+        {
+            var result = await mediator.Send(new GetActivityForRequestedRoomsQuery
+            {
+                UserId = UserId,
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
     }
 }

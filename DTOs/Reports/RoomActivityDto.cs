@@ -20,10 +20,12 @@ namespace OnlineLearning.DTOs.Reports
         public int NumberOfRejectedUsers { get; set; }
         public int NumberOfLeftUsers { get; set; }
         public int AddedMaterials { get => RoomMaterialsActivities == null ? 0 : RoomMaterialsActivities.Count; }
+        public int RoomMeetings { get => RoomMeetingActivities == null ? 0 : RoomMeetingActivities.Count; }
         public List<UserRoomActivityDto> RejectedUserRoomActivities { get; set; }
         public List<UserRoomActivityDto> JoinedUserRoomActivities { get; set; }
         public List<UserRoomActivityDto> RequestedUserRoomActivities { get; set; }
         public List<UserRoomActivityDto> LeftUserRoomActivities { get; set; }
+        public List<RoomMeetingActivityDto> RoomMeetingActivities { get; set; }
         public List<RoomMaterialActivityDto> RoomMaterialsActivities { get; set; }
     }
     public class UserRoomActivityDto
@@ -53,5 +55,14 @@ namespace OnlineLearning.DTOs.Reports
         public int MaterialId { get; set; }
         public string MaterialName { get; set; }
         public DateTime CreatedAt { get; set; }
+    }
+    public class RoomMeetingActivityDto
+    {
+        public int MeetingId { get; set; }
+        public int RoomId { get; set; }
+        public string TopicName { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate{ get; set; }
     }
 }

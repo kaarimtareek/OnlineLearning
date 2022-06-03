@@ -129,8 +129,9 @@ namespace OnlineLearning.Handlers.Queries.Reports
                         CreatedAt = x.CreatedAt,
                         MaterialId = x.Id,
                         MaterialName = x.FileName
-                    }).ToList()
-                }).FirstOrDefaultAsync();
+                    }).ToList(),
+                    
+                }).FirstOrDefaultAsync(cancellationToken);
                 var userRoomsHistories = await context.UserRoomsHistories.Include(x=>x.User).AsNoTracking().Where(x=>x.RoomId == request.RoomId).Select( x=> new UserRoomHistoryDto
                 {
                     Comment = x.Comment,
@@ -143,7 +144,18 @@ namespace OnlineLearning.Handlers.Queries.Reports
                     UserId = x.UserId,
                     UserName = x.User.Name,
                     UserRoomActivityId = x.UserRoomsId
-                }).ToListAsync();
+                }).ToListAsync(cancellationToken);
+                var roomMeetings = await context.RoomMeetings.AsNoTracking().Where(x=>x.RoomId == request.RoomId).Select( x=> new RoomMeetingActivityDto
+                {
+                   EndDate = x.EndDate,
+                   MeetingId =x.Id,
+                   StartDate = x.StartDate,
+                   TopicName = x.MeetingName,
+                   RoomId = x.RoomId,
+                   CreatedAt = x.CreatedAt,
+                   
+                }).ToListAsync(cancellationToken);
+                room.RoomMeetingActivities = roomMeetings;
                 foreach (var item in userRoomsHistories)
                 {
                     foreach (var joinedRoomH in room.JoinedUserRoomActivities)

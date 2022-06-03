@@ -3,7 +3,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using OnlineLearning.Handlers.Queries.Reports;
 using OnlineLearning.Queries.Reports;
+using OnlineLearning.QueryParameters;
+using OnlineLearning.Settings;
 
 using System.Threading.Tasks;
 
@@ -14,10 +17,12 @@ namespace OnlineLearning.Controllers
     public class ReportsController : SystemBaseController
     {
         private readonly IMediator mediator;
+        private readonly PaginationSettings paginationSettings;
 
-        public ReportsController(IMediator mediator)
+        public ReportsController(IMediator mediator, PaginationSettings paginationSettings)
         {
             this.mediator=mediator;
+            this.paginationSettings=paginationSettings;
         }
 
         [HttpGet("Rooms/{roomId}")]
@@ -36,6 +41,19 @@ namespace OnlineLearning.Controllers
             var result = await mediator.Send(new GetActivityForRequestedRoomsQuery
             {
                 UserId = UserId,
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        [HttpGet("UserCreatedRooms")]
+        public async Task<IActionResult> GetReportForUserCreatedRooms([FromQuery] GetReportForUserCreatedRoomsQueryParameters queryParameters)
+        {
+            queryParameters.HandleSettings(paginationSettings);
+            var result = await mediator.Send(new GetUserCreatedRoomsReportQuery
+            {
+                UserId = UserId,
+                From = queryParameters.From,
+                Statusess = queryParameters.Statusess,
+                To = queryParameters.To,
             });
             return StatusCode((int)result.HttpStatusCode, result);
         }

@@ -45,6 +45,7 @@ namespace OnlineLearning.Handlers.Commands
                         }
                         else
                         {
+                            await interestService.UpdateInterestNumber(context, request.InterestId);
                             await transactionScope.CommitAsync();
                         }
                         return new ResponseModel<int>

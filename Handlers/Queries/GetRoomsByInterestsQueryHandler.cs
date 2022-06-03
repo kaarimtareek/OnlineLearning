@@ -54,11 +54,11 @@ namespace OnlineLearning.Handlers.Queries
                            NameEnglish = room.Status.NameEnglish,
                            IsDeleted = room.Status.IsDeleted
                        },
-                       UserRoomStatus = room.RequestedUsers.FirstOrDefault() ==null? null : new UserRoomStatusDto
+                       UserRoomStatus = room.RequestedUsers.FirstOrDefault(x => x.UserId == request.UserId) ==null? null : new UserRoomStatusDto
                        {
-                           Id = room.RequestedUsers.First().Status.Id,
-                           NameArabic = room.RequestedUsers.First().Status.NameArabic,
-                           NameEnglish = room.RequestedUsers.First().Status.NameEnglish,
+                           Id = room.RequestedUsers.First(x => x.UserId == request.UserId).Status.Id,
+                           NameArabic = room.RequestedUsers.First(x => x.UserId == request.UserId).Status.NameArabic,
+                           NameEnglish = room.RequestedUsers.First(x => x.UserId == request.UserId).Status.NameEnglish,
 
                        }
 

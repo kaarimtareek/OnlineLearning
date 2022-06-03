@@ -44,6 +44,7 @@ namespace OnlineLearning.Handlers.Queries
                     Interests = room.RoomInterests.Select(x => new InterestDto
                     {
                         Id = x.InterestId,
+                         NumberOfInterestedUsers = x.Interest.NumberOfInterestedUsers,
                         IsDeleted = x.IsDeleted
                     }).ToList(),
                     OwnerId = room.OwnerId,

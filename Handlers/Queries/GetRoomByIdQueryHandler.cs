@@ -41,6 +41,7 @@ namespace OnlineLearning.Handlers.Queries
                     Interests = room.RoomInterests.Select(x => new InterestDto
                     {
                         Id = x.InterestId,
+                        NumberOfInterestedUsers = x.Interest.NumberOfInterestedUsers,
                         IsDeleted = x.IsDeleted
                     }).ToList(),
                     OwnerId = room.OwnerId,
@@ -54,11 +55,11 @@ namespace OnlineLearning.Handlers.Queries
                     NumberOfLeftUsers = room.NumberOfLeftUsers,
                     NumberOfRejectedUsers = room.NumberOfRejectedUsers,
                     NumberOfRequestedUsers = room.NumberOfRequestedUsers,
-                    UserRoomStatus = room.RequestedUsers.FirstOrDefault()==null ? null : new UserRoomStatusDto
+                    UserRoomStatus = room.RequestedUsers.FirstOrDefault(x => x.UserId == request.UserId)==null ? null : new UserRoomStatusDto
                     {
-                        Id = room.RequestedUsers.First().StatusId,
-                        NameArabic = room.RequestedUsers.First().Status.NameArabic,
-                        NameEnglish = room.RequestedUsers.First().Status.NameEnglish,
+                        Id = room.RequestedUsers.First(x => x.UserId == request.UserId).StatusId,
+                        NameArabic = room.RequestedUsers.First(x => x.UserId == request.UserId).Status.NameArabic,
+                        NameEnglish = room.RequestedUsers.First(x => x.UserId == request.UserId).Status.NameEnglish,
                     },
                     Status = room.Status==null ? null : new RoomStatusDto
                     {

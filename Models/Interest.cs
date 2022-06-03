@@ -8,6 +8,7 @@ namespace OnlineLearning.Models
         [Key]
         [MaxLength(200)]
         public string Id { get; set; }
+        public int NumberOfInterestedUsers { get; set; }
         [MaxLength(200)]
         public string StemmedName { get; set; }
         public virtual ICollection<RoomInterest> RoomInterests { get; set; }

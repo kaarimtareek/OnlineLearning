@@ -87,7 +87,7 @@ namespace OnlineLearning.Services
 
         public static IQueryable<Room> IncludeInterests(this IQueryable<Room> query)
         {
-            return query.Include(x => x.RoomInterests);
+            return query.Include(x => x.RoomInterests).ThenInclude(x=>x.Interest);
         }
 
         public static IQueryable<Room> IncludeRequestedUsers(this IQueryable<Room> query)

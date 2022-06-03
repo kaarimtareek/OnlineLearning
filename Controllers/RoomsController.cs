@@ -32,6 +32,23 @@ namespace OnlineLearning.Controllers
             this.mediator = mediator;
             this.paginationSettings = paginationSettings;
         }
+        [HttpGet("Search/{search}")]
+        public async Task<IActionResult> GetRoom(string search)
+        {
+            try
+            {
+                var result = await mediator.Send(new SearchAllQuery
+                {
+                    SearchValue = search,
+                    UserId = UserId
+                });
+                return StatusCode((int)result.HttpStatusCode, result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRoom(int id)
         {

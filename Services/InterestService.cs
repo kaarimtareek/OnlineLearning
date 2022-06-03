@@ -60,7 +60,7 @@ namespace OnlineLearning.Services
                 {
                     if (interest.IsDeleted)
                     {
-                        interest.IsDeleted = true;
+                        interest.IsDeleted = false;
                     }
                     else
                     {
@@ -92,6 +92,46 @@ namespace OnlineLearning.Services
                     };
                     await context.Interests.AddAsync(interest);
                 }
+                await context.SaveChangesAsync();
+                return OperationResult.Success<string>(interest.Id);
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"error whilte AddInterest: {e}");
+                return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
+            }
+        }
+        public async Task<OperationResult<string>> UpdateInterestNumber(AppDbContext context,string interestId, int number = 1)
+        {
+            try
+            {
+               
+
+                var interest = await context.Interests.FirstOrDefaultAsync(x => x.Id == interestId);
+                if (interest == null)
+                {
+                   
+                        return OperationResult.Fail<string>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
+                }
+                interest.NumberOfInterestedUsers += number;
+                await context.SaveChangesAsync();
+                return OperationResult.Success<string>(interest.Id);
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"error whilte AddInterest: {e}");
+                return OperationResult.Fail<string>(ConstantMessageCodes.OPERATION_FAILED, default, ResponseCodeEnum.FAILED);
+            }
+        }
+        public async Task<OperationResult<string>> UpdateInterestNumber(AppDbContext context,Interest interest, int number = 1)
+        {
+            try
+            {
+                if (interest == null)
+                {
+                    return OperationResult.Fail<string>(ConstantMessageCodes.NOT_FOUND, default, ResponseCodeEnum.NOT_FOUND);
+                }
+                interest.NumberOfInterestedUsers += number;
                 await context.SaveChangesAsync();
                 return OperationResult.Success<string>(interest.Id);
             }

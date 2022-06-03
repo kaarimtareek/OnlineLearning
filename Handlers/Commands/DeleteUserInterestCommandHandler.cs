@@ -28,6 +28,7 @@ namespace OnlineLearning.Handlers.Commands
             using (var context = new AppDbContext(contextOptions))
             {
                 var result = await interestService.DeleteUserInterest(context, request.UserId, request.InterestId);
+                await interestService.UpdateInterestNumber(context, request.InterestId,-1);
                 return new ResponseModel<int>
                 {
                     HttpStatusCode = result.ResponseCode.GetStatusCode(),

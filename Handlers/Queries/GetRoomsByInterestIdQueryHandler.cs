@@ -57,14 +57,15 @@ namespace OnlineLearning.Handlers.Queries
                         Interests = room.RoomInterests.Select(i => new InterestDto
                         {
                             Id = i.InterestId,
+                            NumberOfInterestedUsers = i.Interest.NumberOfInterestedUsers,
                             IsDeleted = i.IsDeleted
 
                         }),
-                        UserRoomStatus = room.RequestedUsers.FirstOrDefault() == null ? null : new UserRoomStatusDto
+                        UserRoomStatus = room.RequestedUsers.FirstOrDefault(x => x.UserId == request.UserId) == null ? null : new UserRoomStatusDto
                         {
-                            Id = room.RequestedUsers.First().StatusId,
-                            NameArabic = room.RequestedUsers.First().Status.NameArabic,
-                            NameEnglish = room.RequestedUsers.First().Status.NameEnglish,
+                            Id = room.RequestedUsers.First(x => x.UserId == request.UserId).StatusId,
+                            NameArabic = room.RequestedUsers.First(x => x.UserId == request.UserId).Status.NameArabic,
+                            NameEnglish = room.RequestedUsers.First(x => x.UserId == request.UserId).Status.NameEnglish,
                         }
                     }).ToPagedList(request.PageNumber, request.PageSize);
                     return new ResponseModel<PagedList<RoomDto>>

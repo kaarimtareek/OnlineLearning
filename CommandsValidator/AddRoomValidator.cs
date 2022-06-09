@@ -36,12 +36,16 @@ namespace OnlineLearning.CommandsValidator
             RuleFor(x => x.RoomDescription)
                 .NotEmpty()
                 .WithMessage("Room description cannot be empty");
-            RuleFor(x => x.StartDate)
+            When(x => !x.StartNow, () =>
+            {
+                RuleFor(x => x.StartDate)
                 .GreaterThan(DateTime.Now.AddHours(2))
                 .WithMessage("Cannot create room with start date less than 2 hours from now");
-            RuleFor(x => x.ExpectedEndDate)
-                .GreaterThan(x => x.StartDate.AddHours(1))
-                .WithMessage("cannot add expected end date less than 1 hour from start date");
+                RuleFor(x => x.ExpectedEndDate)
+                    .GreaterThan(x => x.StartDate.AddHours(1))
+                    .WithMessage("cannot add expected end date less than 1 hour from start date");
+            });
+            
         }
     }
 }

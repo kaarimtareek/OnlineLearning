@@ -110,6 +110,7 @@ namespace OnlineLearning.Controllers
                     Price = inputModel.Price,
                     RoomName = inputModel.RoomName,
                     StartDate = inputModel.StartDate,
+                    StartNow = inputModel.StartNow,
                     UserId = UserId
                 });
                 return StatusCode((int)result.HttpStatusCode, result);

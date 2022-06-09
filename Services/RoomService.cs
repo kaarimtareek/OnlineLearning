@@ -26,7 +26,7 @@ namespace OnlineLearning.Services
             this.fileManager = fileManager;
         }
 
-        public async Task<OperationResult<int>> CreateRoom(AppDbContext context, string userId, string roomName, string roomDescription, decimal price, DateTime StartDate, DateTime? expectedEndDate, bool isPublic, List<string> interests)
+        public async Task<OperationResult<Room>> CreateRoom(AppDbContext context, string userId, string roomName, string roomDescription, decimal price, DateTime StartDate, DateTime? expectedEndDate, bool isPublic, List<string> interests)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace OnlineLearning.Services
                     StartDate = StartDate,
                     ExpectedEndDate = expectedEndDate,
                     Description = roomDescription,
-                    StatusId = ConstantRoomStatus.ACTIVE,
+                    StatusId = ConstantRoomStatus.PENDING,
                     IsPublic = isPublic
                 };
                 //adding room interests
@@ -51,18 +51,18 @@ namespace OnlineLearning.Services
                 await context.Rooms.AddAsync(room);
                 await context.RoomInterests.AddRangeAsync(roomInterests);
                 await context.SaveChangesAsync();
-                return new OperationResult<int>
+                return new OperationResult<Room>
                 {
                     IsSuccess = true,
                     Message = ConstantMessageCodes.OPERATION_SUCCESS,
                     ResponseCode = ResponseCodeEnum.SUCCESS,
-                    Data = room.Id,
+                    Data = room,
                 };
             }
             catch (Exception e)
             {
                 logger.LogError($"error in create room {e}");
-                return new OperationResult<int>
+                return new OperationResult<Room>
                 {
                     IsSuccess = false,
                     Message = ConstantMessageCodes.OPERATION_FAILED,
@@ -93,6 +93,44 @@ namespace OnlineLearning.Services
                     Message = ConstantMessageCodes.OPERATION_SUCCESS,
                     ResponseCode = ResponseCodeEnum.SUCCESS
                 };
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"error in GetRoomById {e}");
+                return new OperationResult<Room>
+                {
+                    IsSuccess = false,
+                    Message = ConstantMessageCodes.OPERATION_FAILED,
+                    ResponseCode = ResponseCodeEnum.FAILED,
+                };
+            }
+        }
+        public async Task<OperationResult<Room>> StartRoom(int roomId)
+        {
+            try
+            {
+                using var context = new AppDbContext(contextOptions);
+
+                var room = await context.Rooms.Include(x=>x.RequestedUsers).FirstOrDefaultAsync(x => x.Id == roomId && !x.IsDeleted);
+                if (room == null)
+                {
+                    return new OperationResult<Room>
+                    {
+                        IsSuccess = false,
+                        Message = ConstantMessageCodes.ROOM_NOT_FOUND,
+                        ResponseCode = ResponseCodeEnum.NOT_FOUND,
+                    };
+                }
+                if (ConstantRoomStatus.IsActive(room.StatusId))
+                    return OperationResult.Fail<Room>(ConstantMessageCodes.ROOM_ALREADY_ACTIVE,default,ResponseCodeEnum.DUPLICATE_DATA);
+                room.StatusId = ConstantRoomStatus.ACTIVE;
+                foreach (var item in room.RequestedUsers.Where(x=>x.StatusId == ConstantUserRoomStatus.PENDING || x.StatusId == ConstantUserRoomStatus.ACCEPTED))
+                {
+                    await ChangeUserRoomStatus(context, item.UserId, item.RoomId, ConstantUserRoomStatus.JOINED, ConstantUserRoomStatus.RoomOwnerAllowedStatus);
+                    await UpdateNumberOfUsers(context, roomId, ConstantUserRoomStatus.JOINED);
+                }
+                await context.SaveChangesAsync();
+                return OperationResult.Success(room);
             }
             catch (Exception e)
             {

@@ -13,6 +13,9 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.3" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.3" />
+    <PackageReference Include="Hangfire" Version="1.7.29" />
+    <PackageReference Include="Hangfire.Core" Version="1.7.29" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.7.29" />
     <PackageReference Include="Humanizer.Core" Version="2.11.10" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />

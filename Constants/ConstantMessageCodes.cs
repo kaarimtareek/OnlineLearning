@@ -21,5 +21,6 @@
         public const string INVALID_STATUS = "INVALID_STATUS";
         public const string OVERLAPPED_MEETINGS = "OVERLAPPED_MEETINGS";
         public const string ALREADY_REQUESTED_TO_ROOM = "ALREADY_REQUESTED_TO_ROOM";
+        public const string ROOM_ALREADY_ACTIVE = "ROOM_ALREADY_ACTIVE";
     }
 }

@@ -1,5 +1,8 @@
 using FluentValidation;
 
+using Hangfire;
+using Hangfire.SqlServer;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,8 +41,8 @@ namespace OnlineLearning
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<AppDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("OnlineLearningDb")));
+            string dbConnection = Configuration.GetConnectionString("OnlineLearningDb");
+            services.AddDbContext<AppDbContext>(item => item.UseSqlServer(dbConnection));
             services.AddIdentity<ApplicationUser, IdentityRole>(policy =>
             {
                 policy.Password.RequireUppercase = false;
@@ -52,7 +55,19 @@ namespace OnlineLearning
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<AppDbContext>();
             services.AddTransient<IStartupFilter, MigrationStartupFilter<AppDbContext>>();
-
+            services.AddHangfire(configuration => configuration
+       .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+       .UseSimpleAssemblyNameTypeSerializer()
+       .UseRecommendedSerializerSettings()
+       .UseSqlServerStorage(dbConnection, new SqlServerStorageOptions
+       {
+           CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+           SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+           QueuePollInterval = TimeSpan.Zero,
+           UseRecommendedIsolationLevel = true,
+           DisableGlobalLocks = true
+       }));
+            services.AddHangfireServer();
             #region Services
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IRoomService, RoomService>();
@@ -157,10 +172,11 @@ namespace OnlineLearning
             app.UseAuthentication();
             app.UseRouting();
             app.UseAuthorization();
-
+            app.UseHangfireDashboard();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
         }
     }

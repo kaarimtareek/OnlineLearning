@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Hangfire;
+
+using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,12 +20,14 @@ namespace OnlineLearning.Handlers.Commands
 
     {
         private readonly IRoomService roomService;
+        private readonly IBackgroundJobClient backgroundJobClient;
         private readonly DbContextOptions<AppDbContext> contextOptions;
 
-        public AddRoomCommandHandler(DbContextOptions<AppDbContext> contextOptions, IRoomService roomService)
+        public AddRoomCommandHandler(DbContextOptions<AppDbContext> contextOptions, IRoomService roomService, IBackgroundJobClient backgroundJobClient)
         {
             this.contextOptions = contextOptions;
             this.roomService = roomService;
+            this.backgroundJobClient=backgroundJobClient;
         }
 
         public async Task<ResponseModel<int>> Handle(AddRoomCommand request, CancellationToken cancellationToken)
@@ -36,6 +40,8 @@ namespace OnlineLearning.Handlers.Commands
                     try
                     {
                         //validate the interests before creating the room
+                        if (request.StartNow)
+                            request.StartDate = DateTime.Now;
                         var result = await roomService.CreateRoom(context, request.UserId, request.RoomName, request.RoomDescription, request.Price, request.StartDate, request.ExpectedEndDate, request.IsPublic, request.Interests);
                         if (!result.IsSuccess)
                         {
@@ -43,13 +49,21 @@ namespace OnlineLearning.Handlers.Commands
                         }
                         else
                         {
+
                             await transactionScope.CommitAsync();
+                            if (request.StartNow)
+                            {
+                                var roomResult = await roomService.StartRoom(result.Data.Id);
+                            }
+                            else
+                                backgroundJobClient.Schedule(() => roomService.StartRoom(result.Data.Id), result.Data.StartDate);
+
                         }
                         return new ResponseModel<int>
                         {
                             IsSuccess = result.IsSuccess,
                             MessageCode = result.Message,
-                            Result = result.Data,
+                            Result = result.Data.Id,
                             HttpStatusCode = result.ResponseCode.GetStatusCode()
                         };
                     }

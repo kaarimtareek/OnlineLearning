@@ -10,6 +10,7 @@ namespace OnlineLearning.Models.InputModels
         public decimal Price { get; set; }
         public DateTime? ExpectedEndDate { get; set; }
         public DateTime StartDate { get; set; }
+        public bool StartNow { get; set; }
         public List<string> Interests { get; set; }
     }
 }

@@ -1,10 +1,13 @@
-﻿using MediatR;
+﻿using Hangfire;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
 using OnlineLearning.Commands;
 using OnlineLearning.Models.InputModels;
 
+using System;
 using System.Threading.Tasks;
 
 namespace OnlineLearning.Controllers
@@ -14,10 +17,12 @@ namespace OnlineLearning.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IMediator mediator;
+        private readonly IBackgroundJobClient backgroundJobClient;
 
-        public AuthenticationController(IMediator mediator)
+        public AuthenticationController(IMediator mediator,IBackgroundJobClient backgroundJobClient)
         {
             this.mediator = mediator;
+            this.backgroundJobClient=backgroundJobClient;
         }
 
         [HttpPost("Register")]
@@ -38,6 +43,7 @@ namespace OnlineLearning.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginUserInputModel inputModel)
         {
+
             var command = new LoginUserCommand
             {
                 Password = inputModel.Password,

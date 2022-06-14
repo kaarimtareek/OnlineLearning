@@ -8,5 +8,8 @@ namespace OnlineLearning.Queries
     {
         public string SearchValue { get; set; }
         public string UserId { get; set; }
+        public bool SkipRooms { get; set; }
+        public bool SkipUsers { get; set; }
+        public bool SkipInterests { get; set; }
     }
 }

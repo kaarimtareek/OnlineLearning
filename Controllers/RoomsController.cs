@@ -33,14 +33,18 @@ namespace OnlineLearning.Controllers
             this.paginationSettings = paginationSettings;
         }
         [HttpGet("Search/{search}")]
-        public async Task<IActionResult> GetRoom(string search)
+        public async Task<IActionResult> GetRoom(string search, [FromQuery] SearchAllQueryParameters queryParameters)
         {
             try
             {
                 var result = await mediator.Send(new SearchAllQuery
                 {
                     SearchValue = search,
-                    UserId = UserId
+                    UserId = UserId,
+                    SkipInterests = queryParameters.SkipInterests,
+                    SkipRooms = queryParameters.SkipRooms,
+                    SkipUsers = queryParameters.SkipUsers,
+
                 });
                 return StatusCode((int)result.HttpStatusCode, result);
             }

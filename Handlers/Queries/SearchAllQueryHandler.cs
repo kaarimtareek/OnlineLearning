@@ -10,6 +10,7 @@ using OnlineLearning.Models.OutputModels;
 using OnlineLearning.Queries;
 using OnlineLearning.Services;
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,7 +30,9 @@ namespace OnlineLearning.Handlers.Queries
         {
             using (AppDbContext context = new AppDbContext(dbContextOptions))
             {
-                var rooms = await context.Rooms.Include(x => x.Owner).Include(x=>x.Status).IncludeUserRoomStatus(request.UserId).AsNoTracking().Where(x => (x.Name.Contains( request.SearchValue ) || x.Owner.Name.Contains( request.SearchValue)) && !x.IsDeleted ).Select(x=> new RoomDto
+                List<RoomDto> rooms = new List<RoomDto>();
+                if(request.SkipRooms)
+                rooms = await context.Rooms.Include(x => x.Owner).Include(x=>x.Status).IncludeUserRoomStatus(request.UserId).AsNoTracking().Where(x => (x.Name.Contains( request.SearchValue ) || x.Owner.Name.Contains( request.SearchValue)) && !x.IsDeleted ).Select(x=> new RoomDto
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -60,7 +63,9 @@ namespace OnlineLearning.Handlers.Queries
                     }
                     
                 }).ToListAsync();
-                var users = await context.Users.Include(x=>x.Status).AsNoTracking().Where(x => x.Name.Contains(request.SearchValue) && !x.IsDeleted).Select(x=> new UserDto
+                List<UserDto> users = new List<UserDto>();
+                if(request.SkipUsers)
+                    users = await context.Users.Include(x=>x.Status).AsNoTracking().Where(x => x.Name.Contains(request.SearchValue) && !x.IsDeleted).Select(x=> new UserDto
                 {
                     Id=x.Id,
                     UserName = x.UserName,
@@ -75,7 +80,9 @@ namespace OnlineLearning.Handlers.Queries
                         NameEnglish = x.Status.NameEnglish
                     }
                 }).ToListAsync();
-                var interests = await context.Interests.AsNoTracking().Where(x => x.Id.Contains(request.SearchValue) && !x.IsDeleted).Select(x=> new InterestDto
+                List<InterestDto> interests = new List<InterestDto>();
+                if (request.SkipInterests)
+                    interests = await context.Interests.AsNoTracking().Where(x => x.Id.Contains(request.SearchValue) && !x.IsDeleted).Select(x=> new InterestDto
                 {
                     Id = x.Id,
                     NumberOfInterestedUsers = x.NumberOfInterestedUsers,

@@ -9,11 +9,11 @@ namespace OnlineLearning.Common
 
     public class ResponseModel : IResponseModel
     {
-        public static ResponseModel<T> Fail<T>(string message = ConstantMessageCodes.OPERATION_FAILED, T data = default, List<ValidationErrorModel> errors = default, HttpStatusCode code = default)
+        public static ResponseModel<T> Fail<T>(string message = ConstantMessageCodes.OPERATION_FAILED, T data = default, List<ValidationErrorModel> errors = default, HttpStatusCode code = HttpStatusCode.InternalServerError)
         {
             return new ResponseModel<T>(false, data, errors, message, code);
         }
-        public static ResponseModel<T> Success<T>(string message = ConstantMessageCodes.OPERATION_SUCCESS, T data = default, List<ValidationErrorModel> errors = default, HttpStatusCode code = default)
+        public static ResponseModel<T> Success<T>(string message = ConstantMessageCodes.OPERATION_SUCCESS, T data = default, List<ValidationErrorModel> errors = default, HttpStatusCode code = HttpStatusCode.OK)
         {
             return new ResponseModel<T>(true, data, errors, message, code);
         }

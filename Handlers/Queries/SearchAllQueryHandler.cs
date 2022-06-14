@@ -31,7 +31,7 @@ namespace OnlineLearning.Handlers.Queries
             using (AppDbContext context = new AppDbContext(dbContextOptions))
             {
                 List<RoomDto> rooms = new List<RoomDto>();
-                if(request.SkipRooms)
+                if(!request.SkipRooms)
                 rooms = await context.Rooms.Include(x => x.Owner).Include(x=>x.Status).IncludeUserRoomStatus(request.UserId).AsNoTracking().Where(x => (x.Name.Contains( request.SearchValue ) || x.Owner.Name.Contains( request.SearchValue)) && !x.IsDeleted ).Select(x=> new RoomDto
                 {
                     Id = x.Id,
@@ -64,7 +64,7 @@ namespace OnlineLearning.Handlers.Queries
                     
                 }).ToListAsync();
                 List<UserDto> users = new List<UserDto>();
-                if(request.SkipUsers)
+                if(!request.SkipUsers)
                     users = await context.Users.Include(x=>x.Status).AsNoTracking().Where(x => x.Name.Contains(request.SearchValue) && !x.IsDeleted).Select(x=> new UserDto
                 {
                     Id=x.Id,
@@ -81,7 +81,7 @@ namespace OnlineLearning.Handlers.Queries
                     }
                 }).ToListAsync();
                 List<InterestDto> interests = new List<InterestDto>();
-                if (request.SkipInterests)
+                if (!request.SkipInterests)
                     interests = await context.Interests.AsNoTracking().Where(x => x.Id.Contains(request.SearchValue) && !x.IsDeleted).Select(x=> new InterestDto
                 {
                     Id = x.Id,

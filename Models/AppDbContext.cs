@@ -25,6 +25,7 @@ namespace OnlineLearning.Models
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserInterest> UserInterests { get; set; }
         public DbSet<UserRoomsHistory> UserRoomsHistories { get; set; }
+        public DbSet<UserInvites> UserInvites { get; set; }
 
         public AppDbContext(DbContextOptions options) : base(options)
         {

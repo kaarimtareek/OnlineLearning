@@ -33,5 +33,6 @@ namespace OnlineLearning.Models
         public virtual ICollection<UsersRooms> RequestedUsers { get; set; }
         public virtual ICollection<RoomRoadMap> RoomRoadMaps { get; set; }
         public virtual ICollection<RoomMaterial> RoomMaterials { get; set; }
+        public virtual ICollection<UserInvites> UserInvites { get; set; }
     }
 }

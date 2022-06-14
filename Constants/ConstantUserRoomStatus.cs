@@ -15,7 +15,9 @@ namespace OnlineLearning.Constants
         public const string SUSPENDED = "SUSPENDED";
         public const string LEFT = "LEFT";
         public const string CANCELED = "CANCELED";
-        public static readonly string[] ALL = new string[] { PENDING, JOINED, ACCEPTED, REJECTED, SUSPENDED, LEFT, CANCELED };
+        public const string INVITED = "INVITED";
+        public const string OWNER = "OWNER";
+        public static readonly string[] ALL = new string[] { PENDING, JOINED, ACCEPTED, REJECTED, SUSPENDED, LEFT, CANCELED, INVITED, OWNER };
         public static bool IsValidStatus(string status) => ALL.Contains(status);
 
         public static bool IsJoined(string status) => status == JOINED;
@@ -24,7 +26,7 @@ namespace OnlineLearning.Constants
 
         public static bool IsRejected(string status) => status == REJECTED;
 
-        public static bool IsPending(string status) => status == PENDING;
+        public static bool IsPending(string status) => status == PENDING || status == INVITED;
 
         public static bool IsSuspended(string status) => status == SUSPENDED;
         public static bool IsLeft(string status) => status == LEFT;
@@ -50,6 +52,7 @@ namespace OnlineLearning.Constants
             { REJECTED ,new List<string>{ ACCEPTED }},
             { JOINED ,new List<string>{ SUSPENDED  }},
             { SUSPENDED ,new List<string>{ JOINED }},
+            { INVITED ,new List<string>{ JOINED,ACCEPTED }},
             { LEFT ,new List<string>{ }},
             { CANCELED ,new List<string>{ }},
         };
@@ -58,6 +61,7 @@ namespace OnlineLearning.Constants
             { NO_REQUEST ,new List<string>{ PENDING } },
             { PENDING ,new List<string>{ CANCELED } },
             { ACCEPTED ,new List<string>{  LEFT ,CANCELED } },
+            { INVITED ,new List<string>{ JOINED,ACCEPTED, CANCELED }},
             { REJECTED ,new List<string>{  }},
             { JOINED ,new List<string>{ LEFT  }},
             { SUSPENDED ,new List<string>{  }},

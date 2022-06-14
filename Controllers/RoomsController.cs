@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineLearning.Commands;
 using OnlineLearning.Common;
 using OnlineLearning.Constants;
+using OnlineLearning.Handlers.Queries;
 using OnlineLearning.Models.InputModels;
 using OnlineLearning.Queries;
 using OnlineLearning.QueryParameters;
@@ -388,6 +389,48 @@ namespace OnlineLearning.Controllers
                 UserId = UserId,
 
 
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        [HttpPost("{roomId}/Invites/{userId}")]
+        public async Task<IActionResult> InviteUser(int roomId,string userId)
+        {
+            var result = await mediator.Send(new InviteUserToRoomCommand
+            {
+                UserId = userId,
+                OwnerId = UserId,
+                RoomId = roomId,
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        [HttpGet("/Invites")]
+        public async Task<IActionResult> GetUserInvites()
+        {
+            var result = await mediator.Send(new GetUserInvitesQuery
+            {
+                UserId = UserId
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        [HttpPut("/Invites/{inviteId}/Accept")]
+        public async Task<IActionResult> AcceptInvite(int inviteId)
+        {
+            var result = await mediator.Send(new ChangeInviteStatusCommand
+            {
+                UserId = UserId,
+                InviteId = inviteId,
+                Status = ConstantUserInvites.ACCEPTED
+            });
+            return StatusCode((int)result.HttpStatusCode, result);
+        }
+        [HttpPut("/Invites/{inviteId}/Reject")]
+        public async Task<IActionResult> RejectInvite(int inviteId)
+        {
+            var result = await mediator.Send(new ChangeInviteStatusCommand
+            {
+                UserId = UserId,
+                InviteId = inviteId,
+                Status = ConstantUserInvites.REJECTED
             });
             return StatusCode((int)result.HttpStatusCode, result);
         }

@@ -105,6 +105,100 @@ namespace OnlineLearning.Services
                 };
             }
         }
+        public async Task<OperationResult<int>> InviteUserToRoom(AppDbContext context, int roomId,string ownerId,string userId)
+        {
+            try
+            {
+                var room = await context.Rooms.Include(x=>x.RequestedUsers).FirstOrDefaultAsync(x => x.Id == roomId && !x.IsDeleted);
+                if (room == null)
+                {
+                    return new OperationResult<int>
+                    {
+                        IsSuccess = false,
+                        Message = ConstantMessageCodes.ROOM_NOT_FOUND,
+                        ResponseCode = ResponseCodeEnum.NOT_FOUND,
+                    };
+                }
+                if(room.RequestedUsers.Any(x=>x.UserId == userId && !x.IsDeleted))
+                {
+                    return OperationResult.Fail<int>(ConstantMessageCodes.ALREADY_REQUESTED_TO_ROOM, default, ResponseCodeEnum.BAD_INPUT);
+                }
+                var userInvite = await context.UserInvites.FirstOrDefaultAsync(x => x.UserId == userId && x.RoomId == roomId && !x.IsDeleted);
+                if(userInvite == null)
+                {
+                    userInvite = new UserInvites
+                    {
+                        RoomId = roomId,
+                        OwnerId = ownerId,
+                        UserId = userId,
+                        StatusId = ConstantUserInvites.PENDING
+                    };
+                    await context.UserInvites.AddAsync(userInvite);
+                    await context.SaveChangesAsync();
+                    await ChangeUserRoomStatus(context, userId, roomId, ConstantUserRoomStatus.INVITED, ConstantUserRoomStatus.RoomOwnerAllowedStatus);
+
+                    return new OperationResult<int>
+                    {
+                        IsSuccess = true,
+                        Data = userInvite.Id,
+                        Message = ConstantMessageCodes.OPERATION_SUCCESS,
+                        ResponseCode = ResponseCodeEnum.SUCCESS
+                    };
+                }
+                return OperationResult.Fail<int>(ConstantMessageCodes.ALREADY_REQUESTED_TO_ROOM,default,ResponseCodeEnum.BAD_INPUT);
+                
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"error in GetRoomById {e}");
+                return new OperationResult<int>
+                {
+                    IsSuccess = false,
+                    Message = ConstantMessageCodes.OPERATION_FAILED,
+                    ResponseCode = ResponseCodeEnum.FAILED,
+                };
+            }
+        }
+        public async Task<OperationResult<int>> ChangeInviteUser(AppDbContext context,int inviteId ,string status)
+        {
+            try
+            {
+                var userInvite = await context.UserInvites.Include(x=>x.Room).FirstOrDefaultAsync(x => x.Id == inviteId && !x.IsDeleted);
+                if (userInvite == null)
+                {
+                    return new OperationResult<int>
+                    {
+                        IsSuccess = false,
+                        Message = ConstantMessageCodes.NOT_FOUND,
+                        ResponseCode = ResponseCodeEnum.NOT_FOUND,
+                    };
+                }
+                if(userInvite.StatusId == status)
+                    return OperationResult.Fail<int>(ConstantMessageCodes.ALREADY_REQUESTED_TO_ROOM,default,ResponseCodeEnum.BAD_INPUT);
+
+                var userRoom = await context.UsersRooms.Include(x=>x.Room).FirstOrDefaultAsync(x => x.RoomId == userInvite.RoomId && x.UserId == userInvite.UserId && !x.IsDeleted);
+                string oldStatus = string.Empty;
+                if (userRoom != null)
+                    oldStatus = userRoom.StatusId;
+                userInvite.StatusId = status;
+                string newStatus = GetUserRoomStatusFromInvite(status, userInvite.Room);
+                await ChangeUserRoomStatus(context, userInvite.UserId, userInvite.RoomId, newStatus, ConstantUserRoomStatus.UserAllowedStatus);
+                await UpdateNumberOfUsers(context, userInvite.RoomId, oldStatus, -1);
+                await UpdateNumberOfUsers(context, userInvite.RoomId, newStatus);
+                await context.SaveChangesAsync();
+                return OperationResult.Success(userInvite.Id);
+            }
+            catch (Exception e)
+            {
+                logger.LogError($"error in GetRoomById {e}");
+                return new OperationResult<int>
+                {
+                    IsSuccess = false,
+                    Message = ConstantMessageCodes.OPERATION_FAILED,
+                    ResponseCode = ResponseCodeEnum.FAILED,
+                };
+            }
+        }
         public async Task<OperationResult<Room>> StartRoom(int roomId)
         {
             try
@@ -260,7 +354,7 @@ namespace OnlineLearning.Services
                     IsDeleted = false,
                 };
                 //for requsting join to the room
-                userRoom.StatusId = GetStatusForUserRoom(room);
+                userRoom.StatusId = GetStatusForUserRoom(room,status);
                 var userRoomHistory = new UserRoomsHistory
                 {
                     Comment = userRoom.Comment,
@@ -381,7 +475,7 @@ namespace OnlineLearning.Services
             return OperationResult.Success(room.NumberOfRequestedUsers);
         }
 
-
+        
         #region Private Methods
 
         private bool IsValidRoomToJoin(Room room)
@@ -389,16 +483,31 @@ namespace OnlineLearning.Services
             return room != null && ConstantRoomStatus.IsActiveStatus(room.StatusId);
         }
 
-        private string GetStatusForUserRoom(Room room)
+        private string GetStatusForUserRoom(Room room,string status = "")
         {
-            bool isRoomStarted = IsRoomStarted(room);
-            if (room.IsPublic)
+            if(string.IsNullOrEmpty(status) || status == ConstantUserRoomStatus.PENDING)
             {
-                return isRoomStarted ? ConstantUserRoomStatus.JOINED : ConstantUserRoomStatus.ACCEPTED;
+                bool isRoomStarted = IsRoomStarted(room);
+                if (isRoomStarted)
+                {
+                    return ConstantUserRoomStatus.JOINED;
+                }
+                if(room.IsPublic)
+                {
+                    return ConstantUserRoomStatus.ACCEPTED;
+                }
+                return ConstantUserRoomStatus.PENDING;
             }
-            return ConstantUserRoomStatus.PENDING;
+            return status;
         }
-
+        private string GetUserRoomStatusFromInvite(string inviteStatus,Room room)
+        {
+            if (inviteStatus == ConstantUserInvites.ACCEPTED)
+            {
+                return room.IsPublic ? ConstantUserRoomStatus.JOINED : ConstantUserRoomStatus.ACCEPTED;
+            }
+            return ConstantUserRoomStatus.CANCELED;
+        }
         private bool IsRoomStarted(Room room)
         {
             return room.StartDate.Date >= DateTime.Now.Date;

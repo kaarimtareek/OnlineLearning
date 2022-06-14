@@ -1,5 +1,13 @@
 USE [OnlineLearning]
 GO
+Delete FROM [dbo].[LOOKUP_USER_STATUS];
+GO
+Delete FROM [dbo].[LookupRoomMeetingStatuses];
+GO
+Delete FROM [dbo].[LookupRoomStatuses];
+GO
+Delete FROM [dbo].[LookupUserRoomStatuses];
+GO
 INSERT [dbo].[LOOKUP_USER_STATUS] ([Id], [NameArabic], [NameEnglish], [CreatedAt], [UpdatedAt], [IsDeleted]) VALUES (N'ACTIVE', N'نشط', N'Active', CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), 0)
 GO
 INSERT [dbo].[LOOKUP_USER_STATUS] ([Id], [NameArabic], [NameEnglish], [CreatedAt], [UpdatedAt], [IsDeleted]) VALUES (N'BLOCKED', N'محظور', N'Blocked', CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), 0)
@@ -37,4 +45,6 @@ GO
 INSERT [dbo].[LookupUserRoomStatuses] ([Id], [NameArabic], [NameEnglish], [CreatedAt], [UpdatedAt], [IsDeleted]) VALUES (N'REJECTED', N'مرفوض', N'Rejected', CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), 0)
 GO
 INSERT [dbo].[LookupUserRoomStatuses] ([Id], [NameArabic], [NameEnglish], [CreatedAt], [UpdatedAt], [IsDeleted]) VALUES (N'SUSPENDED', N'موقوف', N'Suspended', CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), 0)
+GO
+INSERT [dbo].[LookupUserRoomStatuses] ([Id], [NameArabic], [NameEnglish], [CreatedAt], [UpdatedAt], [IsDeleted]) VALUES (N'INVITED', N'مدعو', N'Invited', CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), CAST(N'2021-11-06T09:29:59.5745403' AS DateTime2), 0)
 GO

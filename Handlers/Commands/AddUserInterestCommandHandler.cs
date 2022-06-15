@@ -54,9 +54,10 @@ namespace OnlineLearning.Handlers.Commands
                             else
                             {
                                 await interestService.UpdateInterestNumber(context, item);
-                                await transactionScope.CommitAsync();
                             }
                         }
+                        if(success)
+                                await transactionScope.CommitAsync();
                         return success ? ResponseModel.Success<int>(): ResponseModel.Fail<int>(result.Message,default,null,result.ResponseCode.GetStatusCode());
                     }
                     catch (Exception e)

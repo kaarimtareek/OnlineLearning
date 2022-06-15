@@ -2,6 +2,7 @@
 
 using OnlineLearning.Common;
 
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnlineLearning.Commands
@@ -10,6 +11,6 @@ namespace OnlineLearning.Commands
     {
         public string UserId { get; set; }
         [Required]
-        public string InterestId { get; set; }
+        public List<string> Interests { get; set; }
     }
 }

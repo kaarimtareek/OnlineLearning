@@ -41,7 +41,7 @@ namespace OnlineLearning.Controllers
             var query = new AddUserInterestCommand
             {
                 UserId= UserId,
-                InterestId = inputModel.InterestId,
+                Interests = inputModel.Interests,
             };
             var result = await mediator.Send(query);
             return StatusCode((int)result.HttpStatusCode, result);

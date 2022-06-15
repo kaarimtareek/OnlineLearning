@@ -37,24 +37,27 @@ namespace OnlineLearning.Handlers.Commands
                 {
                     try
                     {
-                        OperationResult<int> result;
-                        result = await interestService.AddUserInterest(context, request.UserId, request.InterestId);
-                        if (!result.IsSuccess)
+                        bool success = true;
+                        OperationResult<int> result = new OperationResult<int>();
+
+                        foreach (var item in request.Interests)
                         {
-                            await transactionScope.RollbackAsync();
+                            OperationResult<int> tempResult;
+                            tempResult = await interestService.AddUserInterest(context, request.UserId,item);
+                            if (!tempResult.IsSuccess)
+                            {
+                                await transactionScope.RollbackAsync();
+                                success = false;
+                                result = tempResult;
+                                break;
+                            }
+                            else
+                            {
+                                await interestService.UpdateInterestNumber(context, item);
+                                await transactionScope.CommitAsync();
+                            }
                         }
-                        else
-                        {
-                            await interestService.UpdateInterestNumber(context, request.InterestId);
-                            await transactionScope.CommitAsync();
-                        }
-                        return new ResponseModel<int>
-                        {
-                            IsSuccess = result.IsSuccess,
-                            MessageCode = result.Message,
-                            Result = result.Data,
-                            HttpStatusCode = result.ResponseCode.GetStatusCode()
-                        };
+                        return success ? ResponseModel.Success<int>(): ResponseModel.Fail<int>(result.Message,default,null,result.ResponseCode.GetStatusCode());
                     }
                     catch (Exception e)
                     {

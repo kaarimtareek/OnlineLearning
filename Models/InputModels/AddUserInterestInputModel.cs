@@ -1,7 +1,11 @@
-﻿namespace OnlineLearning.Models.InputModels
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace OnlineLearning.Models.InputModels
 {
     public class AddUserInterestInputModel
     {
-        public string InterestId { get; set; }
+        [Required]
+        public List<string>Interests{ get; set; }
     }
 }

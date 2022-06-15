@@ -26,5 +26,7 @@ namespace OnlineLearning.DTOs.Reports
         public DateTime RequestDate { get; set; }
         public DateTime FinalDate { get; set; }
         public string StatusId { get; set; }
+        public string RoomName { get; set; }
+
     }
 }

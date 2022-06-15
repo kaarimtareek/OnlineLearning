@@ -42,22 +42,22 @@ namespace OnlineLearning.Handlers.Queries.Reports
                     switch (item.StatusId)
                     {
                         case Constants.ConstantUserRoomStatus.JOINED:
-                            result.JoinedRooms.Add( new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId });
+                            result.JoinedRooms.Add( new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId, RoomName = item.Room.Name });
                             break;
                         case Constants.ConstantUserRoomStatus.ACCEPTED:
-                            result.JoinedRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId });
+                            result.JoinedRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId, RoomName = item.Room.Name });
                             break;
                         case Constants.ConstantUserRoomStatus.LEFT:
-                            result.LeftRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId });
+                            result.LeftRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId, RoomName = item.Room.Name });
                             break;
                         case Constants.ConstantUserRoomStatus.CANCELED:
-                            result.LeftRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId });
+                            result.LeftRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId, RoomName = item.Room.Name });
                             break;
                         case Constants.ConstantUserRoomStatus.REJECTED:
-                            result.RejectedRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId });
+                            result.RejectedRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId, RoomName = item.Room.Name });
                             break;
                         case Constants.ConstantUserRoomStatus.SUSPENDED:
-                            result.RejectedRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId });
+                            result.RejectedRooms.Add(new RequestedRoomDto { FinalDate = item.UpdatedAt, Id = item.RoomId, OwnerId = item.Room.OwnerId, OwnerName = item.Room.Owner.Name, RequestDate = item.CreatedAt, StatusId = item.StatusId,RoomName = item.Room.Name });
                             break;
                         default:
                             break;

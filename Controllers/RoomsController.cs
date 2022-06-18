@@ -61,7 +61,8 @@ namespace OnlineLearning.Controllers
             {
                 var result = await mediator.Send(new GetRoomByIdQuery
                 {
-                    RoomId = id
+                    RoomId = id,
+                    UserId = UserId
                 });
                 return StatusCode((int)result.HttpStatusCode, result);
             }

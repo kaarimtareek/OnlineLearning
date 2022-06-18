@@ -68,6 +68,7 @@ namespace OnlineLearning.Handlers.Queries
                         },
                         JoinedRooms = user.RequestedRooms.Where(x => x.StatusId == ConstantUserRoomStatus.JOINED).Select(r => new RoomDto
                         {
+                            RequesterId = request.Id,
                             Description = r.Room.Description,
                             Id = r.Room.Id,
                             ExpectedEndDate = r.Room.ExpectedEndDate,
@@ -81,6 +82,7 @@ namespace OnlineLearning.Handlers.Queries
                         }).ToList(),
                         CreatedRooms = user.CreatedRooms.Select(r => new RoomDto
                         {
+                            RequesterId = request.Id,
                             Id = r.Id,
                             Description = r.Description,
                             ExpectedEndDate = r.ExpectedEndDate,

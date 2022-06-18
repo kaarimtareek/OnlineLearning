@@ -7,6 +7,8 @@ namespace OnlineLearning.DTOs
 {
     public class RoomDto
     {
+        public string RequesterId { get; set; }
+        public bool IsRoomOwner { get => !string.IsNullOrWhiteSpace(RequesterId) && RequesterId == OwnerId; }
         public int Id { get; set; }
         public string OwnerId { get; set; }
         public string OwnerName { get; set; }

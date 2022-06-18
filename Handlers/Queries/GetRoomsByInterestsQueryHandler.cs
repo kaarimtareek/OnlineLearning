@@ -32,6 +32,8 @@ namespace OnlineLearning.Handlers.Queries
                     var rooms = context.RoomInterests.Include(r => r.Room).ThenInclude(x => x.Status).Include(x => x.Room).ThenInclude(x => x.Owner).Include(x=>x.Room).ThenInclude(x=>x.RequestedUsers.Where(x=>x.UserId == request.UserId)).ThenInclude(x=>x.Status).AsNoTracking().Where(x => request.Interests.Contains(x.InterestId) && !x.IsDeleted && !x.Room.IsDeleted).OrderByDescending(x => x.Room.StartDate).Select(x => x.Room
                    ).Skip(request.PageSize * (request.PageNumber - 1)).Take(request.PageSize).Select(room => new RoomDto
                    {
+
+                       RequesterId = request.UserId,
                        Description = room.Description,
                        ExpectedEndDate = room.ExpectedEndDate,
                        FinishDate = room.FinishDate,

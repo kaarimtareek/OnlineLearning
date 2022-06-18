@@ -44,6 +44,7 @@ namespace OnlineLearning.Handlers.Queries
                                                                   && room.StartDate > DateTime.Now && room.StatusId != ConstantRoomStatus.FINISHED && room.StatusId != ConstantRoomStatus.CANCELED
                                                                  select new RoomDto
                                                                  {
+                                                                     RequesterId = request.UserId,
                                                                      Id = room.Id,
                                                                      Description = room.Description,
                                                                      ExpectedEndDate = room.ExpectedEndDate,

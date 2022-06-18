@@ -34,6 +34,7 @@ namespace OnlineLearning.Handlers.Queries
                 if(!request.SkipRooms)
                 rooms = await context.Rooms.Include(x => x.Owner).Include(x=>x.Status).IncludeUserRoomStatus(request.UserId).AsNoTracking().Where(x => (x.Name.Contains( request.SearchValue ) || x.Owner.Name.Contains( request.SearchValue)) && !x.IsDeleted ).Select(x=> new RoomDto
                 {
+                    RequesterId = request.UserId,
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,

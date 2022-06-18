@@ -32,6 +32,7 @@ namespace OnlineLearning.Handlers.Queries
                 {
                     var rooms = await context.Rooms.AsNoTracking().IncludeOwner().IncludeInterests().IncludeStatus().IncludeUserRoomStatus(request.UserId).IsNotDeleted().Where(x => x.RoomInterests.Any(a => a.InterestId == request.InterestId && !a.IsDeleted)).OrderByDescending(x => x.StartDate).Select(room => new RoomDto
                     {
+                        RequesterId = request.UserId,
                         Description = room.Description,
                         ExpectedEndDate = room.ExpectedEndDate,
                         FinishDate = room.FinishDate,

@@ -79,6 +79,17 @@ namespace OnlineLearning.Handlers.Queries
                             StatusId = r.Room.StatusId,
                             StartDate = r.Room.StartDate,
                             IsPublic = r.Room.IsPublic,
+                            OwnerName = r.Room.Owner.Name,
+                            NumberOfJoinedUsers = r.Room.NumberOfJoinedUsers,
+                            NumberOfLeftUsers = r.Room.NumberOfLeftUsers,
+                            NumberOfRejectedUsers = r.Room.NumberOfRejectedUsers,
+                            NumberOfRequestedUsers = r.Room.NumberOfRequestedUsers,
+                            UserRoomStatus = r.Status == null? null : new UserRoomStatusDto
+                            {
+                                Id = r.Status.Id,
+                                NameArabic = r.Status.NameArabic,
+                                NameEnglish = r.Status.NameEnglish,
+                            },
                         }).ToList(),
                         CreatedRooms = user.CreatedRooms.Select(r => new RoomDto
                         {
@@ -93,7 +104,11 @@ namespace OnlineLearning.Handlers.Queries
                             StatusId = r.StatusId,
                             StartDate = r.StartDate,
                             IsPublic = r.IsPublic,
-
+                            OwnerName = user.Name,
+                            NumberOfJoinedUsers = r.NumberOfJoinedUsers,
+                            NumberOfLeftUsers = r.NumberOfLeftUsers,
+                            NumberOfRejectedUsers = r.NumberOfRejectedUsers,
+                            NumberOfRequestedUsers = r.NumberOfRequestedUsers,
                         }).ToList(),
                         Interests = user.UserInterests.Select(r => new InterestDto
                         {

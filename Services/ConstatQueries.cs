@@ -53,7 +53,7 @@ namespace OnlineLearning.Services
 
         public static IQueryable<T> GetAllRoomsForUser<T>(this IQueryable<T> query) where T : ApplicationUser
         {
-            return query.Include(x => x.RequestedRooms.Where(x => !x.IsDeleted)).ThenInclude(x => x.Room);
+            return query.Include(x => x.RequestedRooms.Where(x => !x.IsDeleted)).ThenInclude(x => x.Room).Include(x=>x.Status);
         }
 
         public static IQueryable<T> GetRequestedRoomsForUser<T>(this IQueryable<T> query) where T : ApplicationUser
